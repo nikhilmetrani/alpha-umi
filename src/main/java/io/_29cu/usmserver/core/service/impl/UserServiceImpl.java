@@ -14,15 +14,27 @@
 * limitations under the License.
 **/
 
-package io.cu.usmframework;
+package io._29cu.usmserver.core.service.impl;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import io._29cu.usmserver.core.model.entity.User;
+import io._29cu.usmserver.core.service.UserService;
+import io._29cu.usmserver.core.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@SpringBootApplication
-public class AlphaUmiApplication {
+@Component
+public class UserServiceImpl implements UserService {
 
-    public static void main(String[] args) {
-        SpringApplication.run(AlphaUmiApplication.class, args);
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User findUser(Long id) {
+        return userRepository.findOne(id);
     }
 }

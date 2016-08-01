@@ -14,12 +14,12 @@
 * limitations under the License.
 **/
 
-package io.cu.usmframework.rest.controllers;
+package io._29cu.usmserver.rest.controller;
 
-import io.cu.usmframework.core.model.entities.User;
-import io.cu.usmframework.rest.resources.UserResource;
-import io.cu.usmframework.rest.resources.assemblers.UserResourceAssembler;
-import io.cu.usmframework.core.services.UserService;
+import io._29cu.usmserver.core.model.entity.User;
+import io._29cu.usmserver.core.service.UserService;
+import io._29cu.usmserver.rest.resource.UserResource;
+import io._29cu.usmserver.rest.resource.assembler.UserResourceAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

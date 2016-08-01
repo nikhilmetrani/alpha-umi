@@ -14,9 +14,9 @@
 * limitations under the License.
 **/
 
-package io.cu.usmframework.core.services;
+package io._29cu.usmserver.core.service;
 
-import io.cu.usmframework.core.model.entities.User;
+import io._29cu.usmserver.core.model.entity.User;
 
 public interface UserService {
     public User createUser(User user);

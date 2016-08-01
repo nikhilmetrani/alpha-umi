@@ -14,9 +14,9 @@
 * limitations under the License.
 **/
 
-package io.cu.usmframework.rest.resources;
+package io._29cu.usmserver.rest.resource;
 
-import io.cu.usmframework.core.model.entities.User;
+import io._29cu.usmserver.core.model.entity.User;
 
 public class UserResource extends EntityResourceBase<User> {
     private Long rid;

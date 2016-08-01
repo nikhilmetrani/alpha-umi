@@ -14,12 +14,10 @@
 * limitations under the License.
 **/
 
-package io.cu.usmframework.core.repositories;
+package io._29cu.usmserver.rest.resource;
 
-import org.springframework.data.repository.CrudRepository;
-import io.cu.usmframework.core.model.entities.User;
-import org.springframework.stereotype.Component;
+import org.springframework.hateoas.ResourceSupport;
 
-@Component
-public interface UserRepository extends CrudRepository<User, Long> {
+public abstract class EntityResourceBase<T> extends ResourceSupport {
+    public abstract T toEntity();
 }

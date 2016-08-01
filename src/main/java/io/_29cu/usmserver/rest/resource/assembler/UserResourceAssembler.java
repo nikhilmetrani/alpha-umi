@@ -14,11 +14,11 @@
 * limitations under the License.
 **/
 
-package io.cu.usmframework.rest.resources.assemblers;
+package io._29cu.usmserver.rest.resource.assembler;
 
-import io.cu.usmframework.core.model.entities.User;
-import io.cu.usmframework.rest.controllers.UserController;
-import io.cu.usmframework.rest.resources.UserResource;
+import io._29cu.usmserver.core.model.entity.User;
+import io._29cu.usmserver.rest.controller.UserController;
+import io._29cu.usmserver.rest.resource.UserResource;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;

@@ -14,27 +14,35 @@
 * limitations under the License.
 **/
 
-package io.cu.usmframework.core.services.impl;
+package io._29cu.usmserver.core.model.entity;
 
-import io.cu.usmframework.core.model.entities.User;
-import io.cu.usmframework.core.repositories.UserRepository;
-import io.cu.usmframework.core.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-@Component
-public class UserServiceImpl implements UserService {
+@Entity
+public class User implements Serializable {
+    @Id
+    @GeneratedValue
+    private Long id;
+    @NotNull
+    private String email;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Override
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public User findUser(Long id) {
-        return userRepository.findOne(id);
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

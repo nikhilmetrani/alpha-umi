@@ -14,7 +14,7 @@
 * limitations under the License.
 **/
 
-package io.cu.usmframework.configuration;
+package io._29cu.usmserver.configuration;
 
 import java.sql.SQLException;
 import java.util.Properties;
@@ -38,7 +38,7 @@ public class JpaConfiguration {
 
         final SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
         dataSource.setDriver(new com.mysql.cj.jdbc.Driver());
-        dataSource.setUrl("jdbc:mysql://localhost:3306/usmtest_db");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/usmtest_db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
         dataSource.setUsername("usmtestuser");
         dataSource.setPassword("usmpass");
 
@@ -59,7 +59,7 @@ public class JpaConfiguration {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws SQLException {
 
         LocalContainerEntityManagerFactoryBean lef = new LocalContainerEntityManagerFactoryBean();
-        lef.setPackagesToScan("io.cu.usmframework.core.model.entities");
+        lef.setPackagesToScan("io._29cu.usmserver.core.model.entity");
         lef.setDataSource(dataSource());
         lef.setJpaVendorAdapter(jpaVendorAdapter());
 
