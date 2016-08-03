@@ -20,6 +20,7 @@ import io._29cu.usmserver.core.repository.UserRepositoryTests;
 import io._29cu.usmserver.core.service.UserServiceTests;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.springframework.test.context.ActiveProfiles;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -27,5 +28,6 @@ import org.junit.runners.Suite;
         UserServiceTests.class,
         UserRepositoryTests.class
         })
+@ActiveProfiles("test")
 public class AlphaUmiTestSuite {
 }

@@ -21,6 +21,9 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -30,7 +33,20 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.stereotype.Component;
 
 @Component
+@EnableConfigurationProperties({DataSourceResource.class, JpaAdapterResource.class})
 public class JpaConfiguration {
+
+    @Autowired
+    private final DataSourceResource dataSourceResource;
+
+    @Autowired
+    private final JpaAdapterResource jpaResource;
+
+    @Autowired
+    public JpaConfiguration(DataSourceResource dataSourceResource, JpaAdapterResource jpaResource) {
+        this.dataSourceResource = dataSourceResource;
+        this.jpaResource = jpaResource;
+    }
 
     @Bean
     @Primary
@@ -38,9 +54,10 @@ public class JpaConfiguration {
 
         final SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
         dataSource.setDriver(new com.mysql.cj.jdbc.Driver());
-        dataSource.setUrl("jdbc:mysql://localhost:3306/usmtest_db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
-        dataSource.setUsername("usmtestuser");
-        dataSource.setPassword("usmpass");
+
+        dataSource.setUrl(dataSourceResource.getUrl());
+        dataSource.setUsername(dataSourceResource.getUsername());
+        dataSource.setPassword(dataSourceResource.getPassword());
 
         return dataSource;
     }
@@ -48,11 +65,17 @@ public class JpaConfiguration {
     @Bean
     public JpaVendorAdapter jpaVendorAdapter() {
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-        jpaVendorAdapter.setGenerateDdl(true);
-        jpaVendorAdapter.setShowSql(true);
-        jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.MySQL5Dialect");
+        jpaVendorAdapter.setGenerateDdl(jpaResource.getGenerateddl());
+        jpaVendorAdapter.setShowSql(jpaResource.getShowsql());
+        jpaVendorAdapter.setDatabasePlatform(jpaResource.getDialect());
 
         return jpaVendorAdapter;
+    }
+
+    @Bean
+    @ConfigurationProperties("database")
+    ClientResources dataSorurceResource() {
+        return new ClientResources();
     }
 
     @Bean
@@ -72,6 +95,11 @@ public class JpaConfiguration {
         return lef;
     }
 
+    @Bean
+    @ConfigurationProperties("facebook")
+    ClientResources facebook() {
+        return new ClientResources();
+    }
 
 }
 

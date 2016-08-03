@@ -16,6 +16,7 @@
 
 package io._29cu.usmserver.core.model.entity;
 
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
