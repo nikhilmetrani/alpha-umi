@@ -5,6 +5,7 @@ security:
       client-secret: acmesecret
       scope: read,write
       auto-approve-scopes: '.*'
+      callback-uri: https://www.getpostman.com/oauth2/callback
 
 facebook:
   client:

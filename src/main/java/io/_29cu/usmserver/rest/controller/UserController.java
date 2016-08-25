@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
     @Autowired
     private UserService userService;
