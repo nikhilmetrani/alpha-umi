@@ -16,12 +16,24 @@
 
 package io._29cu.usmserver.rest.controller;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.security.Principal;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+@RestController
 public class IndexController {
 //    @RequestMapping("/")
 //    public String index() {
 //        return "redirect:index.html";
 //    }
+
+    @RequestMapping({ "/user", "/me" })
+    public Map<String, String> user(Principal principal) {
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("name", principal.getName());
+        return map;
+    }
 }

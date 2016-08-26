@@ -53,7 +53,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+//@RestController
 @Configuration
 @EnableOAuth2Client
 @EnableAuthorizationServer
@@ -63,19 +63,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     OAuth2ClientContext oauth2ClientContext;
 
-    @RequestMapping({ "/user", "/me" })
-    public Map<String, String> user(Principal principal) {
-        Map<String, String> map = new LinkedHashMap<>();
-        map.put("name", principal.getName());
-        return map;
-    }
+//    @RequestMapping({ "/user", "/me" })
+//    public Map<String, String> user(Principal principal) {
+//        Map<String, String> map = new LinkedHashMap<>();
+//        map.put("name", principal.getName());
+//        return map;
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
         http.antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/", "/login**", "/webjars/**").permitAll()
+                .antMatchers("/", "/login**", "/store", "/webjars/**").permitAll()
+                .antMatchers("/store", "/store/**").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
                 .and().logout().logoutSuccessUrl("/").permitAll()
@@ -94,7 +95,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             // @formatter:off
             http
                     .antMatcher("/me")
-                    .antMatcher("/api/**/**")
+                    .antMatcher("/user")
+                    .antMatcher("/api*")
                     .authorizeRequests().anyRequest().authenticated();
             // @formatter:on
         }

@@ -14,7 +14,7 @@
 * limitations under the License.
 **/
 
-package io._29cu.usmserver.rest.controller;
+package io._29cu.usmserver.rest.api.controller;
 
 import io._29cu.usmserver.core.model.entity.User;
 import io._29cu.usmserver.core.service.UserService;
