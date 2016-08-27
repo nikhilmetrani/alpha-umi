@@ -30,6 +30,16 @@ public class User implements Serializable {
     private Long id;
     @NotNull
     private String email;
+    @NotNull
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;

@@ -17,9 +17,16 @@
 package io._29cu.usmserver.core.repository;
 
 import io._29cu.usmserver.core.model.entity.Application;
+import io._29cu.usmserver.core.model.entity.User;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public interface ApplicationRepository extends CrudRepository<Application, Long> {
+    @Query("select u from Application u where u.developer.id = :id")
+    List<Application> findApplicationsByDeveloper(@Param("id") Long id);
 }

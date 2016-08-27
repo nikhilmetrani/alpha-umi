@@ -21,6 +21,15 @@ import io._29cu.usmserver.core.model.entity.User;
 public class UserResource extends EntityResourceBase<User> {
     private Long rid;
     private String email;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Long getRid() {
         return rid;
@@ -43,6 +52,7 @@ public class UserResource extends EntityResourceBase<User> {
         User user = new User();
         user.setId(rid);
         user.setEmail(email);
+        user.setName(name);
         return user;
     }
 }

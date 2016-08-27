@@ -33,6 +33,7 @@ public class UserResourceAssembler extends ResourceAssemblerSupport<User, UserRe
         UserResource userResource = new UserResource();
         userResource.setRid(user.getId());
         userResource.setEmail(user.getEmail());
+        userResource.setName(user.getName());
         userResource.add(linkTo(methodOn(UserController.class).getUser(user.getId())).withSelfRel());
         return userResource;
     }

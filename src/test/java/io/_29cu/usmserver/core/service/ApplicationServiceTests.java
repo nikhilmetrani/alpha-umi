@@ -14,8 +14,9 @@
  * limitations under the License.
  **/
 
-package io._29cu.usmserver.core.repository;
+package io._29cu.usmserver.core.service;
 
+import io._29cu.usmserver.core.model.entity.Application;
 import io._29cu.usmserver.core.model.entity.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,26 +34,36 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class UserRepositoryTests {
+public class ApplicationServiceTests {
     @Autowired
-    private UserRepository repo;
+    private ApplicationService service;
+    @Autowired
+    private UserService userService;
 
-    private User account;
+    private User developer;
+    private Application application;
 
     @Before
     @Transactional
     @Rollback(false)
     public void setup() {
-        account = new User();
-        account.setEmail("name");
-        repo.save(account);
+        developer = new User();
+        developer.setName("developer");
+        developer.setEmail("developer@email.com");
+        userService.createUser(developer);
+
+        application = new Application();
+        application.setName("application");
+        application.setDeveloper(developer);
+        service.createApplication(application);
     }
 
     @Test
     @Transactional
     public void testFind() {
-        User fromDb = repo.findOne(account.getId());
+        Application fromDb = service.findApplication(application.getId());
         assertNotNull(fromDb);
-        assertEquals("User email does not match", account.getEmail(), fromDb.getEmail());
+        assertEquals("Application name does not match", application.getName(), fromDb.getName());
+        assertEquals("Application developer does not match", application.getDeveloper(), fromDb.getDeveloper());
     }
 }

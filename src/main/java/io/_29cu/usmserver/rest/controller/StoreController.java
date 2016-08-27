@@ -45,7 +45,7 @@ public class StoreController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> store() {
         try {
-            ApplicationList appList = applicationService.getFeaturedApplications();
+            ApplicationList appList = applicationService.getAllApplications();
             ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(resource.getLink("self").getHref()));

@@ -16,12 +16,14 @@
 
 package io._29cu.usmserver.core.service.impl;
 
+import io._29cu.usmserver.common.utility.AppHelper;
 import io._29cu.usmserver.core.model.entity.Application;
 import io._29cu.usmserver.core.model.entity.User;
 import io._29cu.usmserver.core.repository.ApplicationRepository;
 import io._29cu.usmserver.core.repository.UserRepository;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.utility.ApplicationList;
+import io._29cu.usmserver.core.service.utility.DummyData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,9 +40,14 @@ public class ApplicationServiceImpl implements ApplicationService{
     ApplicationRepository applicationRepository;
 
     @Override
-    public ApplicationList getFeaturedApplications() {
-        return createDummyApplicationList();
+    public ApplicationList getAllApplications() {
+        DummyData.createDummyData(userRepository, applicationRepository);
+        ApplicationList appList = new ApplicationList();
+        appList.setApplications(AppHelper.getInstance().convertIterableToList(applicationRepository.findAll()));
+        return appList;
     }
+
+
 
     @Override
     public Application createApplication(Application application) {
@@ -52,39 +59,12 @@ public class ApplicationServiceImpl implements ApplicationService{
         return applicationRepository.findOne(id);
     }
 
-    private ApplicationList createDummyApplicationList() {
-        List<Application> appList = new ArrayList<>();
-
-        User developer = userRepository.findOne(1L);
-        if (null == developer){
-            developer = new User();
-            developer.setId(1L);
-            developer.setEmail("support@microsoft.com");
-            userRepository.save(developer);
-        }
-
-        Application app = applicationRepository.findOne(2L);
-        if (null == app) {
-            app = new Application();
-            app.setId(2L);
-            app.setName("Visual Studio Code");
-            app.setDeveloper(developer);
-            applicationRepository.save(app);
-        }
-        appList.add(app);
-
-        app = applicationRepository.findOne(3L);
-        if (null == app) {
-            app = new Application();
-            app.setId(3L);
-            app.setName("MS Office");
-            app.setDeveloper(developer);
-            applicationRepository.save(app);
-        }
-        appList.add(app);
-
+    @Override
+    public ApplicationList findApplicationsByDeveloper(Long developerId) {
+        List<Application> appList = applicationRepository.findApplicationsByDeveloper(developerId);
         ApplicationList applicationList = new ApplicationList();
         applicationList.setApplications(appList);
-        return applicationList;
+        return  applicationList;
     }
+
 }

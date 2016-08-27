@@ -18,7 +18,10 @@ package io._29cu.usmserver.rest.controller;
 
 import io._29cu.usmserver.core.model.entity.Application;
 import io._29cu.usmserver.core.service.ApplicationService;
+import io._29cu.usmserver.core.service.utility.ApplicationList;
+import io._29cu.usmserver.rest.resource.ApplicationListResource;
 import io._29cu.usmserver.rest.resource.ApplicationResource;
+import io._29cu.usmserver.rest.resource.assembler.ApplicationListResourceAssembler;
 import io._29cu.usmserver.rest.resource.assembler.ApplicationResourceAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,5 +49,17 @@ public class ApplicationController {
 
         ApplicationResource applicationResource = new ApplicationResourceAssembler().toResource(application);
         return new ResponseEntity<ApplicationResource>(applicationResource, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/developer/{developerId}", method = RequestMethod.GET)
+    public ResponseEntity<ApplicationListResource> getApplicationByDeveloper(
+            @PathVariable Long developerId
+    ) {
+        ApplicationList applicationList = applicationService.findApplicationsByDeveloper(developerId);
+        if (null == applicationList)
+            return new ResponseEntity<ApplicationListResource>(HttpStatus.NOT_FOUND);
+
+        ApplicationListResource applicationListResource = new ApplicationListResourceAssembler().toResource(applicationList);
+        return new ResponseEntity<ApplicationListResource>(applicationListResource, HttpStatus.OK);
     }
 }

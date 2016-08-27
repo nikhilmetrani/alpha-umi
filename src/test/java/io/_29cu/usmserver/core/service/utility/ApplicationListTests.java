@@ -14,45 +14,47 @@
  * limitations under the License.
  **/
 
-package io._29cu.usmserver.core.repository;
+package io._29cu.usmserver.core.service.utility;
 
-import io._29cu.usmserver.core.model.entity.User;
-import org.junit.Before;
+import io._29cu.usmserver.common.utility.AppHelper;
+import io._29cu.usmserver.core.model.entity.Application;
+import io._29cu.usmserver.core.repository.ApplicationRepository;
+import io._29cu.usmserver.core.repository.UserRepository;
+import io._29cu.usmserver.core.service.ApplicationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class UserRepositoryTests {
+public class ApplicationListTests {
     @Autowired
-    private UserRepository repo;
+    private ApplicationRepository applicationRepository;
 
-    private User account;
-
-    @Before
-    @Transactional
-    @Rollback(false)
-    public void setup() {
-        account = new User();
-        account.setEmail("name");
-        repo.save(account);
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     @Transactional
-    public void testFind() {
-        User fromDb = repo.findOne(account.getId());
-        assertNotNull(fromDb);
-        assertEquals("User email does not match", account.getEmail(), fromDb.getEmail());
+    public void testApplicationListClass() {
+        DummyData.createDummyData(userRepository, applicationRepository);
+        List<Application> appList =  AppHelper.getInstance().convertIterableToList(applicationRepository.findAll());
+        ApplicationList applicationList = new ApplicationList();
+        applicationList.setApplications(appList);
+        List<Application> appList2 = applicationList.getApplications();
+        for (Application app: appList) {
+            assertTrue(appList2.contains(app));
+        }
     }
 }

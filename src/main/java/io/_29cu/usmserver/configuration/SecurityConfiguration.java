@@ -95,8 +95,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             // @formatter:off
             http
                     .antMatcher("/me")
+                    .authorizeRequests().anyRequest().authenticated()
+                    .and()
                     .antMatcher("/user")
-                    .antMatcher("/api*")
+                    .authorizeRequests().anyRequest().authenticated()
+                    .and()
+                    .antMatcher("/api/**")
                     .authorizeRequests().anyRequest().authenticated();
             // @formatter:on
         }

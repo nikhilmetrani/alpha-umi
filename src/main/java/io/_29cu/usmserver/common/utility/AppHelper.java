@@ -14,16 +14,28 @@
  * limitations under the License.
  **/
 
-package io._29cu.usmserver.core.service;
+package io._29cu.usmserver.common.utility;
 
-import io._29cu.usmserver.core.model.entity.Application;
-import io._29cu.usmserver.core.service.utility.ApplicationList;
-import org.springframework.stereotype.Component;
+import java.util.ArrayList;
+import java.util.List;
 
-@Component
-public interface ApplicationService {
-    public ApplicationList getAllApplications();
-    public Application createApplication(Application application);
-    public Application findApplication(Long id);
-    public ApplicationList findApplicationsByDeveloper(Long developerId);
+public class AppHelper {
+
+    private static AppHelper instance = null;
+
+    private AppHelper() {}
+
+    public static AppHelper getInstance() {
+        if(null == instance)
+            instance = new AppHelper();
+        return instance;
+    }
+
+    public <E> List<E> convertIterableToList(Iterable<E> iter) {
+        List<E> list = new ArrayList<E>();
+        for (E item : iter) {
+            list.add(item);
+        }
+        return list;
+    }
 }
