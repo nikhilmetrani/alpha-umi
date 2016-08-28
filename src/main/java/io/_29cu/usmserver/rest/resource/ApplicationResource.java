@@ -24,6 +24,15 @@ public class ApplicationResource extends EntityResourceBase<Application> {
     private Long rid;
     private String name;
     private User developer;
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public Long getRid() {
         return rid;

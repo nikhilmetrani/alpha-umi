@@ -40,40 +40,40 @@ public class DummyData {
 
         User developer = createDeveloper(1L, "Microsoft", "support@microsoft.com");
         userRepository.save(developer);
-        Application app = createApplication(1L, "Visual Studio Code", developer);
+        Application app = createApplication(1L, "Visual Studio Code", developer, "Development");
         applicationRepository.save(app);
-        app = createApplication(2L, "Microsoft Office", developer);
+        app = createApplication(2L, "Microsoft Office", developer, "Productivity");
         applicationRepository.save(app);
-        app = createApplication(3L, "Dot Net Framewok", developer);
+        app = createApplication(3L, "Dot Net Framewok", developer, "Development");
         applicationRepository.save(app);
 
 
 
         developer = createDeveloper(2L, "GitHub", "support@github.com");
         userRepository.save(developer);
-        app = createApplication(4L, "GitHub Desktop App", developer);
+        app = createApplication(4L, "GitHub Desktop App", developer, "Development");
         applicationRepository.save(app);
-        app = createApplication(5L, "Atom Editor", developer);
+        app = createApplication(5L, "Atom Editor", developer, "Development");
         applicationRepository.save(app);
 
 
         developer = createDeveloper(3L, "Google", "support@google.com");
         userRepository.save(developer);
-        app = createApplication(6L, "Google Chrome", developer);
+        app = createApplication(6L, "Google Chrome", developer, "Productivity");
         applicationRepository.save(app);
-        app = createApplication(7L, "Google Drive Sync", developer);
+        app = createApplication(7L, "Google Drive Sync", developer, "Productivity");
         applicationRepository.save(app);
-        app = createApplication(8L, "Google Web Developer", developer);
+        app = createApplication(8L, "Google Web Developer", developer, "Development");
         applicationRepository.save(app);
 
 
         developer = createDeveloper(4L, "Adobe", "support@adobe.com");
         userRepository.save(developer);
-        app = createApplication(9L, "Photoshop CC", developer);
+        app = createApplication(9L, "Photoshop CC", developer, "Photography");
         applicationRepository.save(app);
-        app = createApplication(10L, "Lightroom CC", developer);
+        app = createApplication(10L, "Lightroom CC", developer, "Photography");
         applicationRepository.save(app);
-        app = createApplication(11L, "Acrobat DC", developer);
+        app = createApplication(11L, "Acrobat DC", developer, "Productivity");
         applicationRepository.save(app);
 
     }
@@ -86,11 +86,12 @@ public class DummyData {
         return developer;
     }
 
-    private static Application createApplication(Long id, String name, User developer) {
+    private static Application createApplication(Long id, String name, User developer, String category) {
         Application app = new Application();
 //        app.setId(id);
         app.setDeveloper(developer);
         app.setName(name);
+        app.setCategory(category);
         return app;
     }
 }

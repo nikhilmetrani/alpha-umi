@@ -67,4 +67,12 @@ public class ApplicationServiceImpl implements ApplicationService{
         return  applicationList;
     }
 
+    @Override
+    public ApplicationList findApplicationsByCategory(String category) {
+        List<Application> appList = applicationRepository.findApplicationsByCategory(category);
+        ApplicationList applicationList = new ApplicationList();
+        applicationList.setApplications(appList);
+        return  applicationList;
+    }
+
 }

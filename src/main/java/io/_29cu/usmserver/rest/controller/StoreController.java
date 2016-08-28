@@ -30,6 +30,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -42,6 +44,7 @@ public class StoreController {
     @Autowired
     private ApplicationService applicationService;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> store() {
         try {
@@ -54,4 +57,22 @@ public class StoreController {
             return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping(value = "/{category}", method = RequestMethod.GET)
+    public ResponseEntity<ApplicationListResource> getApplication(
+            @PathVariable String category
+    ) {
+        try {
+            ApplicationList appList = applicationService.findApplicationsByCategory(category);
+            ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create(resource.getLink("self").getHref()));
+            return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 }

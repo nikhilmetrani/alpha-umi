@@ -34,6 +34,16 @@ public class Application {
     @ManyToOne
     private User developer;
 
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String catrgory) {
+        this.category = catrgory;
+    }
+
     public Long getId() {
         return id;
     }
