@@ -15,25 +15,48 @@
 * limitations under the License.
 **/
  -->
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Alpha-UMi</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width" />
-    <base href="/" />
-    <link rel="stylesheet" type="text/css"
-          href="/webjars/bootstrap/css/bootstrap.min.css" />
-    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
-    <script type="text/javascript"
-            src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-</head>
-<body>
-<div class="container">
-    <h1>Alpha-UMi</h1>
-    <h3>Welcom to the Alpha-Umi REST API server</h3>
-</div>
-</body>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>29cu.io</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <base href="/" />
+
+        <!-- 1. Load libraries -->
+        <!-- Polyfill(s) for older browsers -->
+        <script src="js/lib/core-js/client/shim.min.js"></script>
+
+        <script src="js/lib/zone.js/dist/zone.js"></script>
+        <script src="js/lib/reflect-metadata/Reflect.js"></script>
+        <script src="js/lib/systemjs/dist/system.src.js"></script>
+
+        <!-- 2. Configure SystemJS -->
+        <script src="js/systemjs.config.js"></script>
+        <script>
+            System.import('app')
+                    .then(null, console.error.bind(console));
+        </script>
+
+        <!-- 3. Bootstrap theme managed by alpha-umi pom -->
+        <link rel="stylesheet" type="text/css"
+                href="/webjars/bootstrap/css/bootstrap.min.css" />
+        <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+        <script type="text/javascript"
+                src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    </head>
+
+    <!-- 4. Display the application -->
+    <body>
+        <app>
+            <div class="container">
+                <h1>Alpha-Umi</h1>
+                <h3>Welcome to the Alpha-Umi REST API server</h3>
+            </div>
+        </app>
+    </body>
+
 </html>

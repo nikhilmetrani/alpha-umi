@@ -45,11 +45,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 //@RestController
 @Configuration
@@ -73,14 +70,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // @formatter:off
         http.antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/", "/login**", "/js/**", "/app/**", "/webjars/**").permitAll()
-                .antMatchers("/store", "/store/**").permitAll()
-                .anyRequest().authenticated()
-                .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
-                .and().logout().logoutSuccessUrl("/").permitAll()
-                .and().csrf().csrfTokenRepository(csrfTokenRepository())
-                .and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
-                .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
+                    .antMatchers("/", "/js/**", "/app/**", "/webjars/**")
+                        .permitAll()
+                    .antMatchers("/store", "/store/**")
+                        .permitAll()
+                    .anyRequest()
+                    .authenticated()
+                .and()
+                    .exceptionHandling()
+                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
+                .and()
+                    .logout()
+                        .logoutSuccessUrl("/")
+                            .permitAll()
+                .and()
+                    .csrf()
+                        .csrfTokenRepository(csrfTokenRepository())
+                .and()
+                    .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
+                    .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class)
+                ;
         // @formatter:on
     }
 
