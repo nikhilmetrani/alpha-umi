@@ -58,13 +58,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     OAuth2ClientContext oauth2ClientContext;
 
-//    @RequestMapping({ "/user", "/me" })
-//    public Map<String, String> user(Principal principal) {
-//        Map<String, String> map = new LinkedHashMap<>();
-//        map.put("name", principal.getName());
-//        return map;
-//    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
@@ -82,7 +75,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                     .logout()
                         .logoutSuccessUrl("/")
-                            .permitAll()
+                                .permitAll()
                 .and()
                     .csrf()
                         .csrfTokenRepository(csrfTokenRepository())

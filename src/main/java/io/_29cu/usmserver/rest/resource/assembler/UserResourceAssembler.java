@@ -17,7 +17,7 @@
 package io._29cu.usmserver.rest.resource.assembler;
 
 import io._29cu.usmserver.core.model.entity.User;
-import io._29cu.usmserver.rest.api.controller.UserController;
+import io._29cu.usmserver.rest.controller.UserController;
 import io._29cu.usmserver.rest.resource.UserResource;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 

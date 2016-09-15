@@ -17,9 +17,13 @@
 package io._29cu.usmserver.core.repository;
 
 import io._29cu.usmserver.core.model.entity.User;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
 @Component
 public interface UserRepository extends CrudRepository<User, Long> {
+    @Query("select u from User u where u.principal = :principal")
+    User findUserByPrincipal(@Param("principal") String principal);
 }

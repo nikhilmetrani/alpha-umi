@@ -44,7 +44,6 @@ public class StoreController {
     @Autowired
     private ApplicationService applicationService;
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> store() {
         try {
@@ -58,7 +57,6 @@ public class StoreController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/{category}", method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> getApplication(
             @PathVariable String category

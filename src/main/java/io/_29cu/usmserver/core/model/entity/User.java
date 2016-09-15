@@ -17,6 +17,7 @@
 package io._29cu.usmserver.core.model.entity;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -28,10 +29,21 @@ public class User implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-    @NotNull
+
     private String email;
     @NotNull
     private String name;
+
+    @Column(unique = true)
+    private String principal;
+
+    public String getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(String principal) {
+        this.principal = principal;
+    }
 
     public String getName() {
         return name;
