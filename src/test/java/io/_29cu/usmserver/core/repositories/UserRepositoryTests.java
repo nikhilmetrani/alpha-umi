@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-package io._29cu.usmserver.core.service;
+package io._29cu.usmserver.core.repositories;
 
 import io._29cu.usmserver.core.model.entities.User;
 import org.junit.Before;
@@ -33,10 +33,9 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class UserServiceTests {
-
+public class UserRepositoryTests {
     @Autowired
-    private UserService service;
+    private UserRepository repo;
 
     private User account;
 
@@ -46,14 +45,14 @@ public class UserServiceTests {
     public void setup() {
         account = new User();
         account.setEmail("name");
-        service.createUser(account);
+        repo.save(account);
     }
 
     @Test
     @Transactional
     public void testFind() {
-        User fromDb = service.findUser(account.getId());
+        User fromDb = repo.findOne(account.getId());
         assertNotNull(fromDb);
-        assertEquals("Account was retrieved", account.getEmail(), fromDb.getEmail());
+        assertEquals("User email does not match", account.getEmail(), fromDb.getEmail());
     }
 }

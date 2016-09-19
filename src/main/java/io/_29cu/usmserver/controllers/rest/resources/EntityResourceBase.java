@@ -14,14 +14,10 @@
 * limitations under the License.
 **/
 
-package io._29cu.usmserver.core.service;
+package io._29cu.usmserver.controllers.rest.resources;
 
-import io._29cu.usmserver.core.model.entities.User;
-import java.security.Principal;
+import org.springframework.hateoas.ResourceSupport;
 
-public interface UserService {
-    public User createUser(User user);
-    public User findUser(Long id);
-    public User findUserByPrincipal(String principal);
-    public User createUser(Principal principal);
+public abstract class EntityResourceBase<T> extends ResourceSupport {
+    public abstract T toEntity();
 }

@@ -14,8 +14,10 @@ facebook:
     accessTokenUri: https://graph.facebook.com/oauth/access_token
     userAuthorizationUri: https://www.facebook.com/dialog/oauth
     tokenName: oauth_token
-    authenticationScheme: query
     clientAuthenticationScheme: form
+    scope:
+        - email
+        - public_profile
   resource:
     userInfoUri: https://graph.facebook.com/me
 github:
@@ -25,8 +27,24 @@ github:
     accessTokenUri: https://github.com/login/oauth/access_token
     userAuthorizationUri: https://github.com/login/oauth/authorize
     clientAuthenticationScheme: form
+    scope:
+        - user:email
   resource:
     userInfoUri: https://api.github.com/user
+google:
+  client:
+    clientId: 744812384697-qnivnv6309du3lvkb9tq0de0t2dmu5oh.apps.googleusercontent.com
+    clientSecret: kyzsOxPKbr4SpOJQMLgIU9Dj
+    accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+    userAuthorizationUri: https://accounts.google.com/o/oauth2/auth
+    clientAuthenticationScheme: form
+    scope:
+        - openid
+        - profile
+        - email
+  resource:
+    userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+    preferTokenInfo: false
 
 logging:
   level:

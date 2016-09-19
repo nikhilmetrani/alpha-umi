@@ -16,18 +16,16 @@
 
 package io._29cu.usmserver.core.service.impl;
 
-import io._29cu.usmserver.common.utility.AppHelper;
-import io._29cu.usmserver.core.model.entity.Application;
-import io._29cu.usmserver.core.model.entity.User;
-import io._29cu.usmserver.core.repository.ApplicationRepository;
-import io._29cu.usmserver.core.repository.UserRepository;
+import io._29cu.usmserver.common.utilities.AppHelper;
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.repositories.ApplicationRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 import io._29cu.usmserver.core.service.ApplicationService;
-import io._29cu.usmserver.core.service.utility.ApplicationList;
-import io._29cu.usmserver.core.service.utility.DummyData;
+import io._29cu.usmserver.core.service.utilities.ApplicationList;
+import io._29cu.usmserver.core.service.utilities.DummyData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component

@@ -5,12 +5,18 @@
     <packaging>jar</packaging>
     <groupId>io._29cu.usmserver</groupId>
     <artifactId>alpha-umi</artifactId>
-    <version>1.0.1.0-BUILD</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
         <java.version>1.8</java.version>
+
+        <!--Component versions-->
+        <version.spring.boot.starter>1.4.0.RELEASE</version.spring.boot.starter>
+        <version.mysql.connector>6.0.3</version.mysql.connector>
+        <version.c3po>0.9.1.2</version.c3po>
+        <version.jjwt>0.6.0</version.jjwt>
     </properties>
 
     <parent>
@@ -23,6 +29,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${version.spring.boot.starter}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.hateoas</groupId>
@@ -35,17 +42,30 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>6.0.3</version> <!-- Version 6.0.3 is explicitely listed as it is required -->
+            <version>${version.mysql.connector}</version> <!-- Version 6.0.3 is explicitely listed as it is required -->
         </dependency>
         <!-- MySQL C3P0 Data Pool -->
         <dependency>
             <groupId>c3p0</groupId>
             <artifactId>c3p0</artifactId>
-            <version>0.9.1.2</version>
+            <version>${version.c3po}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+
+        <!--JWT Security-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${version.jjwt}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!-- Test Dependencies -->

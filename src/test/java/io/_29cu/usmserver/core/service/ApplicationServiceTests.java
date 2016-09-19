@@ -16,8 +16,8 @@
 
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entity.Application;
-import io._29cu.usmserver.core.model.entity.User;
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

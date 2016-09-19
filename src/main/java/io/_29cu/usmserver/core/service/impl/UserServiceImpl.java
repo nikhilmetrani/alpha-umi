@@ -16,9 +16,9 @@
 
 package io._29cu.usmserver.core.service.impl;
 
-import io._29cu.usmserver.core.model.entity.User;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.UserService;
-import io._29cu.usmserver.core.repository.UserRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
