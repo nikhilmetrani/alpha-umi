@@ -14,27 +14,14 @@
  * limitations under the License.
  **/
 
-package io._29cu.usmserver.controllers.rest.resources;
+package io._29cu.usmserver;
 
-import io._29cu.usmserver.core.service.utilities.ApplicationList;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ApplicationListResource extends EntityResourceBase<ApplicationList> {
-
-    private List<ApplicationResource> applications = new ArrayList();
-
-    public List<ApplicationResource> getApplications() {
-        return applications;
-    }
-
-    public void setApplications(List<ApplicationResource> applications) {
-        this.applications = applications;
-    }
-
+public class AlphaUmiServletInitializer extends SpringBootServletInitializer {
     @Override
-    public ApplicationList toEntity() {
-        return null;
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(AlphaUmiApplication.class);
     }
 }
