@@ -16,12 +16,11 @@
 
 package io._29cu.usmserver;
 
-import io._29cu.usmserver.common.utility.AppHelperTests;
-import io._29cu.usmserver.core.repository.UserRepositoryTests;
-import io._29cu.usmserver.core.service.ApplicationService;
+import io._29cu.usmserver.common.utilities.AppHelperTests;
+import io._29cu.usmserver.core.repositories.UserRepositoryTests;
 import io._29cu.usmserver.core.service.ApplicationServiceTests;
 import io._29cu.usmserver.core.service.UserServiceTests;
-import io._29cu.usmserver.core.service.utility.ApplicationListTests;
+import io._29cu.usmserver.core.service.utilities.ApplicationListTests;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.springframework.test.context.ActiveProfiles;

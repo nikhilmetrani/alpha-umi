@@ -14,17 +14,21 @@
  * limitations under the License.
  **/
 
-package io._29cu.usmserver.core.service;
+package io._29cu.usmserver.core.repositories;
 
 import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.service.utilities.ApplicationList;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
-public interface ApplicationService {
-    public ApplicationList getAllApplications();
-    public Application createApplication(Application application);
-    public Application findApplication(Long id);
-    public ApplicationList findApplicationsByDeveloper(Long developerId);
-    public ApplicationList findApplicationsByCategory(String category);
+public interface ApplicationRepository extends CrudRepository<Application, Long> {
+    @Query("select u from Application u where u.developer.id = :id")
+    List<Application> findApplicationsByDeveloper(@Param("id") Long id);
+
+    @Query("select u from Application u where u.category = :category")
+    List<Application> findApplicationsByCategory(@Param("category") String category);
 }

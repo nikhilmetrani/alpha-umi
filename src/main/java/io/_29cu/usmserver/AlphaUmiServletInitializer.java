@@ -14,17 +14,14 @@
  * limitations under the License.
  **/
 
-package io._29cu.usmserver.core.service;
+package io._29cu.usmserver;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.service.utilities.ApplicationList;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 
-@Component
-public interface ApplicationService {
-    public ApplicationList getAllApplications();
-    public Application createApplication(Application application);
-    public Application findApplication(Long id);
-    public ApplicationList findApplicationsByDeveloper(Long developerId);
-    public ApplicationList findApplicationsByCategory(String category);
+public class AlphaUmiServletInitializer extends SpringBootServletInitializer {
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(AlphaUmiApplication.class);
+    }
 }

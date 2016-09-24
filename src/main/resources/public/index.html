@@ -1,6 +1,6 @@
 <!--
 /**
-* Copyright 2016 - 29cu.io and the authors of alpha-umi open source project
+* Copyright 2016 - 29cu.io and the authors of beta-ori open source project
 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -13,73 +13,52 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-**/ 
- -->
+**/
+-->
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Alpha UMi</title>
+        <title>29cu.io</title>
         <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <base href="/" />
-        <link rel="stylesheet" type="text/css"
-              href="/webjars/bootstrap/css/bootstrap.min.css" />
-        <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
-        <script type="text/javascript"
-                src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-    </head>
-    <body ng-app="app" ng-controller="home as home">
-        <div class="container">
-            <h1>Alpha UMi</h1>
-            <h2>Universal Software Marketplace</h2>
-        </div>
-        <div class="container" ng-show="!home.authenticated">
-            <div>
-                Consumer: <a href="/login/facebook">click here</a>
-            </div>
-            <div>
-                Developer: <a href="/login/github">click here</a>
-            </div>
-        </div>
-        <div class="container" ng-show="home.authenticated">
-            Logged in as: <span ng-bind="home.user"></span>
-            <div>
-                <button ng-click="home.logout()" class="btn btn-primary">Logout</button>
-            </div>
-        </div>
-        <script type="text/javascript" src="/webjars/angularjs/angular.min.js"></script>
-        <script type="text/javascript">
-            angular
-                .module("app", [])
-                .config(
-                    function($httpProvider) {
-                        $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-                    }).controller("home", function($http, $location) {
-                        var self = this;
-                        $http.get("/user").success(function(data) {
-                            if (data.name) {
-                                self.user = data.name;
-                                self.authenticated = true;
-                            } else {
-                                self.user = "N/A";
-                                self.authenticated = false;
-                            }
-                        }).error(function() {
-                            self.user = "N/A";
-                            self.authenticated = false;
-                        });
-                        self.logout = function() {
-                        $http.post('logout', {}).success(function() {
-                            self.authenticated = false;
-                            $location.path("/");
-                        }).error(function(data) {
-                                console.log("Logout failed")
-                                self.authenticated = false;
-                            });
-                        };
-                    });
+
+        <!-- 1. Load libraries -->
+        <!-- Polyfill(s) for older browsers -->
+        <script src="js/lib/core-js/client/shim.min.js"></script>
+
+        <script src="js/lib/zone.js/dist/zone.js"></script>
+        <script src="js/lib/reflect-metadata/Reflect.js"></script>
+        <script src="js/lib/systemjs/dist/system.src.js"></script>
+
+        <!-- 2. Configure SystemJS -->
+        <script src="js/systemjs.config.js"></script>
+        <script>
+            System.import('app')
+                    .then(null, console.error.bind(console));
         </script>
+
+        <!-- 3. Bootstrap theme managed by alpha-umi pom -->
+        <link rel="stylesheet" type="text/css"
+                href="js/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <script type="text/javascript" src="js/lib/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript"
+                src="js/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css"
+                href="js/lib/font-awesome/css/font-awesome.min.css" />
+    </head>
+
+    <!-- 4. Display the application -->
+    <body>
+        <app>
+            <div class="container">
+                <h1>Alpha-Umi</h1>
+                <h3>Welcome to the Alpha-Umi REST API server</h3>
+            </div>
+        </app>
     </body>
+
 </html>

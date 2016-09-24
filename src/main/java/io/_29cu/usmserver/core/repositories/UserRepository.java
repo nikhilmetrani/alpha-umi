@@ -14,14 +14,16 @@
 * limitations under the License.
 **/
 
-package io._29cu.usmserver.core.service;
+package io._29cu.usmserver.core.repositories;
 
 import io._29cu.usmserver.core.model.entities.User;
-import java.security.Principal;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Component;
 
-public interface UserService {
-    public User createUser(User user);
-    public User findUser(Long id);
-    public User findUserByPrincipal(String principal);
-    public User createUser(Principal principal);
+@Component
+public interface UserRepository extends CrudRepository<User, Long> {
+    @Query("select u from User u where u.principal = :principal")
+    User findUserByPrincipal(@Param("principal") String principal);
 }
