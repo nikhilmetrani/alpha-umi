@@ -17,6 +17,7 @@
         <mysql.connector.version>6.0.3</mysql.connector.version>
         <c3po.version>0.9.1.2</c3po.version>
         <jjwt.version>0.6.0</jjwt.version>
+        <maven.res.plugin.version>2.7</maven.res.plugin.version>
     </properties>
 
     <parent>
@@ -98,6 +99,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven.res.plugin.version}</version>
             </plugin>
         </plugins>
     </build>

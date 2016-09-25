@@ -16,6 +16,7 @@
 
 package io._29cu.usmserver.controllers.rest.resources.assemblers;
 
+import io._29cu.usmserver.controllers.rest.ProfileController;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.controllers.rest.UserController;
 import io._29cu.usmserver.controllers.rest.resources.UserResource;
@@ -35,6 +36,7 @@ public class UserResourceAssembler extends ResourceAssemblerSupport<User, UserRe
         userResource.setEmail(user.getEmail());
         userResource.setName(user.getName());
         userResource.add(linkTo(methodOn(UserController.class).getUser(user.getId())).withSelfRel());
+        userResource.add(linkTo(methodOn(ProfileController.class).developerProfile(user.getId())).withRel("developerProfile"));
         return userResource;
     }
 }

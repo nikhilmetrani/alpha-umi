@@ -65,7 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/", "/error", "/error/**", "/js/**", "/login/**", "/app/**", "/webjars/**")
                         .permitAll()
-                    .antMatchers("/store**", "/store/**")
+                    .antMatchers("/store**", "/store/**", "/api/1/**") //APIs under the path /api/1 are open to all
                         .permitAll()
                     .anyRequest()
                     .authenticated()
@@ -99,7 +99,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .anyRequest()
                         .authenticated()
                     .and()
-                        .antMatcher("/api/**")
+                        .antMatcher("/api/0/**") //Secure APIs go under /api/0 path
+                            .authorizeRequests()
+                            .anyRequest()
+                            .authenticated()
+                    .and()
+                        .antMatcher("/me")
                             .authorizeRequests()
                             .anyRequest()
                             .authenticated();
