@@ -63,7 +63,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // @formatter:off
         http.antMatcher("/**")
                 .authorizeRequests()
-                    .antMatchers("/", "/error", "/error/**", "/js/**", "/login/**", "/app/**", "/webjars/**")
+                    .antMatchers("/", "/error", "/error/**", "/css/**", "/img/**", "/js/**", "/login/**", "/fonts/**")
                         .permitAll()
                     .antMatchers("/store**", "/store/**", "/api/1/**") //APIs under the path /api/1 are open to all
                         .permitAll()
