@@ -2,8 +2,8 @@
 
 ## Universal Software Marketplace
 
-[![Build Status](https://travis-ci.com/nikhilmetrani/alpha-umi.svg?token=bQkogbxFfYCzp5uJhLW7&branch=master)](https://travis-ci.com/nikhilmetrani/alpha-umi)
-[![codecov](https://codecov.io/gh/nikhilmetrani/alpha-umi/branch/master/graph/badge.svg?token=KQyi4NZj87)](https://codecov.io/gh/nikhilmetrani/alpha-umi)
+[![Build Status](https://travis-ci.com/nikhilmetrani/alpha-umi.svg?token=bQkogbxFfYCzp5uJhLW7&branch=devcenter)](https://travis-ci.com/nikhilmetrani/alpha-umi)
+[![codecov](https://codecov.io/gh/nikhilmetrani/alpha-umi/branch/devcenter/graph/badge.svg?token=KQyi4NZj87)](https://codecov.io/gh/nikhilmetrani/alpha-umi)
 
 ##Environment setup
 
