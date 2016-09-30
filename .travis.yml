@@ -1,10 +1,9 @@
 language: java
 jdk:
   - oraclejdk8
+sudo: false
 services:
   - mysql
-# before_install:
-#   - mysql -e "create schema IF NOT EXISTS usmtestdb;GRANT ALL PRIVILEGES ON usmtestdb.* TO travis@127.0.0.1 IDENTIFIED BY '';FLUSH PRIVILEGES;" -uroot
 before_script:
   - "mysql -uroot -e \"CREATE SCHEMA IF NOT EXISTS usmtestdb DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;\""
   - "mysql -uroot -e \"GRANT ALL PRIVILEGES ON usmtestdb.* TO 'usm_user'@'localhost' IDENTIFIED BY 'usm_pass';\""
@@ -12,4 +11,10 @@ before_script:
   # Some extras for Travis-CI only
   - "mysql -uroot -e \"DELETE FROM mysql.user WHERE User = 'travis';\""
   - "mysql -uroot -e \"FLUSH PRIVILEGES;\""
-
+script: "mvn cobertura:cobertura"
+after_success:
+  bash <(curl -s https://codecov.io/bash) -t 4f523273-00ba-49d5-bc3b-27b84da15c79
+cache:
+  directories:
+  - .autoconf
+  - $HOME/.m2
