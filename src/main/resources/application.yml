@@ -48,6 +48,7 @@ google:
 
 logging:
   level:
+#    ROOT: ERROR
     org.springframework.security: DEBUG
 
 database:

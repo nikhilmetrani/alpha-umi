@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApplicationList {
-    private List<Application> applications = new ArrayList();
+    private List<Application> applications = new ArrayList<>();
 
     public ApplicationList() {}
 

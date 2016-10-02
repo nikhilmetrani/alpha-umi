@@ -23,7 +23,7 @@ import java.util.List;
 
 public class ApplicationListResource extends EntityResourceBase<ApplicationList> {
 
-    private List<ApplicationResource> applications = new ArrayList();
+    private List<ApplicationResource> applications = new ArrayList<>();
 
     public List<ApplicationResource> getApplications() {
         return applications;

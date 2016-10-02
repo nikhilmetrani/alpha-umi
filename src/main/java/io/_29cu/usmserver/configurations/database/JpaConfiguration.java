@@ -95,12 +95,5 @@ public class JpaConfiguration {
         lef.setJpaProperties(properties);
         return lef;
     }
-
-    @Bean
-    @ConfigurationProperties("facebook")
-    ClientResources facebook() {
-        return new ClientResources();
-    }
-
 }
 
