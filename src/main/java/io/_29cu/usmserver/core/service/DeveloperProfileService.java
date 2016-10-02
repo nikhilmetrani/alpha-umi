@@ -19,6 +19,7 @@ package io._29cu.usmserver.core.service;
 import io._29cu.usmserver.core.model.entities.DeveloperProfile;
 
 public interface DeveloperProfileService {
-    public DeveloperProfile findProfileByUserId(Long id);
-    public DeveloperProfile createProfile(DeveloperProfile profile);
+    public DeveloperProfile findProfileByUserId(Long id);               //View Developer Profile
+    public DeveloperProfile createProfile(DeveloperProfile profile);    //Create Developer Profile
+    public void modifyProfile(DeveloperProfile profile);                //Modify Developer Profile
 }

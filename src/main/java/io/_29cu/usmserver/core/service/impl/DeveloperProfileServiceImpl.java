@@ -37,4 +37,9 @@ public class DeveloperProfileServiceImpl implements DeveloperProfileService{
     public DeveloperProfile createProfile(DeveloperProfile profile) {
         return developerProfileRepository.save(profile);
     }
+
+    @Override
+    public void modifyProfile(DeveloperProfile profile) {
+        //return developerProfileRepository.save(profile);  //not returning any value
+    }
 }
