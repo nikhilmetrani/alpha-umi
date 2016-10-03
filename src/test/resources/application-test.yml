@@ -21,7 +21,8 @@ github:
 
 logging:
   level:
-    org.springframework.security: DEBUG
+    ROOT: ERROR
+    org.springframework.security: ERROR
 
 database:
   jpa:
