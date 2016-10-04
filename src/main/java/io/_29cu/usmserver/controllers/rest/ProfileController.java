@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.stereotype.Controller;
@@ -49,50 +50,58 @@ public class ProfileController {
     public ResponseEntity<DeveloperProfileResource> developerProfile(
             @PathVariable Long userId
     ) {
-        try {
-            User user = userService.findUser(userId);
-            if (null == user) //User does not exist. Something must be wrong
-                return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
-
-            DeveloperProfile developerProfile = developerProfileService.findProfileByUserId(userId);
-            if (null == developerProfile) {
-                developerProfile = new DeveloperProfile(); //Create an empty profile object
-                developerProfile.setOwner(user);
+        // Let's get the user from principal and validate the userId against it.
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal instanceof String) {
+            User user = userService.findUserByPrincipal(principal.toString());
+            if (user.getId() == userId) { // The principal matches with the incoming userId, let's proceed.
+                try {
+                    DeveloperProfile developerProfile = developerProfileService.findProfileByUserId(userId);
+                    if (null == developerProfile) {
+                        developerProfile = new DeveloperProfile(); //Create an empty profile object
+                        developerProfile.setOwner(user);
+                    }
+                    DeveloperProfileResource developerProfileResource = new DeveloperProfileResourceAssembler().toResource(developerProfile);
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setLocation(URI.create(developerProfileResource.getLink("self").getHref()));
+                    return new ResponseEntity<DeveloperProfileResource>(developerProfileResource, headers, HttpStatus.OK);
+                } catch (Exception ex) {
+                    return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
             }
-            DeveloperProfileResource developerProfileResource = new DeveloperProfileResourceAssembler().toResource(developerProfile);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create(developerProfileResource.getLink("self").getHref()));
-            return new ResponseEntity<DeveloperProfileResource>(developerProfileResource, headers, HttpStatus.OK);
-        } catch (Exception ex) {
-            return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
         }
     }
 
-    // userId path variable imposes a security risk. Need to remove it.
     @RequestMapping(path = "/developer/{userId}", method = RequestMethod.POST)
     public ResponseEntity<DeveloperProfileResource> createDeveloperProfile(
             @PathVariable Long userId,
             @RequestBody DeveloperProfileResource developerProfileResource
     ) {
-        User user = userService.findUser(userId);
-        if (null == user) //User does not exist. Something must be wrong
-            return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
-
-        DeveloperProfile developerProfile = developerProfileService.findProfileByUserId(userId);
-        if (null != developerProfile) //User does not exist. Something must be wrong
-            return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
-
-        try {
-            developerProfile = developerProfileResource.toEntity();
-            developerProfile.setOwner(user);
-            DeveloperProfile createdProfile = developerProfileService.createProfile(developerProfile);
-            DeveloperProfileResource createdProfileResource = new DeveloperProfileResourceAssembler().toResource(createdProfile);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create(createdProfileResource.getLink("self").getHref()));
-            return new ResponseEntity<DeveloperProfileResource>(createdProfileResource, headers, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
+        // Let's get the user from principal and validate the userId against it.
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal instanceof String) {
+            User user = userService.findUserByPrincipal(principal.toString());
+            if (user.getId() == userId) { // The principal matches with the incoming userId, let's proceed.
+                try {
+                    DeveloperProfile receivedProfile = developerProfileResource.toEntity();
+                    receivedProfile.setOwner(user);
+                    DeveloperProfile createdProfile = developerProfileService.createProfile(receivedProfile);
+                    DeveloperProfileResource createdProfileResource = new DeveloperProfileResourceAssembler().toResource(createdProfile);
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setLocation(URI.create(createdProfileResource.getLink("self").getHref()));
+                    return new ResponseEntity<DeveloperProfileResource>(createdProfileResource, headers, HttpStatus.OK);
+                } catch (Exception e) {
+                    return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
+            }
+        } else {
+            return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
         }
     }
-
 }
