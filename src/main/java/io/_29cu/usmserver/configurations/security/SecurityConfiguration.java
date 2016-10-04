@@ -28,7 +28,6 @@ import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.*;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -58,6 +57,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     OAuth2ClientContext oauth2ClientContext;
 
+    @Autowired
+    EntryPointUnauthorizedHandler unauthorizedHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
@@ -65,13 +67,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/", "/error", "/error/**", "/css/**", "/img/**", "/js/**", "/login/**", "/fonts/**")
                         .permitAll()
-                    .antMatchers("/store**", "/store/**", "/api/1/**") //APIs under the path /api/1 are open to all
+                    .antMatchers("/api/1/**") // APIs under the path /api/1 are open to all
                         .permitAll()
                     .anyRequest()
                     .authenticated()
                 .and()
                     .exceptionHandling()
-                        .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/error"))
+                        .authenticationEntryPoint(unauthorizedHandler)
                 .and()
                     .logout()
                         .logoutSuccessUrl("/")
@@ -99,7 +101,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .anyRequest()
                         .authenticated()
                     .and()
-                        .antMatcher("/api/0/**") //Secure APIs go under /api/0 path
+                        .antMatcher("/api/0/**") // Secure APIs go under /api/0 path
                             .authorizeRequests()
                             .anyRequest()
                             .authenticated()

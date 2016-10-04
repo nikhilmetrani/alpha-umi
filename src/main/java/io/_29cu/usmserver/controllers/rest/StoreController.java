@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.net.URI;
 
 @Controller
-@RequestMapping("/store")
+@RequestMapping("/api/1/store")
 public class StoreController {
     @Autowired
     private ApplicationService applicationService;

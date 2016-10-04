@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/store/application")
+@RequestMapping("/api/1/store/application")
 public class ApplicationController {
 
     @Autowired

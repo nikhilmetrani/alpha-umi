@@ -23,6 +23,7 @@ import io._29cu.usmserver.controllers.rest.resources.assemblers.UserResourceAsse
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ import java.security.Principal;
 
 @Controller
 @RequestMapping("/user")
+@EnableResourceServer
 public class UserController {
     @Autowired
     private UserService userService;
@@ -39,9 +41,9 @@ public class UserController {
             Principal principal /**/
     ) {
         try {
-            //Let's check whether the user is already registered.
+            // Let's check whether the user is already registered.
             User user = userService.findUserByPrincipal(principal.getName());
-            if (null == user) { //We can't find the principal in our database, let's create it.
+            if (null == user) { // We can't find the principal in our database, let's create it.
                 user = userService.createUser(principal);
             }
 
