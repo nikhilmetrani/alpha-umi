@@ -53,6 +53,11 @@ public class ApplicationServiceImpl implements ApplicationService{
     }
 
     @Override
+    public Application findApplicationByName(String name) {
+        return applicationRepository.findApplicationByName(name);
+    }
+
+    @Override
     public Application findApplication(Long id) {
         return applicationRepository.findOne(id);
     }
