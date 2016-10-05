@@ -39,7 +39,8 @@ public class DeveloperProfileServiceImpl implements DeveloperProfileService{
     }
 
     @Override
-    public void modifyProfile(DeveloperProfile profile) {
-        //return developerProfileRepository.save(profile);  //not returning any value
+    public void modifyProfile(Long id, DeveloperProfile modifiedProfile) {
+        //Save the updated developer profile to repository
+        developerProfileRepository.saveDeveloperProfileByUserId(id, modifiedProfile);
     }
 }
