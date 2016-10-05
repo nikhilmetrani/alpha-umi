@@ -22,9 +22,13 @@ import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -37,6 +41,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
+@ActiveProfiles("test")
 public class StoreControllerTests {
     @InjectMocks
     private StoreController storeController;
@@ -82,10 +89,9 @@ public class StoreControllerTests {
 
     @Test
     public void  testStore() throws Exception {
-
         when(applicationService.getAllApplications()).thenReturn(appList);
 
-        mockMvc.perform(get("/store"))
+        mockMvc.perform(get("/api/1/store"))
                 .andExpect(jsonPath("$.applications[*].name",
                         hasItems(endsWith("Application A"), endsWith("Application B"))))
                 .andExpect(status().isOk());
@@ -93,30 +99,26 @@ public class StoreControllerTests {
 
     @Test
     public void  testStoreErrorHandling() throws Exception {
-
         when(applicationService.getAllApplications()).thenReturn(null);
 
-        mockMvc.perform(get("/store"))
+        mockMvc.perform(get("/api/1/store"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void  testGetApplicationByCategory() throws Exception {
-        // appList = new ApplicationList();
         List<Application> list = new ArrayList<>();
-
         Application appB = new Application();
         appB.setDeveloper(appOwner);
         appB.setName("Application B");
         appB.setId(24L);
         appB.setCategory("Development");
         list.add(appB);
-
         appList.setApplications(list);
 
         when(applicationService.findApplicationsByCategory("Development")).thenReturn(appList);
 
-        mockMvc.perform(get("/store/Development"))
+        mockMvc.perform(get("/api/1/store/Development"))
                 .andExpect(jsonPath("$.applications[*].category",
                         hasItems(endsWith("Development"))))
                 .andExpect(status().isOk());
@@ -124,10 +126,9 @@ public class StoreControllerTests {
 
     @Test
     public void  testGetApplicationByCategoryErrorHandling() throws Exception {
-
         when(applicationService.findApplicationsByCategory("Development")).thenReturn(null);
 
-        mockMvc.perform(get("/store/Development"))
+        mockMvc.perform(get("/api/1/store/Development"))
                 .andExpect(status().isBadRequest());
     }
 }

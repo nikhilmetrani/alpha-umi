@@ -17,6 +17,7 @@
 package io._29cu.usmserver;
 
 import io._29cu.usmserver.common.utilities.AppHelperTests;
+import io._29cu.usmserver.controllers.rest.ApplicationControllerTests;
 import io._29cu.usmserver.controllers.rest.StoreControllerTests;
 import io._29cu.usmserver.core.repositories.UserRepositoryTests;
 import io._29cu.usmserver.core.service.ApplicationServiceTests;
@@ -34,7 +35,8 @@ import org.springframework.test.context.ActiveProfiles;
     ApplicationServiceTests.class,
     AppHelperTests.class,
     ApplicationListTests.class,
-    StoreControllerTests.class
+    StoreControllerTests.class,
+    ApplicationControllerTests.class
 })
 @ActiveProfiles("test")
 public class AlphaUmiTestSuite {

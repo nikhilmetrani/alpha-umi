@@ -17,7 +17,6 @@
 package io._29cu.usmserver.core.repositories;
 
 import io._29cu.usmserver.core.model.entities.DeveloperProfile;
-import io._29cu.usmserver.core.model.entities.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -26,6 +25,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface DeveloperProfileRepository extends CrudRepository<DeveloperProfile, Long>{
     @Query("select p from DeveloperProfile p where p.owner.id = :id")
-    DeveloperProfile findDeveloperProfileByUserId(@Param("id") Long id);                            //Read
-    void saveDeveloperProfileByUserId(@Param("id") Long id, DeveloperProfile modifiedProfile);      //Update
+    DeveloperProfile findDeveloperProfileByUserId(@Param("id") Long id);
 }
