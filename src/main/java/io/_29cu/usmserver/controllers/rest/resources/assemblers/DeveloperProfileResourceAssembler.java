@@ -16,7 +16,7 @@
 
 package io._29cu.usmserver.controllers.rest.resources.assemblers;
 
-import io._29cu.usmserver.controllers.rest.ProfileController;
+import io._29cu.usmserver.controllers.rest.DeveloperProfileController;
 import io._29cu.usmserver.controllers.rest.resources.DeveloperProfileResource;
 import io._29cu.usmserver.core.model.entities.DeveloperProfile;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
@@ -26,7 +26,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 public class DeveloperProfileResourceAssembler extends ResourceAssemblerSupport<DeveloperProfile, DeveloperProfileResource>{
     public DeveloperProfileResourceAssembler() {
-        super(ProfileController.class, DeveloperProfileResource.class);
+        super(DeveloperProfileController.class, DeveloperProfileResource.class);
     }
     @Override
     public DeveloperProfileResource toResource(DeveloperProfile developerProfile) {
@@ -36,7 +36,7 @@ public class DeveloperProfileResourceAssembler extends ResourceAssemblerSupport<
         developerProfileResource.setEmail(developerProfile.getEmail());
         developerProfileResource.setDescription(developerProfile.getDescription());
         developerProfileResource.setCompany(developerProfile.getCompany());
-        developerProfileResource.add(linkTo(methodOn(ProfileController.class).developerProfile(developerProfile.getOwner().getId())).withSelfRel());
+        developerProfileResource.add(linkTo(methodOn(DeveloperProfileController.class).developerProfile(developerProfile.getOwner().getId())).withSelfRel());
         return developerProfileResource;
     }
 }

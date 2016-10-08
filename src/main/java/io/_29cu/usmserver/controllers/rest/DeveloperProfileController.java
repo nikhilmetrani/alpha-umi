@@ -37,16 +37,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.net.URI;
 
 @Controller
-@RequestMapping("/api/0/profile")
+@RequestMapping("/api/0/developer")
 @EnableResourceServer
-public class ProfileController {
+public class DeveloperProfileController {
     @Autowired
     private UserService userService;
     @Autowired
     private DeveloperProfileService developerProfileService;
 
     // userId path variable imposes a security risk. Need to remove it.
-    @RequestMapping(path = "/developer/{userId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{userId}/profile", method = RequestMethod.GET)
     public ResponseEntity<DeveloperProfileResource> developerProfile(
             @PathVariable Long userId
     ) {
@@ -76,7 +76,7 @@ public class ProfileController {
         }
     }
 
-    @RequestMapping(path = "/developer/{userId}", method = RequestMethod.POST)
+    @RequestMapping(path = "/{userId}/profile", method = RequestMethod.POST)
     public ResponseEntity<DeveloperProfileResource> createDeveloperProfile(
             @PathVariable Long userId,
             @RequestBody DeveloperProfileResource developerProfileResource
