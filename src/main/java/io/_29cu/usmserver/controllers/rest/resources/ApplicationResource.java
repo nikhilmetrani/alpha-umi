@@ -25,6 +25,33 @@ public class ApplicationResource extends EntityResourceBase<Application> {
     private String name;
     private User developer;
     private String category;
+    private String status;
+    private String downloadUrl;
+    private String version;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
     public String getCategory() {
         return category;
@@ -64,6 +91,10 @@ public class ApplicationResource extends EntityResourceBase<Application> {
         application.setId(rid);
         application.setName(name);
         application.setDeveloper(developer);
+        application.setStatus(status);
+        application.setDownloadUrl(downloadUrl);
+        application.setVersion(version);
+        application.setCategory(category);
         return application;
     }
 }

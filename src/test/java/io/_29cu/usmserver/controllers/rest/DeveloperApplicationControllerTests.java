@@ -108,9 +108,10 @@ public class DeveloperApplicationControllerTests {
     public void  testCreatingNonExistentApplication() throws Exception {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
+        when(applicationService.createApplication(any(Application.class))).thenReturn(application);
 
-        mockMvc.perform(post("/api/0/developer/22/application/create")
-                .content("{'name':'dreamweaver','downloadUrl':'https://test.com\', 'version':'1.0', 'category':'Productivity', 'status':'Staging'}")
+        mockMvc.perform(post("/api/0/developer/22/applications/create")
+                .content("{\"name\":\"dreamweaver\",\"downloadUrl\":\"https://test.com\", \"version\":\"1.0\", \"category\":\"Productivity\", \"status\":\"Staging\"}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$.name",
@@ -125,7 +126,6 @@ public class DeveloperApplicationControllerTests {
                         equalTo(application.getStatus())))
                 .andExpect(jsonPath("$.category",
                         equalTo(application.getCategory())))
-                .andExpect(header().string("Location", endsWith("/api/0/developer/22/application/create")))
                 .andExpect(status().isOk());
     }
 

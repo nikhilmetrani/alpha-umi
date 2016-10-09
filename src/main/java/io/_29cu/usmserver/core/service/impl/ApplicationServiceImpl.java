@@ -45,8 +45,6 @@ public class ApplicationServiceImpl implements ApplicationService{
         return appList;
     }
 
-
-
     @Override
     public Application createApplication(Application application) {
         return applicationRepository.save(application);
