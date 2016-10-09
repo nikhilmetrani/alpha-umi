@@ -40,40 +40,40 @@ public class DummyData {
 
         User developer = createDeveloper(1L, "Microsoft", "support@microsoft.com");
         userRepository.save(developer);
-        Application app = createApplication(1L, "Visual Studio Code", developer, "Development");
+        Application app = createApplication(1L, "Visual Studio Code", developer, "Development", "1.0", "Published", "http:\\test.con");
         applicationRepository.save(app);
-        app = createApplication(2L, "Microsoft Office", developer, "Productivity");
+        app = createApplication(2L, "Microsoft Office", developer, "Productivity", "2.0", "Published", "http:\\test.con");
         applicationRepository.save(app);
-        app = createApplication(3L, "Dot Net Framewok", developer, "Development");
+        app = createApplication(3L, "Dot Net Framewok", developer, "Development", "3.1", "Staging", "http:\\test.con");
         applicationRepository.save(app);
 
 
 
         developer = createDeveloper(2L, "GitHub", "support@github.com");
         userRepository.save(developer);
-        app = createApplication(4L, "GitHub Desktop App", developer, "Development");
+        app = createApplication(4L, "GitHub Desktop App", developer, "Development", "1.0", "Published", "http:\\test.con");
         applicationRepository.save(app);
-        app = createApplication(5L, "Atom Editor", developer, "Development");
+        app = createApplication(5L, "Atom Editor", developer, "Development", "2.6", "Staging", "http:\\test.con");
         applicationRepository.save(app);
 
 
         developer = createDeveloper(3L, "Google", "support@google.com");
         userRepository.save(developer);
-        app = createApplication(6L, "Google Chrome", developer, "Productivity");
+        app = createApplication(6L, "Google Chrome", developer, "Productivity", "1.0", "Published", "http:\\test.con");
         applicationRepository.save(app);
-        app = createApplication(7L, "Google Drive Sync", developer, "Productivity");
+        app = createApplication(7L, "Google Drive Sync", developer, "Productivity", "2.0", "Published", "http:\\test.con");
         applicationRepository.save(app);
-        app = createApplication(8L, "Google Web Developer", developer, "Development");
+        app = createApplication(8L, "Google Web Developer", developer, "Development", "3.0", "Staging", "http:\\test.con");
         applicationRepository.save(app);
 
 
         developer = createDeveloper(4L, "Adobe", "support@adobe.com");
         userRepository.save(developer);
-        app = createApplication(9L, "Photoshop CC", developer, "Photography");
+        app = createApplication(9L, "Photoshop CC", developer, "Photography", "1.0", "Published", "http:\\test.con");
         applicationRepository.save(app);
-        app = createApplication(10L, "Lightroom CC", developer, "Photography");
+        app = createApplication(10L, "Lightroom CC", developer, "Photography", "2.2", "Published", "http:\\test.con");
         applicationRepository.save(app);
-        app = createApplication(11L, "Acrobat DC", developer, "Productivity");
+        app = createApplication(11L, "Acrobat DC", developer, "Productivity", "3.0", "Staging", "http:\\test.con");
         applicationRepository.save(app);
 
     }
@@ -86,12 +86,15 @@ public class DummyData {
         return developer;
     }
 
-    private static Application createApplication(Long id, String name, User developer, String category) {
+    private static Application createApplication(Long id, String name, User developer, String category, String version, String status, String downloadUrl) {
         Application app = new Application();
 //        app.setId(id);
         app.setDeveloper(developer);
         app.setName(name);
         app.setCategory(category);
+        app.setVersion(version);
+        app.setStatus(status);
+        app.setDownloadUrl(downloadUrl);
         return app;
     }
 }
