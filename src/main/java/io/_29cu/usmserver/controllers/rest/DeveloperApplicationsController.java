@@ -16,19 +16,27 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
 import io._29cu.usmserver.controllers.rest.resources.DeveloperProfileResource;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
 import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.DeveloperProfileService;
 import io._29cu.usmserver.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.net.URI;
 
 @Controller
 @RequestMapping("/api/0/developer")
@@ -54,13 +62,38 @@ public class DeveloperApplicationsController {
 //    }
 //
     // Create Application
-//    @RequestMapping(path = "/{userId}/application", method = RequestMethod.POST)
-//    public ResponseEntity<ApplicationResource> createDeveloperApplication(
-//            @PathVariable Long userId,
-//            @RequestBody ApplicationResource applicationResource
-//    ) {
-//
-//    }
+    @RequestMapping(path = "/{userId}/application/create", method = RequestMethod.POST)
+    public ResponseEntity<ApplicationResource> createDeveloperApplication(
+            @PathVariable Long userId,
+            @RequestBody ApplicationResource applicationResource
+    ) {
+        // Let's get the user from principal and validate the userId against it.
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof String) {
+            User user = userService.findUserByPrincipal(principal.toString());
+            if (user.getId() == userId) { // The principal matches with the incoming userId, let's proceed.
+                try {
+                    //Let's check whether the application is already registered.
+                    Application receivedApplication = applicationResource.toEntity();
+                    Application existingApp = applicationService.findApplicationByName(receivedApplication.getName());
+                    if (null == existingApp) { //We can't find the application in our database, let's create it.
+                        Application application = applicationService.createApplication(receivedApplication);
+                        ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application);
+                        return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
+                    } else {
+                        // Application with same name already exists
+                        return new ResponseEntity<ApplicationResource>(applicationResource, HttpStatus.CONFLICT);
+                    }
+                } catch (Exception ex) {
+                    return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+            }
+        } else {
+            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+        }
+    }
 //
     // Get Application
 //    @RequestMapping(path = "/{userId}/application/{appId}", method = RequestMethod.GET)

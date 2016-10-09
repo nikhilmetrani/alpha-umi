@@ -62,21 +62,4 @@ public class ApplicationController {
         return new ResponseEntity<ApplicationListResource>(applicationListResource, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/createApplication", method = RequestMethod.POST)
-    public ResponseEntity<ApplicationResource> createApplication(
-            Application application /**/
-    ) {
-        try {
-            //Let's check whether the application is already registered.
-            Application existingApp = applicationService.findApplicationByName(application.getName());
-            if (null == existingApp) { //We can't find the application in our database, let's create it.
-                application = applicationService.createApplication(application);
-            }
-
-            ApplicationResource applicationResource = new ApplicationResourceAssembler().toResource(application);
-            return new ResponseEntity<ApplicationResource>(applicationResource, HttpStatus.OK);
-        } catch (Exception ex) {
-            return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
-        }
-    }
 }

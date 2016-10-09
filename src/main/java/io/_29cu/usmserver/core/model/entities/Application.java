@@ -31,6 +31,15 @@ public class Application {
     @NotNull
     private String name;
 
+    @NotNull
+    private String status;
+
+    @NotNull
+    private String downloadUrl;
+
+    @NotNull
+    private String version;
+
     @ManyToOne
     private User developer;
 
@@ -59,6 +68,18 @@ public class Application {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getStatus() { return status; }
+
+    public void setStatus(String status) { this.status = status; }
+
+    public String getDownloadUrl() { return downloadUrl; }
+
+    public String getVersion() { return version; }
+
+    public void setVersion(String version) { this.version = version; }
+
+    public void setDownloadUrl(String downloadUrl) { this.downloadUrl = downloadUrl; }
 
     public User getDeveloper() {
         return developer;
