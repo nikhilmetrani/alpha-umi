@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.net.URI;
 
@@ -85,23 +86,33 @@ public class DeveloperApplicationsController {
         if (!SecurityHelper.getInstance().validateUserIdWithPrincipal(userId, userService))
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
         User user = userService.findUser(userId);
-        try {
-            //Let's check whether the application is already registered.
-            Application receivedApplication = applicationResource.toEntity();
-            receivedApplication.setDeveloper(user);
-            Application existingApp = applicationService.findApplicationByName(receivedApplication.getName());
-            if (null == existingApp) { //We can't find the application in our database, let's create it.
-                Application application = applicationService.createApplication(receivedApplication);
-                ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application);
-                return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
-            } else {
-                // Application with same name already exists
-                return new ResponseEntity<ApplicationResource>(applicationResource, HttpStatus.CONFLICT);
-            }
-        } catch (Exception ex) {
-            return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+        Application receivedApplication = applicationResource.toEntity();
+        receivedApplication.setDeveloper(user); 
+        Application application = applicationService.createApplication(receivedApplication); 
+        ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application); 
+        return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
+    }
+
+    // Create Application
+    @RequestMapping(path = "/{userId}/applications/create", method = RequestMethod.GET)
+    public ResponseEntity<ApplicationResource> isApplicationExistsForDeveloper(
+            @PathVariable Long userId,
+            @RequestParam String name
+    ) {
+        // Let's get the user from principal and validate the userId against it.
+        if (!SecurityHelper.getInstance().validateUserIdWithPrincipal(userId, userService))
+            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+
+        //Let's check whether the application is already registered.
+        Application existingApp = applicationService.findApplicationByDeveloper(userId, name);
+        if (null == existingApp) { //We can't find the application in our database for the developer.
+            return new ResponseEntity<ApplicationResource>(HttpStatus.NO_CONTENT);
+        } else {
+            // Application with same name already exists 
+        	return new ResponseEntity<ApplicationResource>(HttpStatus.OK);
         }
     }
+
 //
     // Get Application
 //    @RequestMapping(path = "/{userId}/application/{appId}/updates", method = RequestMethod.GET)
