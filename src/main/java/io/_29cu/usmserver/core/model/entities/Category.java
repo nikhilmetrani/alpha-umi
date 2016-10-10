@@ -16,32 +16,23 @@
 
 package io._29cu.usmserver.core.model.entities;
 
-import org.hibernate.annotations.NaturalId;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
 
 @Entity
-public class ConsumerProfile {
+public class Category {
     @Id
     @GeneratedValue
     private Long id;
-    @NotNull
-    private String email;
-    private String website;
-    @OneToOne
-    @NaturalId
-    private User consumer;
+    @Column(unique = true)
+    private String name;
 
-    public User getConsumer() {
-        return consumer;
-    }
+    public Category() {}
 
-    public void setConsumer(User consumer) {
-        this.consumer = consumer;
+    public Category(String name) {
+        this.setName(name);
     }
 
     public Long getId() {
@@ -52,19 +43,11 @@ public class ConsumerProfile {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getName() {
+        return name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
+    public void setName(String name) {
+        this.name = name;
     }
 }

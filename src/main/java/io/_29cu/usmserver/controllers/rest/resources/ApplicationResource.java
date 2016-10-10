@@ -17,24 +17,26 @@
 package io._29cu.usmserver.controllers.rest.resources;
 
 import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.enumerations.AppState;
 
 public class ApplicationResource extends EntityResourceBase<Application> {
 
     private Long rid;
     private String name;
     private User developer;
-    private String category;
-    private String status;
+    private Category category;
+    private AppState state;
     private String downloadUrl;
     private String version;
 
-    public String getStatus() {
-        return status;
+    public AppState getState() {
+        return state;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setState(AppState state) {
+        this.state = state;
     }
 
     public String getDownloadUrl() {
@@ -53,11 +55,11 @@ public class ApplicationResource extends EntityResourceBase<Application> {
         this.version = version;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
@@ -91,8 +93,7 @@ public class ApplicationResource extends EntityResourceBase<Application> {
         application.setId(rid);
         application.setName(name);
         application.setDeveloper(developer);
-        application.setStatus(status);
-        application.setDownloadUrl(downloadUrl);
+        application.setState(state);
         application.setVersion(version);
         application.setCategory(category);
         return application;

@@ -19,6 +19,7 @@ package io._29cu.usmserver.core.service.utilities;
 import io._29cu.usmserver.common.utilities.AppHelper;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
+import io._29cu.usmserver.core.repositories.CategoryRepository;
 import io._29cu.usmserver.core.repositories.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,10 +45,13 @@ public class ApplicationListTests {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     @Transactional
     public void testApplicationListClass() {
-        DummyData.createDummyData(userRepository, applicationRepository);
+        DummyData.createDummyData(userRepository, applicationRepository, categoryRepository);
         List<Application> appList =  AppHelper.getInstance().convertIterableToList(applicationRepository.findAll());
         ApplicationList applicationList = new ApplicationList();
         applicationList.setApplications(appList);

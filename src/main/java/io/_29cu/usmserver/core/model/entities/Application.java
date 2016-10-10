@@ -16,10 +16,9 @@
 
 package io._29cu.usmserver.core.model.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import io._29cu.usmserver.core.model.enumerations.AppState;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -27,30 +26,33 @@ public class Application {
     @Id
     @GeneratedValue
     private Long id;
-
     @NotNull
     private String name;
-
     @NotNull
-    private String status;
-
-    @NotNull
-    private String downloadUrl;
-
+    private AppState state;
     @NotNull
     private String version;
-
     @ManyToOne
     private User developer;
+    @OneToOne
+    private Application target;
+    @ManyToOne
+    private Category category;
 
-    private String category;
+    public Application getTarget() {
+        return target;
+    }
 
-    public String getCategory() {
+    public void setTarget(Application target) {
+        this.target = target;
+    }
+
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String catrgory) {
-        this.category = catrgory;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public Long getId() {
@@ -69,17 +71,13 @@ public class Application {
         this.name = name;
     }
 
-    public String getStatus() { return status; }
+    public AppState getState() { return state; }
 
-    public void setStatus(String status) { this.status = status; }
-
-    public String getDownloadUrl() { return downloadUrl; }
+    public void setState(AppState state) { this.state = state; }
 
     public String getVersion() { return version; }
 
     public void setVersion(String version) { this.version = version; }
-
-    public void setDownloadUrl(String downloadUrl) { this.downloadUrl = downloadUrl; }
 
     public User getDeveloper() {
         return developer;

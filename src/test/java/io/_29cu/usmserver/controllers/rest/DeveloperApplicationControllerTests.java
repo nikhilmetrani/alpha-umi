@@ -17,7 +17,9 @@
 package io._29cu.usmserver.controllers.rest;
 
 import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.UserService;
 import org.junit.Before;
@@ -81,19 +83,17 @@ public class DeveloperApplicationControllerTests {
 
         application = new Application();
         application.setId(22L);
-        application.setCategory("Productivity");
+        application.setCategory(new Category("Productivity"));
         application.setName("Dreamweaver");
-        application.setDownloadUrl("https://test.com");
-        application.setStatus("Staging");
+        application.setState(AppState.Staging);
         application.setVersion("1.0");
         application.setDeveloper(developer);
 
         existingApplication = new Application();
         existingApplication.setId(22L);
-        existingApplication.setCategory("Productivity");
+        existingApplication.setCategory(new Category("Productivity"));
         existingApplication.setName("Dreamweaver");
-        existingApplication.setDownloadUrl("https://test.com");
-        existingApplication.setStatus("Staging");
+        existingApplication.setState(AppState.Staging);
         existingApplication.setVersion("1.0");
         existingApplication.setDeveloper(developer);
 
@@ -118,12 +118,10 @@ public class DeveloperApplicationControllerTests {
                         equalTo(application.getName())))
                 .andExpect(jsonPath("$.rid",
                         equalTo(22)))
-                .andExpect(jsonPath("$.downloadUrl",
-                        equalTo(application.getDownloadUrl())))
                 .andExpect(jsonPath("$.version",
                         equalTo(application.getVersion())))
-                .andExpect(jsonPath("$.status",
-                        equalTo(application.getStatus())))
+                .andExpect(jsonPath("$.state",
+                        equalTo(application.getState())))
                 .andExpect(jsonPath("$.category",
                         equalTo(application.getCategory())))
                 .andExpect(status().isOk());

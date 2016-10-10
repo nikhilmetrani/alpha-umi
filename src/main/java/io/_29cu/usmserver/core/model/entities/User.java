@@ -29,11 +29,10 @@ public class User implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-
+    @Column(unique = true)
     private String email;
     @NotNull
     private String name;
-
     @Column(unique = true)
     private String principal;
 

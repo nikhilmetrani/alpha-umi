@@ -17,6 +17,7 @@
 package io._29cu.usmserver.controllers.rest;
 
 import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.ApplicationService;
 import org.junit.Before;
@@ -65,7 +66,7 @@ public class ApplicationControllerTests {
         app.setDeveloper(appOwner);
         app.setName("Application A");
         app.setId(23L);
-        app.setCategory("Productivity");
+        app.setCategory(new Category("Productivity"));
 
     }
 

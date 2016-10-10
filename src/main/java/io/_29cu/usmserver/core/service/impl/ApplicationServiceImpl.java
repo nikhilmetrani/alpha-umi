@@ -19,6 +19,7 @@ package io._29cu.usmserver.core.service.impl;
 import io._29cu.usmserver.common.utilities.AppHelper;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
+import io._29cu.usmserver.core.repositories.CategoryRepository;
 import io._29cu.usmserver.core.repositories.UserRepository;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
@@ -37,9 +38,12 @@ public class ApplicationServiceImpl implements ApplicationService{
     @Autowired
     ApplicationRepository applicationRepository;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
     @Override
     public ApplicationList getAllApplications() {
-        DummyData.createDummyData(userRepository, applicationRepository);
+        DummyData.createDummyData(userRepository, applicationRepository, categoryRepository);
         ApplicationList appList = new ApplicationList();
         appList.setApplications(AppHelper.getInstance().convertIterableToList(applicationRepository.findAll()));
         return appList;

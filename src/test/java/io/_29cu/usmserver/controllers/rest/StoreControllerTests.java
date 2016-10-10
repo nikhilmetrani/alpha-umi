@@ -17,6 +17,7 @@
 package io._29cu.usmserver.controllers.rest;
 
 import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
@@ -74,14 +75,14 @@ public class StoreControllerTests {
         appA.setDeveloper(appOwner);
         appA.setName("Application A");
         appA.setId(23L);
-        appA.setCategory("Productivity");
+        appA.setCategory(new Category("Productivity"));
         list.add(appA);
 
         Application appB = new Application();
         appB.setDeveloper(appOwner);
         appB.setName("Application B");
         appB.setId(24L);
-        appB.setCategory("Development");
+        appB.setCategory(new Category("Development"));
         list.add(appB);
 
         appList.setApplications(list);
@@ -112,7 +113,7 @@ public class StoreControllerTests {
         appB.setDeveloper(appOwner);
         appB.setName("Application B");
         appB.setId(24L);
-        appB.setCategory("Development");
+        appB.setCategory(new Category("Development"));
         list.add(appB);
         appList.setApplications(list);
 

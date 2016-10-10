@@ -19,24 +19,19 @@ package io._29cu.usmserver.core.model.entities;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
-public class DeveloperProfile {
+public class Subscription {
     @Id
     @GeneratedValue
     private Long id;
-    @NotNull
     @OneToOne
     @NaturalId
-    private User owner;
-    @NotNull
-    @Column(unique = true)
-    private String email;
-    private String website;
-    private String description;
-    private String company;
-    //TODO: Logo
+    private Application application;
+    @ManyToOne
+    @NaturalId
+    private User user;
+    private String dateSubscribed;
 
     public Long getId() {
         return id;
@@ -46,43 +41,27 @@ public class DeveloperProfile {
         this.id = id;
     }
 
-    public User getOwner() {
-        return owner;
+    public Application getApplication() {
+        return application;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setApplication(Application application) {
+        this.application = application;
     }
 
-    public String getEmail() {
-        return email;
+    public User getUser() {
+        return user;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getWebsite() {
-        return website;
+    public String getDateSubscribed() {
+        return dateSubscribed;
     }
 
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
+    public void setDateSubscribed(String dateSubscribed) {
+        this.dateSubscribed = dateSubscribed;
     }
 }
