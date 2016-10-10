@@ -120,8 +120,8 @@ public class StoreControllerTests {
         when(applicationService.findApplicationsByCategory("Development")).thenReturn(appList);
 
         mockMvc.perform(get("/api/1/store/Development"))
-                .andExpect(jsonPath("$.applications[*].category",
-                        hasItems(endsWith("Development"))))
+                .andExpect(jsonPath("$.applications[*].category.name",
+                        hasItems(endsWith(appB.getCategory().getName()))))
                 .andExpect(status().isOk());
     }
 

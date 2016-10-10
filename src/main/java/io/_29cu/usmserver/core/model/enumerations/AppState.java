@@ -20,5 +20,9 @@ public enum AppState {
     Staging,
     Active,
     Recalled,
-    Blocked
+    Blocked;
+
+    public String getState() {
+        return this.name();
+    }
 }

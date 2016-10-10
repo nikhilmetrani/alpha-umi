@@ -22,6 +22,15 @@ import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.UserService;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,16 +47,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import static org.hamcrest.Matchers.endsWith;
-import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -105,13 +104,14 @@ public class DeveloperApplicationControllerTests {
     }
 
     @Test
-    public void  testCreatingNonExistentApplication() throws Exception {
+    public void  testCreateDeveloperApplication() throws Exception {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
+        when(userService.findUser(22L)).thenReturn(developer);
         when(applicationService.createApplication(any(Application.class))).thenReturn(application);
 
         mockMvc.perform(post("/api/0/developer/22/applications/create")
-                .content("{\"name\":\"dreamweaver\",\"downloadUrl\":\"https://test.com\", \"version\":\"1.0\", \"category\":\"Productivity\", \"status\":\"Staging\"}")
+                .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': 'Productivity'}, 'state': 'Staging'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$.name",
@@ -121,10 +121,31 @@ public class DeveloperApplicationControllerTests {
                 .andExpect(jsonPath("$.version",
                         equalTo(application.getVersion())))
                 .andExpect(jsonPath("$.state",
-                        equalTo(application.getState())))
-                .andExpect(jsonPath("$.category",
-                        equalTo(application.getCategory())))
+                        equalTo(application.getState().name())))
+                .andExpect(jsonPath("$.category.name",
+                        equalTo(application.getCategory().getName())))
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void  testIsApplicationExistsForDeveloper() throws Exception {
+        when(userService.findUserByPrincipal("22")).thenReturn(developer);
+        when(authenticationMocked.getPrincipal()).thenReturn("22");
+        when(applicationService.findApplicationByDeveloper(22L, "Dreamweaver")).thenReturn(application);
+
+        mockMvc.perform(get("/api/0/developer/22/applications/create")
+        		.param("name", "Dreamweaver"))
+		        .andExpect(status().isOk());
+    }
+
+    @Test
+    public void  testIsApplicationNotExistsForDeveloper() throws Exception {
+        when(userService.findUserByPrincipal("22")).thenReturn(developer);
+        when(authenticationMocked.getPrincipal()).thenReturn("22");
+        when(applicationService.findApplicationByDeveloper(22L, "Dreams")).thenReturn(null);
+
+        mockMvc.perform(get("/api/0/developer/22/applications/create")
+        		.param("name", "Dreams"))
+                .andExpect(status().isNoContent());
+    }
 }

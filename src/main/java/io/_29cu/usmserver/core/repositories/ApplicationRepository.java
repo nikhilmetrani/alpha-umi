@@ -32,6 +32,6 @@ public interface ApplicationRepository extends CrudRepository<Application, Long>
     @Query("select u from Application u where u.category = :category")
     List<Application> findApplicationsByCategory(@Param("category") String category);
 
-    @Query("select a from Application a where a.name = :name")
-    Application findApplicationByName(@Param("name") String name);
+    @Query("select a from Application a where a.developer.id = :id and a.name = :applicationName")
+    Application findApplicationByDeveloper(@Param("id") Long id, @Param("applicationName") String applicationName);
 }
