@@ -95,7 +95,7 @@ public class DeveloperApplicationsController {
 
     // Create Application
     @RequestMapping(path = "/{userId}/applications/create", method = RequestMethod.GET)
-    public ResponseEntity<ApplicationResource> isApplicationExistsForDeveloper(
+    public ResponseEntity<ApplicationResource> checkApplicationNameExistsForDeveloper(
             @PathVariable Long userId,
             @RequestParam String name
     ) {
@@ -104,7 +104,7 @@ public class DeveloperApplicationsController {
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
 
         //Let's check whether the application is already registered.
-        Application existingApp = applicationService.findApplicationByDeveloper(userId, name);
+        Application existingApp = applicationService.findApplicationByDeveloperAndName(userId, name);
         if (null == existingApp) { //We can't find the application in our database for the developer.
             return new ResponseEntity<ApplicationResource>(HttpStatus.NO_CONTENT);
         } else {

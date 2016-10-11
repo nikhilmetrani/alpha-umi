@@ -55,7 +55,7 @@ public class ApplicationServiceImpl implements ApplicationService{
     }
 
     @Override
-    public Application findApplicationByDeveloper(Long developerId, String applicationName) {
+    public Application findApplicationByDeveloperAndName(Long developerId, String applicationName) {
         return applicationRepository.findApplicationByDeveloper(developerId, applicationName);
     }
 

@@ -128,10 +128,10 @@ public class DeveloperApplicationControllerTests {
     }
 
     @Test
-    public void  testIsApplicationExistsForDeveloper() throws Exception {
+    public void  testCheckApplicationNameExistsForDeveloper() throws Exception {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
-        when(applicationService.findApplicationByDeveloper(22L, "Dreamweaver")).thenReturn(application);
+        when(applicationService.findApplicationByDeveloperAndName(22L, "Dreamweaver")).thenReturn(application);
 
         mockMvc.perform(get("/api/0/developer/22/applications/create")
         		.param("name", "Dreamweaver"))
@@ -139,10 +139,10 @@ public class DeveloperApplicationControllerTests {
     }
 
     @Test
-    public void  testIsApplicationNotExistsForDeveloper() throws Exception {
+    public void  testCheckApplicationNameNotExistsForDeveloper() throws Exception {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
-        when(applicationService.findApplicationByDeveloper(22L, "Dreams")).thenReturn(null);
+        when(applicationService.findApplicationByDeveloperAndName(22L, "Dreams")).thenReturn(null);
 
         mockMvc.perform(get("/api/0/developer/22/applications/create")
         		.param("name", "Dreams"))
