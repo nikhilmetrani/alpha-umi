@@ -227,4 +227,18 @@ public class DeveloperProfileControllerTests {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void  testDeveloperProfileErrorHandling() throws Exception {
+        when(userService.findUserByPrincipal("22")).thenReturn(null);
+        mockMvc.perform(get("/api/0/developer/22/profile"))
+                .andExpect(status().isForbidden());
+    }
+    
+    
+    @Test
+    public void  testDeveloperProfileErrorHandlingDifferentUrl() throws Exception {
+        when(userService.findUserByPrincipal("22")).thenReturn(developer);
+        mockMvc.perform(get("/api/0/developer/24/profile"))
+                .andExpect(status().isForbidden());
+    }
 }
