@@ -16,12 +16,11 @@
 
 package io._29cu.usmserver.controllers.rest.resources;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import io._29cu.usmserver.core.model.entities.DeveloperProfile;
 
-public class DeveloperProfileResource extends EntityResourceBase<DeveloperProfile> implements Serializable {
+public class DeveloperProfileResource extends EntityResourceBase<DeveloperProfile>  {
 
     private Long rid;
     private String email;
