@@ -36,6 +36,18 @@ public class DeveloperProfileResourceAssembler extends ResourceAssemblerSupport<
         developerProfileResource.setEmail(developerProfile.getEmail());
         developerProfileResource.setDescription(developerProfile.getDescription());
         developerProfileResource.setCompany(developerProfile.getCompany());
+        developerProfileResource.setAddress(developerProfile.getAddress());
+        developerProfileResource.setJobTitle(developerProfile.getJobTitle());
+        developerProfileResource.setCity(developerProfile.getCity());
+        developerProfileResource.setCountry(developerProfile.getCountry());
+        developerProfileResource.setZipCode(developerProfile.getZipCode());
+        developerProfileResource.setState(developerProfile.getState());
+        developerProfileResource.setGender(developerProfile.getGender());
+        developerProfileResource.setHomePhone(developerProfile.getHomePhone());
+        developerProfileResource.setJoinDate(developerProfile.getJoinDate());
+        developerProfileResource.setDateOfBirth(developerProfile.getDateOfBirth());
+        developerProfileResource.setLogo(developerProfile.getLogo());
+        developerProfileResource.setWorkPhone(developerProfile.getWorkPhone());
         developerProfileResource.add(linkTo(methodOn(DeveloperProfileController.class).developerProfile(developerProfile.getOwner().getId())).withSelfRel());
         return developerProfileResource;
     }

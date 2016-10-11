@@ -16,15 +16,30 @@
 
 package io._29cu.usmserver.controllers.rest.resources;
 
+import java.io.Serializable;
+import java.util.Date;
+
 import io._29cu.usmserver.core.model.entities.DeveloperProfile;
 
-public class DeveloperProfileResource extends EntityResourceBase<DeveloperProfile>{
+public class DeveloperProfileResource extends EntityResourceBase<DeveloperProfile> implements Serializable {
 
     private Long rid;
     private String email;
     private String website;
     private String description;
     private String company;
+    private String jobTitle;
+    private String address;
+    private String city;
+    private String state;
+    private Integer zipCode;
+    private String country;
+    private Integer workPhone;
+    private Integer homePhone;
+    private Date dateOfBirth;
+    private String gender;
+    private Date joinDate;
+    private String logo;
 
     public Long getRid() {
         return rid;
@@ -65,15 +80,125 @@ public class DeveloperProfileResource extends EntityResourceBase<DeveloperProfil
     public void setCompany(String company) {
         this.company = company;
     }
+    
+    public String getJobTitle() {
+		return jobTitle;
+	}
 
-    @Override
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public Integer getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(Integer zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public Integer getWorkPhone() {
+		return workPhone;
+	}
+
+	public void setWorkPhone(Integer workPhone) {
+		this.workPhone = workPhone;
+	}
+
+	public Integer getHomePhone() {
+		return homePhone;
+	}
+
+	public void setHomePhone(Integer homePhone) {
+		this.homePhone = homePhone;
+	}
+
+	public Date getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public Date getJoinDate() {
+		return joinDate;
+	}
+
+	public void setJoinDate(Date joinDate) {
+		this.joinDate = joinDate;
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+
+	@Override
     public DeveloperProfile toEntity() {
-        DeveloperProfile developerProfile = new DeveloperProfile();
+
+		DeveloperProfile developerProfile = new DeveloperProfile();
         developerProfile.setId(getRid());
         developerProfile.setCompany(getCompany());
         developerProfile.setDescription(getDescription());
         developerProfile.setEmail(getEmail());
         developerProfile.setWebsite(getWebsite());
+        developerProfile.setAddress(getAddress());
+        developerProfile.setJobTitle(getJobTitle());
+        developerProfile.setCity(getCity());
+        developerProfile.setCountry(getCountry());
+        developerProfile.setZipCode(getZipCode());
+        developerProfile.setState(getState());
+        developerProfile.setGender(getGender());
+        developerProfile.setHomePhone(getHomePhone());
+        developerProfile.setDateOfBirth(getDateOfBirth());
+        developerProfile.setLogo(getLogo());
+        developerProfile.setWorkPhone(getWorkPhone());
         return developerProfile;
     }
+	
+	
 }
