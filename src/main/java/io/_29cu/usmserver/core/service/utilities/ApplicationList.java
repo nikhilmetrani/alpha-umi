@@ -17,24 +17,22 @@
 package io._29cu.usmserver.core.service.utilities;
 
 import io._29cu.usmserver.core.model.entities.Application;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class ApplicationList {
-    private List<Application> applications = new ArrayList<>();
+public class ApplicationList extends EntityList<Application> {
 
     public ApplicationList() {}
 
-    public ApplicationList(List<Application> list) {
-        this.applications = list;
+    public ApplicationList(List<Application> applications) {
+        super();
+        super.setItems(applications);
     }
 
     public List<Application> getApplications() {
-        return applications;
+        return super.getItems();
     }
 
     public void setApplications(List<Application> applications) {
-        this.applications = applications;
+        super.setItems(applications);
     }
 }

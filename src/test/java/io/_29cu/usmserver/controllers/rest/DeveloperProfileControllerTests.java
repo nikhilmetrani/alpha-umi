@@ -112,6 +112,7 @@ public class DeveloperProfileControllerTests {
     @Test
     public void  testGetNonExistentDeveloperProfile() throws Exception {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
         when(profileService.findProfileByUserId(22L)).thenReturn(null);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
         mockMvc.perform(get("/api/0/developer/22/profile"))
@@ -149,6 +150,7 @@ public class DeveloperProfileControllerTests {
     @Test
     public void  testGetExistingDeveloperProfile() throws Exception {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
         when(profileService.findProfileByUserId(22L)).thenReturn(profile);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
         mockMvc.perform(get("/api/0/developer/22/profile"))
@@ -186,6 +188,7 @@ public class DeveloperProfileControllerTests {
     @Test
     public void  testCreateDeveloperProfile() throws Exception {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
         when(profileService.createProfile(any(DeveloperProfile.class))).thenReturn(profile);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
 

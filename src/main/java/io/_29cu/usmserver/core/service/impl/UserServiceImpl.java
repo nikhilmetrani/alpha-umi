@@ -20,6 +20,7 @@ import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
 
@@ -56,5 +57,14 @@ public class UserServiceImpl implements UserService {
         user.setName(details.get("name").toString());
         user.setPrincipal(principal.getName());
         return userRepository.save(user);
+    }
+
+    @Override
+    public User validateUserIdWithPrincipal(Long userId) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!(principal instanceof String)) return null;
+
+        User user = findUserByPrincipal(principal.toString());
+        return (user.getId() == userId) ? user : null;
     }
 }

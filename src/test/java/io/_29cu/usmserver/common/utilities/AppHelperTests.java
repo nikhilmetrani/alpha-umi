@@ -48,7 +48,7 @@ public class AppHelperTests {
     private CategoryRepository categoryRepository;
 
     @Test
-    public void testInstanciation() {
+    public void testInstantiation() {
         AppHelper appHelper = null;
         appHelper = AppHelper.getInstance();
         assertNotNull(appHelper);

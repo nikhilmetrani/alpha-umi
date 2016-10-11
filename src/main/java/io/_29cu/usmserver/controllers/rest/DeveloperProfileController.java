@@ -51,28 +51,21 @@ public class DeveloperProfileController {
             @PathVariable Long userId
     ) {
         // Let's get the user from principal and validate the userId against it.
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(principal instanceof String) {
-            User user = userService.findUserByPrincipal(principal.toString());
-            if (user.getId() == userId) { // The principal matches with the incoming userId, let's proceed.
-                try {
-                    DeveloperProfile developerProfile = developerProfileService.findProfileByUserId(userId);
-                    if (null == developerProfile) {
-                        developerProfile = new DeveloperProfile(); //Create an empty profile object
-                        developerProfile.setOwner(user);
-                    }
-                    DeveloperProfileResource developerProfileResource = new DeveloperProfileResourceAssembler().toResource(developerProfile);
-                    HttpHeaders headers = new HttpHeaders();
-                    headers.setLocation(URI.create(developerProfileResource.getLink("self").getHref()));
-                    return new ResponseEntity<DeveloperProfileResource>(developerProfileResource, headers, HttpStatus.OK);
-                } catch (Exception ex) {
-                    return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
-                }
-            } else {
-                return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
-            }
-        } else {
+        User user = userService.validateUserIdWithPrincipal(userId);
+        if (user == null)
             return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
+        try {
+            DeveloperProfile developerProfile = developerProfileService.findProfileByUserId(userId);
+            if (null == developerProfile) {
+                developerProfile = new DeveloperProfile(); //Create an empty profile object
+                developerProfile.setOwner(user);
+            }
+            DeveloperProfileResource developerProfileResource = new DeveloperProfileResourceAssembler().toResource(developerProfile);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create(developerProfileResource.getLink("self").getHref()));
+            return new ResponseEntity<DeveloperProfileResource>(developerProfileResource, headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -82,26 +75,19 @@ public class DeveloperProfileController {
             @RequestBody DeveloperProfileResource developerProfileResource
     ) {
         // Let's get the user from principal and validate the userId against it.
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(principal instanceof String) {
-            User user = userService.findUserByPrincipal(principal.toString());
-            if (user.getId() == userId) { // The principal matches with the incoming userId, let's proceed.
-                try {
-                    DeveloperProfile receivedProfile = developerProfileResource.toEntity();
-                    receivedProfile.setOwner(user);
-                    DeveloperProfile createdProfile = developerProfileService.createProfile(receivedProfile);
-                    DeveloperProfileResource createdProfileResource = new DeveloperProfileResourceAssembler().toResource(createdProfile);
-                    HttpHeaders headers = new HttpHeaders();
-                    headers.setLocation(URI.create(createdProfileResource.getLink("self").getHref()));
-                    return new ResponseEntity<DeveloperProfileResource>(createdProfileResource, headers, HttpStatus.OK);
-                } catch (Exception e) {
-                    return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
-                }
-            } else {
-                return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
-            }
-        } else {
+        User user = userService.validateUserIdWithPrincipal(userId);
+        if (user == null)
             return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
+        try {
+            DeveloperProfile receivedProfile = developerProfileResource.toEntity();
+            receivedProfile.setOwner(user);
+            DeveloperProfile createdProfile = developerProfileService.createProfile(receivedProfile);
+            DeveloperProfileResource createdProfileResource = new DeveloperProfileResourceAssembler().toResource(createdProfile);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create(createdProfileResource.getLink("self").getHref()));
+            return new ResponseEntity<DeveloperProfileResource>(createdProfileResource, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
         }
     }
 }

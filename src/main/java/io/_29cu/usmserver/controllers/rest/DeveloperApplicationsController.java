@@ -16,10 +16,8 @@
 
 package io._29cu.usmserver.controllers.rest;
 
-import io._29cu.usmserver.common.utilities.SecurityHelper;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
-import io._29cu.usmserver.controllers.rest.resources.DeveloperProfileResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
 import io._29cu.usmserver.core.model.entities.Application;
@@ -29,10 +27,8 @@ import io._29cu.usmserver.core.service.DeveloperProfileService;
 import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,8 +36,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.net.URI;
 
 @Controller
 @RequestMapping("/api/0/developer")
@@ -64,9 +58,9 @@ public class DeveloperApplicationsController {
             @PathVariable Long userId
     ){
         // Let's get the user from principal and validate the userId against it.
-        if (!SecurityHelper.getInstance().validateUserIdWithPrincipal(userId, userService))
+        User user = userService.validateUserIdWithPrincipal(userId);
+        if (user == null)
             return new ResponseEntity<ApplicationListResource>(HttpStatus.FORBIDDEN);
-        User user = userService.findUser(userId);
         try {
             ApplicationList appList = applicationService.findApplicationsByDeveloper(userId);
             ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(appList);
@@ -83,9 +77,9 @@ public class DeveloperApplicationsController {
             @RequestBody ApplicationResource applicationResource
     ) {
         // Let's get the user from principal and validate the userId against it.
-        if (!SecurityHelper.getInstance().validateUserIdWithPrincipal(userId, userService))
+        User user = userService.validateUserIdWithPrincipal(userId);
+        if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
-        User user = userService.findUser(userId);
         Application receivedApplication = applicationResource.toEntity();
         receivedApplication.setDeveloper(user); 
         Application application = applicationService.createApplication(receivedApplication); 
@@ -100,7 +94,8 @@ public class DeveloperApplicationsController {
             @RequestParam String name
     ) {
         // Let's get the user from principal and validate the userId against it.
-        if (!SecurityHelper.getInstance().validateUserIdWithPrincipal(userId, userService))
+        User user = userService.validateUserIdWithPrincipal(userId);
+        if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
 
         //Let's check whether the application is already registered.

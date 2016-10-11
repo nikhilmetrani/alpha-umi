@@ -106,6 +106,7 @@ public class DeveloperApplicationControllerTests {
     @Test
     public void  testCreateDeveloperApplication() throws Exception {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
         when(userService.findUser(22L)).thenReturn(developer);
         when(applicationService.createApplication(any(Application.class))).thenReturn(application);
@@ -130,6 +131,7 @@ public class DeveloperApplicationControllerTests {
     @Test
     public void  testCheckApplicationNameExistsForDeveloper() throws Exception {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
         when(applicationService.findApplicationByDeveloperAndName(22L, "Dreamweaver")).thenReturn(application);
 
@@ -141,6 +143,7 @@ public class DeveloperApplicationControllerTests {
     @Test
     public void  testCheckApplicationNameNotExistsForDeveloper() throws Exception {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
         when(applicationService.findApplicationByDeveloperAndName(22L, "Dreams")).thenReturn(null);
 

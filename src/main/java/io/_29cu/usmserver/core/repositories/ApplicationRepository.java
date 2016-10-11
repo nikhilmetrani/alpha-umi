@@ -29,7 +29,7 @@ public interface ApplicationRepository extends CrudRepository<Application, Long>
     @Query("select u from Application u where u.developer.id = :id")
     List<Application> findApplicationsByDeveloper(@Param("id") Long id);
 
-    @Query("select u from Application u where u.category = :category")
+    @Query("select u from Application u where u.category.name = :category")
     List<Application> findApplicationsByCategory(@Param("category") String category);
 
     @Query("select a from Application a where a.developer.id = :id and a.name = :applicationName")

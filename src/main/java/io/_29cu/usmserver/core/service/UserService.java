@@ -20,8 +20,9 @@ import io._29cu.usmserver.core.model.entities.User;
 import java.security.Principal;
 
 public interface UserService {
-    public User createUser(User user);
-    public User findUser(Long id);
-    public User findUserByPrincipal(String principal);
-    public User createUser(Principal principal);
+    User createUser(User user);
+    User findUser(Long id);
+    User findUserByPrincipal(String principal);
+    User createUser(Principal principal);
+    User validateUserIdWithPrincipal(Long userId);
 }

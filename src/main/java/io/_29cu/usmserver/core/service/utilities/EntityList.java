@@ -16,14 +16,23 @@
 
 package io._29cu.usmserver.core.service.utilities;
 
-import io._29cu.usmserver.core.model.entities.Subscription;
+import java.util.ArrayList;
 import java.util.List;
 
-public class SubscriptionList extends EntityList<Subscription> {
-    public SubscriptionList() {}
+public abstract class EntityList<T> {
+    private List<T> items = new ArrayList<>();
 
-    public SubscriptionList(List<Subscription> list) {
-        super(list);
+    public EntityList() {}
+
+    public EntityList(List<T> items) {
+        this.items = items;
+    }
+
+    public List<T> getItems() {
+        return items;
+    }
+
+    public void setItems(List<T> items) {
+        this.items = items;
     }
 }
-
