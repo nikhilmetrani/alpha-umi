@@ -16,6 +16,11 @@
 
 package io._29cu.usmserver.core.service.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import io._29cu.usmserver.common.utilities.AppHelper;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
@@ -24,10 +29,6 @@ import io._29cu.usmserver.core.repositories.UserRepository;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import io._29cu.usmserver.core.service.utilities.DummyData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class ApplicationServiceImpl implements ApplicationService{
@@ -56,7 +57,12 @@ public class ApplicationServiceImpl implements ApplicationService{
 
     @Override
     public Application findApplicationByDeveloperAndName(Long developerId, String applicationName) {
-        return applicationRepository.findApplicationByDeveloper(developerId, applicationName);
+        return applicationRepository.findApplicationByDeveloperAndName(developerId, applicationName);
+    }
+
+    @Override
+    public Application findApplicationByDeveloperAndId(Long developerId, Long applicationId) {
+        return applicationRepository.findApplicationByDeveloperAndId(developerId, applicationId);
     }
 
     @Override

@@ -17,12 +17,25 @@
 package io._29cu.usmserver.core.model.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class ApplicationUpdate extends Application {
+public class ApplicationUpdate {
+    @Id
+    @GeneratedValue
+    private Long id;
+
     @NotNull
+    private String version;
+
+	@NotNull
     private String whatsNew;
+
+    @OneToOne
+    private Application application;
 
     public String getWhatsNew() {
         return whatsNew;
@@ -31,4 +44,28 @@ public class ApplicationUpdate extends Application {
     public void setWhatsNew(String whatsNew) {
         this.whatsNew = whatsNew;
     }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public Application getApplication() {
+		return application;
+	}
+
+	public void setApplication(Application application) {
+		this.application = application;
+	}
 }

@@ -37,6 +37,7 @@ public class ApplicationResourceAssembler extends ResourceAssemblerSupport<Appli
         applicationResource.setCategory(application.getCategory());
         applicationResource.setVersion(application.getVersion());
         applicationResource.setState(application.getState());
+        applicationResource.setDescription(application.getDescription());
         applicationResource.add(linkTo(methodOn(ApplicationController.class).getApplication(application.getId())).withSelfRel());
         if(application.getDeveloper() != null)
             applicationResource.add(linkTo(ApplicationController.class).slash("developer/" + application.getDeveloper().getId()).withRel("developerApps"));

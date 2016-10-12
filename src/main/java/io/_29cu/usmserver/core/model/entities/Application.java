@@ -29,6 +29,8 @@ public class Application {
     @NotNull
     private String name;
     @NotNull
+    private String description;
+    @NotNull
     private AppState state;
     @NotNull
     private String version;
@@ -86,4 +88,12 @@ public class Application {
     public void setDeveloper(User developer) {
         this.developer = developer;
     }
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

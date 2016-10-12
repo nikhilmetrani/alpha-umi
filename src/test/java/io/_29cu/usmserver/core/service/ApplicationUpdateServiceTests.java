@@ -16,9 +16,8 @@
 
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.User;
-import io._29cu.usmserver.core.model.enumerations.AppState;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,20 +29,26 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
+import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.enumerations.AppState;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class ApplicationServiceTests {
+public class ApplicationUpdateServiceTests {
     @Autowired
-    private ApplicationService service;
+    private ApplicationUpdateService service;
+    @Autowired
+    private ApplicationService appService;
     @Autowired
     private UserService userService;
 
     private User developer;
     private Application application;
+    private ApplicationUpdate applicationUpdate;
 
     @Before
     @Transactional
@@ -52,7 +57,7 @@ public class ApplicationServiceTests {
         developer = new User();
         developer.setName("developer");
         developer.setEmail("developer@email.com");
-        userService.createUser(developer);
+        developer = userService.createUser(developer);
 
         application = new Application();
         application.setName("application");
@@ -60,42 +65,32 @@ public class ApplicationServiceTests {
         application.setState(AppState.Staging);
         application.setDescription("test description");
         application.setVersion("1.0");
-        service.createApplication(application);
+        application = appService.createApplication(application);
+
+        applicationUpdate = new ApplicationUpdate();
+        applicationUpdate.setVersion("1.0");
+        applicationUpdate.setWhatsNew("What is new");
+        application.setState(AppState.Active);
+        applicationUpdate.setApplication(application);
     }
 
     @Test
     @Transactional
-    public void testFind() {
-        Application fromDb = service.findApplication(application.getId());
+    public void testFindByApplication() {
+    	applicationUpdate = service.createApplicationUpdate(applicationUpdate);
+        ApplicationUpdate fromDb = service.findByApplication(applicationUpdate.getApplication().getId());
         assertNotNull(fromDb);
-        assertEquals("Application name does not match", application.getName(), fromDb.getName());
-        assertEquals("Application developer does not match", application.getDeveloper(), fromDb.getDeveloper());
+        assertEquals("Application Update Version does not match", applicationUpdate.getVersion(), fromDb.getVersion());
+        assertEquals("Application name does not match", application.getName(), fromDb.getApplication().getName());
     }
 
     @Test
     @Transactional
-    public void testFindApplicationByDeveloperAndName() {
-        Application fromDb = service.findApplicationByDeveloperAndName(developer.getId(), application.getName());
+    public void testCreateApplicationUpdate() {
+        ApplicationUpdate fromDb = service.createApplicationUpdate(applicationUpdate);
         assertNotNull(fromDb);
-        assertEquals("Application name does not match", application.getName(), fromDb.getName());
-        assertEquals("Application developer does not match", application.getDeveloper(), fromDb.getDeveloper());
-    }
-
-    @Test
-    @Transactional
-    public void testFindApplicationByDeveloperAndId() {
-        Application fromDb = service.findApplicationByDeveloperAndId(developer.getId(), application.getId());
-        assertNotNull(fromDb);
-        assertEquals("Application Id does not match", application.getId(), fromDb.getId());
-        assertEquals("Application developer does not match", application.getDeveloper(), fromDb.getDeveloper());
-    }
-
-    @Test
-    @Transactional
-    public void testCreateApplication() {
-        Application fromDb = service.createApplication(application);
-        assertNotNull(fromDb);
-        assertEquals("Application name does not match", application.getId(), fromDb.getId());
-        assertEquals("Application developer does not match", application.getDeveloper(), fromDb.getDeveloper());
+        assertEquals("Application Update Version does not match", applicationUpdate.getVersion(), fromDb.getVersion());
+        assertEquals("Application name does not match", application.getName(), fromDb.getApplication().getName());
+        assertEquals("Application state does not match", application.getState(), fromDb.getApplication().getState());
     }
 }

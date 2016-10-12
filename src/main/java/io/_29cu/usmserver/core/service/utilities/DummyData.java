@@ -48,40 +48,40 @@ public class DummyData {
 
         User developer = createDeveloper(1L, "Microsoft", "support@microsoft.com");
         userRepository.save(developer);
-        Application app = createApplication(1L, "Visual Studio Code", developer, catDev, "1.0", AppState.Active, "http:\\test.con");
+        Application app = createApplication(1L, "Visual Studio Code", developer, catDev, "1.0", AppState.Active, "http:\\test.con", "IDE for scripts");
         applicationRepository.save(app);
-        app = createApplication(2L, "Microsoft Office", developer, catProd, "2.0", AppState.Active, "http:\\test.con");
+        app = createApplication(2L, "Microsoft Office", developer, catProd, "2.0", AppState.Active, "http:\\test.con", "Office tools");
         applicationRepository.save(app);
-        app = createApplication(3L, "Dot Net Framewok", developer, catDev, "3.1", AppState.Staging, "http:\\test.con");
+        app = createApplication(3L, "Dot Net Framewok", developer, catDev, "3.1", AppState.Staging, "http:\\test.con", "Programming framework");
         applicationRepository.save(app);
 
 
 
         developer = createDeveloper(2L, "GitHub", "support@github.com");
         userRepository.save(developer);
-        app = createApplication(4L, "GitHub Desktop App", developer, catDev, "1.0", AppState.Active, "http:\\test.con");
+        app = createApplication(4L, "GitHub Desktop App", developer, catDev, "1.0", AppState.Active, "http:\\test.con", "Github deskop application");
         applicationRepository.save(app);
-        app = createApplication(5L, "Atom Editor", developer, catDev, "2.6", AppState.Staging, "http:\\test.con");
+        app = createApplication(5L, "Atom Editor", developer, catDev, "2.6", AppState.Staging, "http:\\test.con", "IDE");
         applicationRepository.save(app);
 
 
         developer = createDeveloper(3L, "Google", "support@google.com");
         userRepository.save(developer);
-        app = createApplication(6L, "Google Chrome", developer, catProd, "1.0", AppState.Active, "http:\\test.con");
+        app = createApplication(6L, "Google Chrome", developer, catProd, "1.0", AppState.Active, "http:\\test.con", "Powerful Browser");
         applicationRepository.save(app);
-        app = createApplication(7L, "Google Drive Sync", developer, catProd, "2.0", AppState.Active, "http:\\test.con");
+        app = createApplication(7L, "Google Drive Sync", developer, catProd, "2.0", AppState.Active, "http:\\test.con", "Application for Google drive");
         applicationRepository.save(app);
-        app = createApplication(8L, "Google Web Developer", developer, catDev, "3.0", AppState.Staging, "http:\\test.con");
+        app = createApplication(8L, "Google Web Developer", developer, catDev, "3.0", AppState.Staging, "http:\\test.con", "Web application development tool");
         applicationRepository.save(app);
 
 
         developer = createDeveloper(4L, "Adobe", "support@adobe.com");
         userRepository.save(developer);
-        app = createApplication(9L, "Photoshop CC", developer, catPhoto, "1.0", AppState.Active, "http:\\test.con");
+        app = createApplication(9L, "Photoshop CC", developer, catPhoto, "1.0", AppState.Active, "http:\\test.con", "Photo Editing tool");
         applicationRepository.save(app);
-        app = createApplication(10L, "Lightroom CC", developer, catPhoto, "2.2", AppState.Active, "http:\\test.con");
+        app = createApplication(10L, "Lightroom CC", developer, catPhoto, "2.2", AppState.Active, "http:\\test.con", "Photo Editing tool");
         applicationRepository.save(app);
-        app = createApplication(11L, "Acrobat DC", developer, catProd, "3.0", AppState.Staging, "http:\\test.con");
+        app = createApplication(11L, "Acrobat DC", developer, catProd, "3.0", AppState.Staging, "http:\\test.con", "PDF editing tool");
         applicationRepository.save(app);
 
     }
@@ -94,7 +94,7 @@ public class DummyData {
         return developer;
     }
 
-    private static Application createApplication(Long id, String name, User developer, Category category, String version, AppState state, String downloadUrl) {
+    private static Application createApplication(Long id, String name, User developer, Category category, String version, AppState state, String downloadUrl, String description) {
         Application app = new Application();
 //        app.setId(id);
         app.setDeveloper(developer);
@@ -102,6 +102,7 @@ public class DummyData {
         app.setCategory(category);
         app.setVersion(version);
         app.setState(state);
+        app.setDescription(description);
         return app;
     }
 }

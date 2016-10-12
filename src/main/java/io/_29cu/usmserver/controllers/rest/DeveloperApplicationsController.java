@@ -16,16 +16,6 @@
 
 package io._29cu.usmserver.controllers.rest;
 
-import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
-import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
-import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
-import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.User;
-import io._29cu.usmserver.core.service.ApplicationService;
-import io._29cu.usmserver.core.service.DeveloperProfileService;
-import io._29cu.usmserver.core.service.UserService;
-import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +27,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
+import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
+import io._29cu.usmserver.controllers.rest.resources.ApplicationUpdateResource;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationUpdateResourceAssembler;
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
+import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.enumerations.AppState;
+import io._29cu.usmserver.core.service.ApplicationService;
+import io._29cu.usmserver.core.service.ApplicationUpdateService;
+import io._29cu.usmserver.core.service.DeveloperProfileService;
+import io._29cu.usmserver.core.service.UserService;
+import io._29cu.usmserver.core.service.utilities.ApplicationList;
+
 @Controller
 @RequestMapping("/api/0/developer")
 @EnableResourceServer
@@ -47,6 +53,8 @@ public class DeveloperApplicationsController {
     private DeveloperProfileService developerProfileService;
     @Autowired
     private ApplicationService applicationService;
+    @Autowired
+    private ApplicationUpdateService applicationUpdateService;
 
     // Skeleton methods
     // Add similar methods for create, modify and publish updates
@@ -70,8 +78,27 @@ public class DeveloperApplicationsController {
         }
     }
 
+    // Get all applications
+    @RequestMapping(path = "/{userId}/application/{appId}", method = RequestMethod.GET)
+    public ResponseEntity<ApplicationResource> getApplication(
+            @PathVariable Long userId, 
+            @PathVariable Long appId
+    ){
+        // Let's get the user from principal and validate the userId against it.
+        User user = userService.validateUserIdWithPrincipal(userId);
+        if (user == null)
+            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+        try {
+            Application application = applicationService.findApplicationByDeveloperAndId(userId, appId);
+            ApplicationResource applicationResource = new ApplicationResourceAssembler().toResource(application);
+            return new ResponseEntity<ApplicationResource>(applicationResource, HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     // Create Application
-    @RequestMapping(path = "/{userId}/applications/create", method = RequestMethod.POST)
+    @RequestMapping(path = "/{userId}/application/create", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> createDeveloperApplication(
             @PathVariable Long userId,
             @RequestBody ApplicationResource applicationResource
@@ -88,7 +115,7 @@ public class DeveloperApplicationsController {
     }
 
     // Create Application
-    @RequestMapping(path = "/{userId}/applications/create", method = RequestMethod.GET)
+    @RequestMapping(path = "/{userId}/application/create", method = RequestMethod.GET)
     public ResponseEntity<ApplicationResource> checkApplicationNameExistsForDeveloper(
             @PathVariable Long userId,
             @RequestParam String name
@@ -105,6 +132,38 @@ public class DeveloperApplicationsController {
         } else {
             // Application with same name already exists 
         	return new ResponseEntity<ApplicationResource>(HttpStatus.OK);
+        }
+    }
+
+    // Create Application
+    @RequestMapping(path = "/{userId}/application/{appId}/publish", method = RequestMethod.POST)
+    public ResponseEntity<ApplicationUpdateResource> publishDeveloperApplication(
+            @PathVariable Long userId,
+            @PathVariable Long appId,
+            @RequestBody ApplicationUpdateResource applicationUpdateResource
+    ) {
+        // Let's get the user from principal and validate the userId against it.
+        User user = userService.validateUserIdWithPrincipal(userId);
+        if (user == null)
+            return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.FORBIDDEN);
+
+        try{
+	        ApplicationUpdate applicationUpdate = applicationUpdateResource.toEntity();
+	        Application application = applicationService.findApplicationByDeveloperAndId(userId, appId);
+	        // If the application state is not 'blocked' AND there is no existing Application Update, then proceed for Publish
+	        if(!application.getState().equals(AppState.Blocked) && applicationUpdateService.findByApplication(appId)==null) {
+	        	application.setState(AppState.Active);
+	        	application.setVersion(applicationUpdate.getVersion());
+		        applicationUpdate.setApplication(application);
+		        ApplicationUpdate newApplicationUpdate = applicationUpdateService.createApplicationUpdate(applicationUpdate); 
+		        ApplicationUpdateResource newapplicationUpdateResource = new ApplicationUpdateResourceAssembler().toResource(newApplicationUpdate); 
+		        return new ResponseEntity<ApplicationUpdateResource>(newapplicationUpdateResource, HttpStatus.OK);
+	        }else{
+	        	return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.PRECONDITION_FAILED);
+	        }
+        }catch(Exception ex){
+        	ex.printStackTrace();
+        	return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.BAD_REQUEST);
         }
     }
 

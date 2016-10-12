@@ -30,6 +30,7 @@ public class ApplicationResource extends EntityResourceBase<Application> {
     private AppState state;
     private String downloadUrl;
     private String version;
+    private String description;
 
     public AppState getState() {
         return state;
@@ -87,6 +88,14 @@ public class ApplicationResource extends EntityResourceBase<Application> {
         this.developer = developer;
     }
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
     @Override
     public Application toEntity() {
         Application application = new Application();
@@ -96,6 +105,7 @@ public class ApplicationResource extends EntityResourceBase<Application> {
         application.setState(state);
         application.setVersion(version);
         application.setCategory(category);
+        application.setDescription(description);
         return application;
     }
 }

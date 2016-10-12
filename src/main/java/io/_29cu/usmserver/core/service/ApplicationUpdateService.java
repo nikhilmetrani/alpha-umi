@@ -16,17 +16,12 @@
 
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import org.springframework.stereotype.Component;
 
+import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
+
 @Component
-public interface ApplicationService {
-    public ApplicationList getAllApplications();
-    public Application createApplication(Application application);
-    public Application findApplicationByDeveloperAndName(Long developerId, String applicationName);
-    public Application findApplicationByDeveloperAndId(Long developerId, Long applicationId);
-    public Application findApplication(Long id);
-    public ApplicationList findApplicationsByDeveloper(Long developerId);
-    public ApplicationList findApplicationsByCategory(String category);
+public interface ApplicationUpdateService {
+	public ApplicationUpdate findByApplication(Long applicationId);
+    public ApplicationUpdate createApplicationUpdate(ApplicationUpdate applicationUpdate);
 }
