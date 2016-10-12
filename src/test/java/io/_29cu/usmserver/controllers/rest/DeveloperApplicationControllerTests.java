@@ -119,6 +119,7 @@ public class DeveloperApplicationControllerTests {
     @Test
     public void  testGetApplication() throws Exception {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
         when(applicationService.findApplicationByDeveloperAndId(22L, 22L)).thenReturn(application);
 
@@ -180,6 +181,7 @@ public class DeveloperApplicationControllerTests {
     @Test
     public void  testPublishDeveloperApplication() throws Exception {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
         when(applicationService.findApplicationByDeveloperAndId(22L, 22L)).thenReturn(application);
         when(applicationUpdateService.findByApplication(22L)).thenReturn(null);
