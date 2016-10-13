@@ -31,6 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
@@ -52,11 +53,14 @@ public class ApplicationControllerTests {
 
     private User appOwner;
     Application app;
+    private String appUUID;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(applicationController).build();
+
+        appUUID = UUID.randomUUID().toString();
 
         appOwner = new User();
         appOwner.setId(22L);
@@ -65,16 +69,16 @@ public class ApplicationControllerTests {
         app = new Application();
         app.setDeveloper(appOwner);
         app.setName("Application A");
-        app.setId(23L);
+        app.setId(appUUID);
         app.setCategory(new Category("Productivity"));
 
     }
 
     @Test
     public void  testGetApplication() throws Exception {
-        when(applicationService.findApplication(23L)).thenReturn(app);
+        when(applicationService.findApplication(appUUID)).thenReturn(app);
 
-        mockMvc.perform(get("/api/1/store/application/23"))
+        mockMvc.perform(get("/api/1/store/application/" + appUUID))
                 .andExpect(jsonPath("$.name",
                         equalTo("Application A")))
                 .andExpect(status().isOk());
@@ -82,9 +86,9 @@ public class ApplicationControllerTests {
 
     @Test
     public void  testGetApplicationErrorHandling() throws Exception {
-        when(applicationService.findApplication(23L)).thenReturn(null);
+        when(applicationService.findApplication(appUUID)).thenReturn(null);
 
-        mockMvc.perform(get("/api/1/store/application/23"))
+        mockMvc.perform(get("/api/1/store/application/" + appUUID))
                 .andExpect(status().isNotFound());
     }
 }

@@ -37,7 +37,7 @@ public class ApplicationUpdateResourceAssembler extends ResourceAssemblerSupport
         applicationUpdateResource.setVersion(applicationUpdate.getVersion());
         applicationUpdateResource.setApplication(applicationUpdate.getApplication());
         applicationUpdateResource.setWhatsNew(applicationUpdate.getWhatsNew());
-        applicationUpdateResource.add(linkTo(methodOn(DeveloperApplicationsController.class).getApplication(applicationUpdate.getApplication().getDeveloper().getId(), applicationUpdate.getId())).withSelfRel());
+        applicationUpdateResource.add(linkTo(methodOn(DeveloperApplicationsController.class).getApplication(applicationUpdate.getApplication().getDeveloper().getId(), applicationUpdate.getApplication().getId())).withSelfRel());
         if(applicationUpdate.getApplication() != null && applicationUpdate.getApplication().getDeveloper() != null)
             applicationUpdateResource.add(linkTo(ApplicationController.class).slash("developer/" + applicationUpdate.getApplication().getDeveloper().getId()).withRel("developerApps"));
         return applicationUpdateResource;

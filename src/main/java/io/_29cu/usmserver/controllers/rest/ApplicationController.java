@@ -40,7 +40,7 @@ public class ApplicationController {
 
     @RequestMapping(value = "/{appId}", method = RequestMethod.GET)
     public ResponseEntity<ApplicationResource> getApplication(
-            @PathVariable Long appId
+            @PathVariable String appId
     ) {
         Application application = applicationService.findApplication(appId);
         if (null == application)

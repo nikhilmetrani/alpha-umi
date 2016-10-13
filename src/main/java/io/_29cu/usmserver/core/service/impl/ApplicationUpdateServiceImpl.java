@@ -33,7 +33,7 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
     ApplicationUpdateRepository applicationUpdateRepository;
 
     @Override
-    public ApplicationUpdate findByApplication(Long applicationId) {
+    public ApplicationUpdate findByApplication(String applicationId) {
     	return applicationUpdateRepository.findByApplication(applicationId);
     }
 

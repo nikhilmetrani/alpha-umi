@@ -17,6 +17,7 @@
 package io._29cu.usmserver.core.model.entities;
 
 import io._29cu.usmserver.core.model.enumerations.AppState;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,8 +25,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Application {
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    private String id;
     @NotNull
     private String name;
     @NotNull
@@ -57,11 +59,11 @@ public class Application {
         this.category = category;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

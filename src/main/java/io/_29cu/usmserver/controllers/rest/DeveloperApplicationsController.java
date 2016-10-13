@@ -82,7 +82,7 @@ public class DeveloperApplicationsController {
     @RequestMapping(path = "/{userId}/application/{appId}", method = RequestMethod.GET)
     public ResponseEntity<ApplicationResource> getApplication(
             @PathVariable Long userId, 
-            @PathVariable Long appId
+            @PathVariable String appId
     ){
         // Let's get the user from principal and validate the userId against it.
         User user = userService.validateUserIdWithPrincipal(userId);
@@ -139,7 +139,7 @@ public class DeveloperApplicationsController {
     @RequestMapping(path = "/{userId}/application/{appId}/publish", method = RequestMethod.POST)
     public ResponseEntity<ApplicationUpdateResource> publishDeveloperApplication(
             @PathVariable Long userId,
-            @PathVariable Long appId,
+            @PathVariable String appId,
             @RequestBody ApplicationUpdateResource applicationUpdateResource
     ) {
         // Let's get the user from principal and validate the userId against it.

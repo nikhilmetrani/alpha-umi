@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public interface ApplicationRepository extends CrudRepository<Application, Long> {
+public interface ApplicationRepository extends CrudRepository<Application, String> {
     @Query("select u from Application u where u.developer.id = :id")
     List<Application> findApplicationsByDeveloper(@Param("id") Long id);
 
@@ -36,5 +36,5 @@ public interface ApplicationRepository extends CrudRepository<Application, Long>
     Application findApplicationByDeveloperAndName(@Param("id") Long id, @Param("applicationName") String applicationName);
 
     @Query("select a from Application a where a.developer.id = :id and a.id = :applicationId")
-    Application findApplicationByDeveloperAndId(@Param("id") Long id, @Param("applicationId") Long applicationId);
+    Application findApplicationByDeveloperAndId(@Param("id") Long id, @Param("applicationId") String applicationId);
 }

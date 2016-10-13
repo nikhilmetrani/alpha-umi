@@ -31,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
-import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 
@@ -40,7 +39,7 @@ import io._29cu.usmserver.core.model.enumerations.AppState;
 @ActiveProfiles("test")
 public class ApplicationUpdateServiceTests {
     @Autowired
-    private ApplicationUpdateService service;
+    private ApplicationUpdateService appUpdateService;
     @Autowired
     private ApplicationService appService;
     @Autowired
@@ -77,8 +76,8 @@ public class ApplicationUpdateServiceTests {
     @Test
     @Transactional
     public void testFindByApplication() {
-    	applicationUpdate = service.createApplicationUpdate(applicationUpdate);
-        ApplicationUpdate fromDb = service.findByApplication(applicationUpdate.getApplication().getId());
+    	applicationUpdate = appUpdateService.createApplicationUpdate(applicationUpdate);
+        ApplicationUpdate fromDb = appUpdateService.findByApplication(applicationUpdate.getApplication().getId());
         assertNotNull(fromDb);
         assertEquals("Application Update Version does not match", applicationUpdate.getVersion(), fromDb.getVersion());
         assertEquals("Application name does not match", application.getName(), fromDb.getApplication().getName());
@@ -87,7 +86,7 @@ public class ApplicationUpdateServiceTests {
     @Test
     @Transactional
     public void testCreateApplicationUpdate() {
-        ApplicationUpdate fromDb = service.createApplicationUpdate(applicationUpdate);
+        ApplicationUpdate fromDb = appUpdateService.createApplicationUpdate(applicationUpdate);
         assertNotNull(fromDb);
         assertEquals("Application Update Version does not match", applicationUpdate.getVersion(), fromDb.getVersion());
         assertEquals("Application name does not match", application.getName(), fromDb.getApplication().getName());

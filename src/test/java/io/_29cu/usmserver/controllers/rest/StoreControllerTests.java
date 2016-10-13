@@ -35,6 +35,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
@@ -57,10 +58,16 @@ public class StoreControllerTests {
     private User appOwner;
     private ApplicationList appList;
 
+    private String appUUID;
+    private String appUUID2;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(storeController).build();
+
+        appUUID = UUID.randomUUID().toString();
+        appUUID2 = UUID.randomUUID().toString();
 
         appOwner = new User();
         appOwner.setId(22L);
@@ -74,14 +81,14 @@ public class StoreControllerTests {
         Application appA = new Application();
         appA.setDeveloper(appOwner);
         appA.setName("Application A");
-        appA.setId(23L);
+        appA.setId(appUUID);
         appA.setCategory(new Category("Productivity"));
         list.add(appA);
 
         Application appB = new Application();
         appB.setDeveloper(appOwner);
         appB.setName("Application B");
-        appB.setId(24L);
+        appB.setId(appUUID2);
         appB.setCategory(new Category("Development"));
         list.add(appB);
 
@@ -112,7 +119,7 @@ public class StoreControllerTests {
         Application appB = new Application();
         appB.setDeveloper(appOwner);
         appB.setName("Application B");
-        appB.setId(24L);
+        appB.setId(appUUID2);
         appB.setCategory(new Category("Development"));
         list.add(appB);
         appList.setApplications(list);

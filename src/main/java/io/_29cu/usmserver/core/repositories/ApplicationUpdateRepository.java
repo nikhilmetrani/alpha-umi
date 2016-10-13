@@ -27,5 +27,5 @@ import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
 public interface ApplicationUpdateRepository extends CrudRepository<ApplicationUpdate, Long> {
 
 	@Query("select a from ApplicationUpdate a where a.application.id = :applicationId")
-    ApplicationUpdate findByApplication(@Param("applicationId") Long applicationId);
+    ApplicationUpdate findByApplication(@Param("applicationId") String applicationId);
 }

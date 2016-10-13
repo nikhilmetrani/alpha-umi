@@ -22,6 +22,6 @@ import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
 
 @Component
 public interface ApplicationUpdateService {
-	public ApplicationUpdate findByApplication(Long applicationId);
+	public ApplicationUpdate findByApplication(String applicationId);
     public ApplicationUpdate createApplicationUpdate(ApplicationUpdate applicationUpdate);
 }

@@ -50,6 +50,7 @@ import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.ApplicationUpdateService;
 import io._29cu.usmserver.core.service.UserService;
+import java.util.UUID;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -75,6 +76,7 @@ public class DeveloperApplicationControllerTests {
     private Application application;
     private ApplicationUpdate applicationUpdate;
     private Application existingApplication;
+    private String appUUID;
 
     @Before
     public void setup() throws Exception {
@@ -86,8 +88,10 @@ public class DeveloperApplicationControllerTests {
         developer.setEmail("owner@test.com");
         developer.setName("Test Owner");
 
+        appUUID = UUID.randomUUID().toString();
+
         application = new Application();
-        application.setId(22L);
+        application.setId(appUUID);
         application.setCategory(new Category("Productivity"));
         application.setName("Dreamweaver");
         application.setState(AppState.Staging);
@@ -102,7 +106,7 @@ public class DeveloperApplicationControllerTests {
         applicationUpdate.setApplication(application);
 
         existingApplication = new Application();
-        existingApplication.setId(22L);
+        existingApplication.setId(appUUID);
         existingApplication.setCategory(new Category("Productivity"));
         existingApplication.setName("Dreamweaver");
         existingApplication.setState(AppState.Staging);
@@ -121,9 +125,9 @@ public class DeveloperApplicationControllerTests {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
         when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
-        when(applicationService.findApplicationByDeveloperAndId(22L, 22L)).thenReturn(application);
+        when(applicationService.findApplicationByDeveloperAndId(22L, appUUID)).thenReturn(application);
 
-        mockMvc.perform(get("/api/0/developer/22/application/22"))
+        mockMvc.perform(get("/api/0/developer/22/application/" + appUUID))
 		        .andExpect(status().isOk());
     }
 
@@ -142,7 +146,7 @@ public class DeveloperApplicationControllerTests {
                 .andExpect(jsonPath("$.name",
                         equalTo(application.getName())))
                 .andExpect(jsonPath("$.rid",
-                        equalTo(22)))
+                        equalTo(appUUID)))
                 .andExpect(jsonPath("$.version",
                         equalTo(application.getVersion())))
                 .andExpect(jsonPath("$.state",
@@ -183,11 +187,11 @@ public class DeveloperApplicationControllerTests {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
         when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
         when(authenticationMocked.getPrincipal()).thenReturn("22");
-        when(applicationService.findApplicationByDeveloperAndId(22L, 22L)).thenReturn(application);
-        when(applicationUpdateService.findByApplication(22L)).thenReturn(null);
+        when(applicationService.findApplicationByDeveloperAndId(22L, appUUID)).thenReturn(application);
+        when(applicationUpdateService.findByApplication(appUUID)).thenReturn(null);
         when(applicationUpdateService.createApplicationUpdate(any(ApplicationUpdate.class))).thenReturn(applicationUpdate);
 
-        mockMvc.perform(post("/api/0/developer/22/application/22/publish")
+        mockMvc.perform(post("/api/0/developer/22/application/" + appUUID +"/publish")
                 .content("{'whatsNew':'What is new', 'version':'1.0'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())

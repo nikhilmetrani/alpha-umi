@@ -25,8 +25,8 @@ public interface ApplicationService {
     public ApplicationList getAllApplications();
     public Application createApplication(Application application);
     public Application findApplicationByDeveloperAndName(Long developerId, String applicationName);
-    public Application findApplicationByDeveloperAndId(Long developerId, Long applicationId);
-    public Application findApplication(Long id);
+    public Application findApplicationByDeveloperAndId(Long developerId, String applicationId);
+    public Application findApplication(String id);
     public ApplicationList findApplicationsByDeveloper(Long developerId);
     public ApplicationList findApplicationsByCategory(String category);
 }
