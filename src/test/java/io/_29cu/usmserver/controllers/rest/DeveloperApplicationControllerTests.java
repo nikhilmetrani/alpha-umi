@@ -183,6 +183,33 @@ public class DeveloperApplicationControllerTests {
     }
 
     @Test
+    public void testModifyDeveloperApplication() throws Exception {
+        when(userService.findUserByPrincipal("22")).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
+        when(authenticationMocked.getPrincipal()).thenReturn("22");
+        when(applicationService.findApplicationByDeveloperAndId(22L, appUUID)).thenReturn(application);
+        when(applicationService.modifyApplication(any(Application.class))).thenReturn(application);
+
+        mockMvc.perform(post("/api/0/developer/22/application/modify")
+                .content("{'name':'dreamweaver_updated','downloadUrl':'https://test.com/updated', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'updated test description'}".replaceAll("'",  "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+                // .andDo(print())
+                .andExpect(jsonPath("$.name",
+                        equalTo("dreamweaver_updated")))
+                .andExpect(jsonPath("$.rid",
+                        equalTo(appUUID)))
+                .andExpect(jsonPath("$.version",
+                        equalTo("1.1")))
+                .andExpect(jsonPath("$.state",
+                        equalTo(application.getState().name())))
+                .andExpect(jsonPath("$.category.name",
+                        equalTo("Lifestyle")))
+                .andExpect(jsonPath("$.description",
+                        equalTo("updated test description")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void  testPublishDeveloperApplication() throws Exception {
         when(userService.findUserByPrincipal("22")).thenReturn(developer);
         when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);

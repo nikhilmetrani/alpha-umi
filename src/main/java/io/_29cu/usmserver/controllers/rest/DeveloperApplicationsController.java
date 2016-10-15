@@ -136,6 +136,23 @@ public class DeveloperApplicationsController {
     }
 
     // Create Application
+    @RequestMapping(path = "/{userId}/application/modify", method = RequestMethod.POST)
+    public ResponseEntity<ApplicationResource> ModifyDeveloperApplication(
+            @PathVariable Long userId,
+            @RequestBody ApplicationResource applicationResource
+    ) {
+        // Let's get the user from principal and validate the userId against it.
+        User user = userService.validateUserIdWithPrincipal(userId);
+        if (user == null)
+            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+        Application receivedApplication = applicationResource.toEntity();
+        receivedApplication.setDeveloper(user);
+        Application application = applicationService.modifyApplication(receivedApplication);
+        ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application);
+        return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
+    }
+
+    // Create Application
     @RequestMapping(path = "/{userId}/application/{appId}/publish", method = RequestMethod.POST)
     public ResponseEntity<ApplicationUpdateResource> publishDeveloperApplication(
             @PathVariable Long userId,
