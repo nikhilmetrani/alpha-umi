@@ -135,24 +135,38 @@ public class DeveloperApplicationsController {
         }
     }
 
-    // Create Application
-    @RequestMapping(path = "/{userId}/application/modify", method = RequestMethod.POST)
+    // Modify Application
+    @RequestMapping(path = "/{userId}/application/{appId}/modify", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> ModifyDeveloperApplication(
             @PathVariable Long userId,
+            @PathVariable String appId,
             @RequestBody ApplicationResource applicationResource
     ) {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.validateUserIdWithPrincipal(userId);
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
-        Application receivedApplication = applicationResource.toEntity();
-        receivedApplication.setDeveloper(user);
-        Application application = applicationService.modifyApplication(receivedApplication);
-        ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application);
-        return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
+
+	    try{
+		    Application application = applicationService.findApplicationByDeveloperAndId(userId, appId);
+
+		    if (application == null) {
+			    return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
+		    }
+
+		    Application receivedApplication = applicationResource.toEntity();
+		    receivedApplication.setDeveloper(user);
+		    receivedApplication.setId(appId);
+	        application = applicationService.modifyApplication(receivedApplication);
+	        ApplicationResource modifiedApplicationResource = new ApplicationResourceAssembler().toResource(application);
+	        return new ResponseEntity<ApplicationResource>(modifiedApplicationResource, HttpStatus.OK);
+	    }catch(Exception ex){
+		    ex.printStackTrace();
+		    return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+	    }
     }
 
-    // Create Application
+    // Publish Application
     @RequestMapping(path = "/{userId}/application/{appId}/publish", method = RequestMethod.POST)
     public ResponseEntity<ApplicationUpdateResource> publishDeveloperApplication(
             @PathVariable Long userId,
