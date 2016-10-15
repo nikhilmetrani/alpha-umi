@@ -23,49 +23,16 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class ApplicationUpdate {
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    @NotNull
-    private String version;
-
-	@NotNull
-    private String whatsNew;
-
+public class ApplicationUpdate extends ApplicationBase {
     @OneToOne
-    private Application application;
+    private Application target;
 
-    public String getWhatsNew() {
-        return whatsNew;
+    public Application getTarget() {
+        return target;
     }
 
-    public void setWhatsNew(String whatsNew) {
-        this.whatsNew = whatsNew;
+    public void setTarget(Application target) {
+        this.target = target;
     }
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
-	public Application getApplication() {
-		return application;
-	}
-
-	public void setApplication(Application application) {
-		this.application = application;
-	}
 }

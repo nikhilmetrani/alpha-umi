@@ -19,7 +19,7 @@ package io._29cu.usmserver.controllers.rest.resources;
 import io._29cu.usmserver.core.model.entities.User;
 
 public class UserResource extends EntityResourceBase<User> {
-    private Long rid;
+    private String rid;
     private String email;
     private String name;
 
@@ -31,11 +31,11 @@ public class UserResource extends EntityResourceBase<User> {
         this.name = name;
     }
 
-    public Long getRid() {
+    public String getRid() {
         return rid;
     }
 
-    public void setRid(Long rid) {
+    public void setRid(String rid) {
         this.rid = rid;
     }
 

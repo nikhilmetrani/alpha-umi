@@ -23,7 +23,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, String> {
     @Query("select u from User u where u.principal = :principal")
     User findUserByPrincipal(@Param("principal") String principal);
 }

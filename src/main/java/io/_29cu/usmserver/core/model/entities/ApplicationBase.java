@@ -14,27 +14,37 @@
  * limitations under the License.
  **/
 
-package io._29cu.usmserver.controllers.rest.resources;
+package io._29cu.usmserver.core.model.entities;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
+import org.hibernate.annotations.GenericGenerator;
 
-public class ApplicationUpdateResource extends EntityResourceBase<ApplicationUpdate> {
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 
-    private String rid;
+@MappedSuperclass
+public class ApplicationBase {
+    @Id
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    private String id;
+    @NotNull
     private String name;
-    private String version;
+    @NotNull
     private String description;
+    @NotNull
+    private String version;
+    @NotNull
     private String whatsNew;
-    private Application target;
 
-	public String getRid() {
-		return rid;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setRid(String rid) {
-		this.rid = rid;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -44,13 +54,9 @@ public class ApplicationUpdateResource extends EntityResourceBase<ApplicationUpd
         this.name = name;
     }
 
-	public String getVersion() {
-		return version;
-	}
+    public String getVersion() { return version; }
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
+    public void setVersion(String version) { this.version = version; }
 
     public String getDescription() {
         return description;
@@ -68,19 +74,4 @@ public class ApplicationUpdateResource extends EntityResourceBase<ApplicationUpd
         this.whatsNew = whatsNew;
     }
 
-    public Application getTarget() { return target; }
-
-    public void setTarget(Application target) { this.target = target; }
-
-
-    @Override
-    public ApplicationUpdate toEntity() {
-        ApplicationUpdate applicationUpdate = new ApplicationUpdate();
-        applicationUpdate.setId(rid);
-        applicationUpdate.setName(name);
-        applicationUpdate.setVersion(version);
-        applicationUpdate.setDescription(description);
-        applicationUpdate.setWhatsNew(whatsNew);
-        return applicationUpdate;
-    }
 }

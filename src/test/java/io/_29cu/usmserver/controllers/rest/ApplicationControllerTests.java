@@ -53,32 +53,32 @@ public class ApplicationControllerTests {
 
     private User appOwner;
     Application app;
-    private String appUUID;
+    private String uuid;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(applicationController).build();
 
-        appUUID = UUID.randomUUID().toString();
+        uuid = UUID.randomUUID().toString();
 
         appOwner = new User();
-        appOwner.setId(22L);
+        appOwner.setId(uuid);
         appOwner.setEmail("owner@test.com");
         appOwner.setName("Test Owner");
         app = new Application();
         app.setDeveloper(appOwner);
         app.setName("Application A");
-        app.setId(appUUID);
+        app.setId(uuid);
         app.setCategory(new Category("Productivity"));
 
     }
 
     @Test
     public void  testGetApplication() throws Exception {
-        when(applicationService.findApplication(appUUID)).thenReturn(app);
+        when(applicationService.findApplication(uuid)).thenReturn(app);
 
-        mockMvc.perform(get("/api/1/store/application/" + appUUID))
+        mockMvc.perform(get("/api/1/store/application/" + uuid))
                 .andExpect(jsonPath("$.name",
                         equalTo("Application A")))
                 .andExpect(status().isOk());
@@ -86,9 +86,9 @@ public class ApplicationControllerTests {
 
     @Test
     public void  testGetApplicationErrorHandling() throws Exception {
-        when(applicationService.findApplication(appUUID)).thenReturn(null);
+        when(applicationService.findApplication(uuid)).thenReturn(null);
 
-        mockMvc.perform(get("/api/1/store/application/" + appUUID))
+        mockMvc.perform(get("/api/1/store/application/" + uuid))
                 .andExpect(status().isNotFound());
     }
 }

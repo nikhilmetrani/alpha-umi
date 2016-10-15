@@ -60,6 +60,7 @@ public class ApplicationServiceTests {
         application.setState(AppState.Staging);
         application.setDescription("test description");
         application.setVersion("1.0");
+        application.setWhatsNew("test");
         service.createApplication(application);
     }
 

@@ -27,14 +27,14 @@ import java.util.List;
 @Component
 public interface ApplicationRepository extends CrudRepository<Application, String> {
     @Query("select u from Application u where u.developer.id = :id")
-    List<Application> findApplicationsByDeveloper(@Param("id") Long id);
+    List<Application> findApplicationsByDeveloper(@Param("id") String id);
 
     @Query("select u from Application u where u.category.name = :category")
     List<Application> findApplicationsByCategory(@Param("category") String category);
 
     @Query("select a from Application a where a.developer.id = :id and a.name = :applicationName")
-    Application findApplicationByDeveloperAndName(@Param("id") Long id, @Param("applicationName") String applicationName);
+    Application findApplicationByDeveloperAndName(@Param("id") String id, @Param("applicationName") String applicationName);
 
     @Query("select a from Application a where a.developer.id = :id and a.id = :applicationId")
-    Application findApplicationByDeveloperAndId(@Param("id") Long id, @Param("applicationId") String applicationId);
+    Application findApplicationByDeveloperAndId(@Param("id") String id, @Param("applicationId") String applicationId);
 }

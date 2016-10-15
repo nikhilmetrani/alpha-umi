@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -62,6 +63,8 @@ public class DeveloperProfileControllerTests {
     @Mock
     private UserService userService;
 
+    private String uuid;
+
     // @Mock not used here since they are mocked in setup()
     // Spring boot does not allow mocking with annotation.
     SecurityContext securityContextMocked;
@@ -77,8 +80,10 @@ public class DeveloperProfileControllerTests {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(developerProfileController).build();
 
+        uuid = UUID.randomUUID().toString();
+
         developer = new User();
-        developer.setId(22L);
+        developer.setId(uuid);
         developer.setEmail("owner@test.com");
         developer.setName("Test Owner");
         profile = new DeveloperProfile();
@@ -111,11 +116,11 @@ public class DeveloperProfileControllerTests {
 
     @Test
     public void  testGetNonExistentDeveloperProfile() throws Exception {
-        when(userService.findUserByPrincipal("22")).thenReturn(developer);
-        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
-        when(profileService.findProfileByUserId(22L)).thenReturn(null);
-        when(authenticationMocked.getPrincipal()).thenReturn("22");
-        mockMvc.perform(get("/api/0/developer/22/profile"))
+        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
+        when(profileService.findProfileByUserId(uuid)).thenReturn(null);
+        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
+        mockMvc.perform(get("/api/0/developer/"+uuid+"/profile"))
                 .andExpect(jsonPath("$.email",
                         equalTo(null))) 
                 .andExpect(jsonPath("$.rid",
@@ -149,11 +154,11 @@ public class DeveloperProfileControllerTests {
 
     @Test
     public void  testGetExistingDeveloperProfile() throws Exception {
-        when(userService.findUserByPrincipal("22")).thenReturn(developer);
-        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
-        when(profileService.findProfileByUserId(22L)).thenReturn(profile);
-        when(authenticationMocked.getPrincipal()).thenReturn("22");
-        mockMvc.perform(get("/api/0/developer/22/profile"))
+        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
+        when(profileService.findProfileByUserId(uuid)).thenReturn(profile);
+        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
+        mockMvc.perform(get("/api/0/developer/"+uuid+"/profile"))
                 .andExpect(jsonPath("$.email",
                         equalTo(profile.getEmail())))
                 .andExpect(jsonPath("$.rid",
@@ -187,12 +192,12 @@ public class DeveloperProfileControllerTests {
 
     @Test
     public void  testCreateDeveloperProfile() throws Exception {
-        when(userService.findUserByPrincipal("22")).thenReturn(developer);
-        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
+        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
         when(profileService.createProfile(any(DeveloperProfile.class))).thenReturn(profile);
-        when(authenticationMocked.getPrincipal()).thenReturn("22");
+        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
 
-        mockMvc.perform(post("/api/0/developer/22/profile")
+        mockMvc.perform(post("/api/0/developer/"+uuid+"/profile")
                 .content("{\"email\":\"test@test.com\",\"website\":\"https://test.com\",\"jobTitle\":\"jobTitle\",\"address\":\"address\",\"city\":\"city\",\"state\":\"state\",\"zipCode\":12345,\"country\":\"country\",\"workPhone\":567890,\"homePhone\":123456,\"dateOfBirth\":978278400000,\"gender\":\"gender\",\"joinDate\":1478707200000,\"logo\":\"logo_path_detail\"}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -226,21 +231,21 @@ public class DeveloperProfileControllerTests {
                         equalTo(profile.getJoinDate().getTime())))
                 .andExpect(jsonPath("$.logo",
                         equalTo(profile.getLogo())))
-                .andExpect(header().string("Location", endsWith("/api/0/developer/22/profile")))
+                .andExpect(header().string("Location", endsWith("/api/0/developer/"+uuid+"/profile")))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void  testDeveloperProfileErrorHandling() throws Exception {
-        when(userService.findUserByPrincipal("22")).thenReturn(null);
-        mockMvc.perform(get("/api/0/developer/22/profile"))
+        when(userService.findUserByPrincipal(uuid)).thenReturn(null);
+        mockMvc.perform(get("/api/0/developer/"+uuid+"/profile"))
                 .andExpect(status().isForbidden());
     }
     
     
     @Test
     public void  testDeveloperProfileErrorHandlingDifferentUrl() throws Exception {
-        when(userService.findUserByPrincipal("22")).thenReturn(developer);
+        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
         mockMvc.perform(get("/api/0/developer/24/profile"))
                 .andExpect(status().isForbidden());
     }

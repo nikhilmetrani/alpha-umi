@@ -103,6 +103,7 @@ public class DummyData {
         app.setVersion(version);
         app.setState(state);
         app.setDescription(description);
+        app.setWhatsNew("test");
         return app;
     }
 }

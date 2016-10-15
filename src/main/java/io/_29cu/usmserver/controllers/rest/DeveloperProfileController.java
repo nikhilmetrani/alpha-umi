@@ -48,7 +48,7 @@ public class DeveloperProfileController {
     // userId path variable imposes a security risk. Need to remove it.
     @RequestMapping(path = "/{userId}/profile", method = RequestMethod.GET)
     public ResponseEntity<DeveloperProfileResource> developerProfile(
-            @PathVariable Long userId
+            @PathVariable String userId
     ) {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.validateUserIdWithPrincipal(userId);
@@ -71,7 +71,7 @@ public class DeveloperProfileController {
 
     @RequestMapping(path = "/{userId}/profile", method = RequestMethod.POST)
     public ResponseEntity<DeveloperProfileResource> createDeveloperProfile(
-            @PathVariable Long userId,
+            @PathVariable String userId,
             @RequestBody DeveloperProfileResource developerProfileResource
     ) {
         // Let's get the user from principal and validate the userId against it.

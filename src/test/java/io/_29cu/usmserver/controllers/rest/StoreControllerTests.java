@@ -58,7 +58,7 @@ public class StoreControllerTests {
     private User appOwner;
     private ApplicationList appList;
 
-    private String appUUID;
+    private String uuid;
     private String appUUID2;
 
     @Before
@@ -66,11 +66,11 @@ public class StoreControllerTests {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(storeController).build();
 
-        appUUID = UUID.randomUUID().toString();
+        uuid = UUID.randomUUID().toString();
         appUUID2 = UUID.randomUUID().toString();
 
         appOwner = new User();
-        appOwner.setId(22L);
+        appOwner.setId(uuid);
         appOwner.setEmail("owner@test.com");
         appOwner.setName("Test Owner");
 
@@ -81,7 +81,7 @@ public class StoreControllerTests {
         Application appA = new Application();
         appA.setDeveloper(appOwner);
         appA.setName("Application A");
-        appA.setId(appUUID);
+        appA.setId(uuid);
         appA.setCategory(new Category("Productivity"));
         list.add(appA);
 

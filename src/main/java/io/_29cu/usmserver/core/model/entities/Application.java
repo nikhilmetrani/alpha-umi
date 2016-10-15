@@ -23,33 +23,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Application {
-    @Id
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
-    private String id;
-    @NotNull
-    private String name;
-    @NotNull
-    private String description;
+public class Application extends ApplicationBase{
     @NotNull
     private AppState state;
-    @NotNull
-    private String version;
     @ManyToOne
     private User developer;
-    @OneToOne
-    private Application target;
     @ManyToOne
     private Category category;
-
-    public Application getTarget() {
-        return target;
-    }
-
-    public void setTarget(Application target) {
-        this.target = target;
-    }
 
     public Category getCategory() {
         return category;
@@ -59,29 +39,9 @@ public class Application {
         this.category = category;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public AppState getState() { return state; }
 
     public void setState(AppState state) { this.state = state; }
-
-    public String getVersion() { return version; }
-
-    public void setVersion(String version) { this.version = version; }
 
     public User getDeveloper() {
         return developer;
@@ -91,11 +51,4 @@ public class Application {
         this.developer = developer;
     }
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 }

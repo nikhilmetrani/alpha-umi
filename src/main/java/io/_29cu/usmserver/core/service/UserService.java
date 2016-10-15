@@ -21,8 +21,8 @@ import java.security.Principal;
 
 public interface UserService {
     User createUser(User user);
-    User findUser(Long id);
+    User findUser(String id);
     User findUserByPrincipal(String principal);
     User createUser(Principal principal);
-    User validateUserIdWithPrincipal(Long userId);
+    User validateUserIdWithPrincipal(String userId);
 }

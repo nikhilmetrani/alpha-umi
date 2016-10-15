@@ -64,32 +64,36 @@ public class ApplicationUpdateServiceTests {
         application.setState(AppState.Staging);
         application.setDescription("test description");
         application.setVersion("1.0");
+        application.setWhatsNew("test");
         application = appService.createApplication(application);
 
         applicationUpdate = new ApplicationUpdate();
-        applicationUpdate.setVersion("1.0");
+        applicationUpdate.setName("application");
+        applicationUpdate.setDescription("test description");
+        applicationUpdate.setVersion("1.1");
         applicationUpdate.setWhatsNew("What is new");
         application.setState(AppState.Active);
-        applicationUpdate.setApplication(application);
     }
 
     @Test
     @Transactional
     public void testFindByApplication() {
+        applicationUpdate.setTarget(application);
     	applicationUpdate = appUpdateService.createApplicationUpdate(applicationUpdate);
-        ApplicationUpdate fromDb = appUpdateService.findByApplication(applicationUpdate.getApplication().getId());
+        ApplicationUpdate fromDb = appUpdateService.findByApplication(application.getId());
         assertNotNull(fromDb);
         assertEquals("Application Update Version does not match", applicationUpdate.getVersion(), fromDb.getVersion());
-        assertEquals("Application name does not match", application.getName(), fromDb.getApplication().getName());
+        assertEquals("Application name does not match", application.getName(), fromDb.getTarget().getName());
     }
 
     @Test
     @Transactional
     public void testCreateApplicationUpdate() {
+        applicationUpdate.setTarget(application);
         ApplicationUpdate fromDb = appUpdateService.createApplicationUpdate(applicationUpdate);
         assertNotNull(fromDb);
         assertEquals("Application Update Version does not match", applicationUpdate.getVersion(), fromDb.getVersion());
-        assertEquals("Application name does not match", application.getName(), fromDb.getApplication().getName());
-        assertEquals("Application state does not match", application.getState(), fromDb.getApplication().getState());
+        assertEquals("Application name does not match", application.getName(), fromDb.getTarget().getName());
+        assertEquals("Application state does not match", application.getState(), fromDb.getTarget().getState());
     }
 }

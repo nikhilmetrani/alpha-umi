@@ -61,12 +61,12 @@ public class ApplicationServiceImpl implements ApplicationService{
     }
 
     @Override
-    public Application findApplicationByDeveloperAndName(Long developerId, String applicationName) {
+    public Application findApplicationByDeveloperAndName(String developerId, String applicationName) {
         return applicationRepository.findApplicationByDeveloperAndName(developerId, applicationName);
     }
 
     @Override
-    public Application findApplicationByDeveloperAndId(Long developerId, String applicationId) {
+    public Application findApplicationByDeveloperAndId(String developerId, String applicationId) {
         return applicationRepository.findApplicationByDeveloperAndId(developerId, applicationId);
     }
 
@@ -76,7 +76,7 @@ public class ApplicationServiceImpl implements ApplicationService{
     }
 
     @Override
-    public ApplicationList findApplicationsByDeveloper(Long developerId) {
+    public ApplicationList findApplicationsByDeveloper(String developerId) {
         List<Application> appList = applicationRepository.findApplicationsByDeveloper(developerId);
         ApplicationList applicationList = new ApplicationList();
         applicationList.setApplications(appList);
@@ -91,4 +91,9 @@ public class ApplicationServiceImpl implements ApplicationService{
         return  applicationList;
     }
 
+    @Override
+    public Application updateApplication(Application application) {
+        application = applicationRepository.save(application);
+        return application;
+    }
 }

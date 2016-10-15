@@ -16,6 +16,7 @@
 
 package io._29cu.usmserver.core.service.impl;
 
+import io._29cu.usmserver.core.model.entities.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,8 +40,8 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
 
     @Override
     public ApplicationUpdate createApplicationUpdate(ApplicationUpdate applicationUpdate) {
+        Application application = applicationRepository.save(applicationUpdate.getTarget());
     	applicationUpdate = applicationUpdateRepository.save(applicationUpdate);
-    	applicationRepository.save(applicationUpdate.getApplication());
     	return applicationUpdate;
     }
 

@@ -63,7 +63,7 @@ public class DeveloperApplicationsController {
     // Get all applications
     @RequestMapping(path = "/{userId}/applications", method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> getApplications(
-            @PathVariable Long userId
+            @PathVariable String userId
     ){
         // Let's get the user from principal and validate the userId against it.
         User user = userService.validateUserIdWithPrincipal(userId);
@@ -79,9 +79,9 @@ public class DeveloperApplicationsController {
     }
 
     // Get all applications
-    @RequestMapping(path = "/{userId}/application/{appId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{userId}/applications/{appId}", method = RequestMethod.GET)
     public ResponseEntity<ApplicationResource> getApplication(
-            @PathVariable Long userId, 
+            @PathVariable String userId,
             @PathVariable String appId
     ){
         // Let's get the user from principal and validate the userId against it.
@@ -98,9 +98,9 @@ public class DeveloperApplicationsController {
     }
 
     // Create Application
-    @RequestMapping(path = "/{userId}/application/create", method = RequestMethod.POST)
+    @RequestMapping(path = "/{userId}/applications/create", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> createDeveloperApplication(
-            @PathVariable Long userId,
+            @PathVariable String userId,
             @RequestBody ApplicationResource applicationResource
     ) {
         // Let's get the user from principal and validate the userId against it.
@@ -115,9 +115,9 @@ public class DeveloperApplicationsController {
     }
 
     // Create Application
-    @RequestMapping(path = "/{userId}/application/create", method = RequestMethod.GET)
+    @RequestMapping(path = "/{userId}/applications/create", method = RequestMethod.GET)
     public ResponseEntity<ApplicationResource> checkApplicationNameExistsForDeveloper(
-            @PathVariable Long userId,
+            @PathVariable String userId,
             @RequestParam String name
     ) {
         // Let's get the user from principal and validate the userId against it.
@@ -136,9 +136,9 @@ public class DeveloperApplicationsController {
     }
 
     // Modify Application
-    @RequestMapping(path = "/{userId}/application/{appId}/modify", method = RequestMethod.POST)
+    @RequestMapping(path = "/{userId}/applications/{appId}/modify", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> ModifyDeveloperApplication(
-            @PathVariable Long userId,
+            @PathVariable String userId,
             @PathVariable String appId,
             @RequestBody ApplicationResource applicationResource
     ) {
@@ -167,16 +167,16 @@ public class DeveloperApplicationsController {
     }
 
     // Publish Application
-    @RequestMapping(path = "/{userId}/application/{appId}/publish", method = RequestMethod.POST)
-    public ResponseEntity<ApplicationUpdateResource> publishDeveloperApplication(
-            @PathVariable Long userId,
+    @RequestMapping(path = "/{userId}/applications/{appId}/publish", method = RequestMethod.POST)
+    public ResponseEntity<ApplicationResource> publishDeveloperApplication(
+            @PathVariable String userId,
             @PathVariable String appId,
             @RequestBody ApplicationUpdateResource applicationUpdateResource
     ) {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.validateUserIdWithPrincipal(userId);
         if (user == null)
-            return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
 
         try{
 	        ApplicationUpdate applicationUpdate = applicationUpdateResource.toEntity();
@@ -185,16 +185,19 @@ public class DeveloperApplicationsController {
 	        if(!application.getState().equals(AppState.Blocked) && applicationUpdateService.findByApplication(appId)==null) {
 	        	application.setState(AppState.Active);
 	        	application.setVersion(applicationUpdate.getVersion());
-		        applicationUpdate.setApplication(application);
-		        ApplicationUpdate newApplicationUpdate = applicationUpdateService.createApplicationUpdate(applicationUpdate); 
-		        ApplicationUpdateResource newapplicationUpdateResource = new ApplicationUpdateResourceAssembler().toResource(newApplicationUpdate); 
-		        return new ResponseEntity<ApplicationUpdateResource>(newapplicationUpdateResource, HttpStatus.OK);
+                application.setDescription(applicationUpdate.getDescription());
+                application.setName(applicationUpdate.getName());
+                application.setWhatsNew(applicationUpdate.getWhatsNew());
+                applicationUpdate.setTarget(application);
+		        ApplicationUpdate newApplicationUpdate = applicationUpdateService.createApplicationUpdate(applicationUpdate);
+		        ApplicationResource newApplicationResource = new ApplicationResourceAssembler().toResource(application);
+		        return new ResponseEntity<ApplicationResource>(newApplicationResource, HttpStatus.OK);
 	        }else{
-	        	return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.PRECONDITION_FAILED);
+	        	return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
 	        }
         }catch(Exception ex){
         	ex.printStackTrace();
-        	return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.BAD_REQUEST);
+        	return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
         }
     }
 
