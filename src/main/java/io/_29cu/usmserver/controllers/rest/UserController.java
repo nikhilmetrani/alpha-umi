@@ -56,7 +56,7 @@ public class UserController {
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public ResponseEntity<UserResource> getUser(
-            @PathVariable Long userId
+            @PathVariable String userId
     ) {
         User user = userService.findUser(userId);
         if (null == user)

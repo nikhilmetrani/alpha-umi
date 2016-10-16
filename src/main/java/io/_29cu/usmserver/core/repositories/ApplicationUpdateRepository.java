@@ -24,8 +24,8 @@ import org.springframework.stereotype.Component;
 import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
 
 @Component
-public interface ApplicationUpdateRepository extends CrudRepository<ApplicationUpdate, Long> {
+public interface ApplicationUpdateRepository extends CrudRepository<ApplicationUpdate, String> {
 
-	@Query("select a from ApplicationUpdate a where a.application.id = :applicationId")
+	@Query("select a from ApplicationUpdate a where a.target.id = :applicationId")
     ApplicationUpdate findByApplication(@Param("applicationId") String applicationId);
 }

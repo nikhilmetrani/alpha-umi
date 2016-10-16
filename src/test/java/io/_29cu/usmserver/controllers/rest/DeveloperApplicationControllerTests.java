@@ -76,7 +76,7 @@ public class DeveloperApplicationControllerTests {
     private Application application;
     private ApplicationUpdate applicationUpdate;
     private Application existingApplication;
-    private String appUUID;
+    private String uuid;
 
     @Before
     public void setup() throws Exception {
@@ -84,14 +84,14 @@ public class DeveloperApplicationControllerTests {
         mockMvc = MockMvcBuilders.standaloneSetup(developerApplicationController).build();
 
         developer = new User();
-        developer.setId(22L);
+        developer.setId(uuid);
         developer.setEmail("owner@test.com");
         developer.setName("Test Owner");
 
-        appUUID = UUID.randomUUID().toString();
+        uuid = UUID.randomUUID().toString();
 
         application = new Application();
-        application.setId(appUUID);
+        application.setId(uuid);
         application.setCategory(new Category("Productivity"));
         application.setName("Dreamweaver");
         application.setState(AppState.Staging);
@@ -100,18 +100,20 @@ public class DeveloperApplicationControllerTests {
         application.setDescription("test description");
         
         applicationUpdate = new ApplicationUpdate();
-        applicationUpdate.setId(22L);
-        applicationUpdate.setVersion("1.0");
+        applicationUpdate.setId(uuid);
+        applicationUpdate.setName("Dreamweaver v1.1");
+        applicationUpdate.setVersion("1.1");
+        applicationUpdate.setDescription("test description v1.1");
         applicationUpdate.setWhatsNew("What is new");
-        applicationUpdate.setApplication(application);
 
         existingApplication = new Application();
-        existingApplication.setId(appUUID);
+        existingApplication.setId(uuid);
         existingApplication.setCategory(new Category("Productivity"));
         existingApplication.setName("Dreamweaver");
         existingApplication.setState(AppState.Staging);
         existingApplication.setVersion("1.0");
         existingApplication.setDeveloper(developer);
+        existingApplication.setDescription("test description");
 
         // Let's mock the security context
         authenticationMocked = Mockito.mock(Authentication.class);
@@ -122,31 +124,31 @@ public class DeveloperApplicationControllerTests {
 
     @Test
     public void  testGetApplication() throws Exception {
-        when(userService.findUserByPrincipal("22")).thenReturn(developer);
-        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
-        when(authenticationMocked.getPrincipal()).thenReturn("22");
-        when(applicationService.findApplicationByDeveloperAndId(22L, appUUID)).thenReturn(application);
+        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
+        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
+        when(applicationService.findApplicationByDeveloperAndId(uuid, uuid)).thenReturn(application);
 
-        mockMvc.perform(get("/api/0/developer/22/application/" + appUUID))
+        mockMvc.perform(get("/api/0/developer/"+ uuid +"/applications/" + uuid))
 		        .andExpect(status().isOk());
     }
 
     @Test
     public void  testCreateDeveloperApplication() throws Exception {
-        when(userService.findUserByPrincipal("22")).thenReturn(developer);
-        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
-        when(authenticationMocked.getPrincipal()).thenReturn("22");
-        when(userService.findUser(22L)).thenReturn(developer);
+        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
+        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
+        when(userService.findUser(uuid)).thenReturn(developer);
         when(applicationService.createApplication(any(Application.class))).thenReturn(application);
 
-        mockMvc.perform(post("/api/0/developer/22/application/create")
+        mockMvc.perform(post("/api/0/developer/"+ uuid +"/applications/create")
                 .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                // .andDo(print())
                 .andExpect(jsonPath("$.name",
                         equalTo(application.getName())))
                 .andExpect(jsonPath("$.rid",
-                        equalTo(appUUID)))
+                        equalTo(uuid)))
                 .andExpect(jsonPath("$.version",
                         equalTo(application.getVersion())))
                 .andExpect(jsonPath("$.state",
@@ -160,51 +162,79 @@ public class DeveloperApplicationControllerTests {
 
     @Test
     public void  testCheckApplicationNameExistsForDeveloper() throws Exception {
-        when(userService.findUserByPrincipal("22")).thenReturn(developer);
-        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
-        when(authenticationMocked.getPrincipal()).thenReturn("22");
-        when(applicationService.findApplicationByDeveloperAndName(22L, "Dreamweaver")).thenReturn(application);
+        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
+        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
+        when(applicationService.findApplicationByDeveloperAndName(uuid, "Dreamweaver")).thenReturn(application);
 
-        mockMvc.perform(get("/api/0/developer/22/application/create")
+        mockMvc.perform(get("/api/0/developer/"+ uuid +"/applications/create")
         		.param("name", "Dreamweaver"))
 		        .andExpect(status().isOk());
     }
 
     @Test
     public void  testCheckApplicationNameNotExistsForDeveloper() throws Exception {
-        when(userService.findUserByPrincipal("22")).thenReturn(developer);
-        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
-        when(authenticationMocked.getPrincipal()).thenReturn("22");
-        when(applicationService.findApplicationByDeveloperAndName(22L, "Dreams")).thenReturn(null);
+        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
+        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
+        when(applicationService.findApplicationByDeveloperAndName(uuid, "Dreams")).thenReturn(null);
 
-        mockMvc.perform(get("/api/0/developer/22/application/create")
+        mockMvc.perform(get("/api/0/developer/"+ uuid +"/applications/create")
         		.param("name", "Dreams"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
+    public void testModifyDeveloperApplication() throws Exception {
+        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
+        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
+        when(applicationService.findApplicationByDeveloperAndId(uuid, uuid)).thenReturn(application);
+        when(applicationService.modifyApplication(any(Application.class))).thenReturn(application);
+
+        mockMvc.perform(post("/api/0/developer/"+ uuid +"/applications/" + uuid +"/modify")
+                .content("{'name':'dreamweaver_updated','downloadUrl':'https://test.com/updated', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'updated test description'}".replaceAll("'",  "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+                // .andDo(print())
+		        .andExpect(jsonPath("$.name",
+				        equalTo(application.getName())))
+		        .andExpect(jsonPath("$.rid",
+				        equalTo(uuid)))
+		        .andExpect(jsonPath("$.version",
+				        equalTo(application.getVersion())))
+		        .andExpect(jsonPath("$.state",
+				        equalTo(application.getState().name())))
+		        .andExpect(jsonPath("$.category.name",
+				        equalTo(application.getCategory().getName())))
+		        .andExpect(jsonPath("$.description",
+				        equalTo(application.getDescription())))
+		        .andExpect(status().isOk());
+    }
+
+    @Test
     public void  testPublishDeveloperApplication() throws Exception {
-        when(userService.findUserByPrincipal("22")).thenReturn(developer);
-        when(userService.validateUserIdWithPrincipal(22L)).thenReturn(developer);
-        when(authenticationMocked.getPrincipal()).thenReturn("22");
-        when(applicationService.findApplicationByDeveloperAndId(22L, appUUID)).thenReturn(application);
-        when(applicationUpdateService.findByApplication(appUUID)).thenReturn(null);
+        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
+        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
+        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
+        when(applicationService.findApplicationByDeveloperAndId(uuid, uuid)).thenReturn(application);
+        application = applicationService.createApplication(application);
+        applicationUpdate.setTarget(application);
         when(applicationUpdateService.createApplicationUpdate(any(ApplicationUpdate.class))).thenReturn(applicationUpdate);
 
-        mockMvc.perform(post("/api/0/developer/22/application/" + appUUID +"/publish")
-                .content("{'whatsNew':'What is new', 'version':'1.0'}".replaceAll("'",  "\""))
+        mockMvc.perform(post("/api/0/developer/"+ uuid +"/applications/" + uuid +"/publish")
+                .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$.whatsNew",
                         equalTo(applicationUpdate.getWhatsNew())))
                 .andExpect(jsonPath("$.rid",
-                        equalTo(22)))
+                        equalTo(uuid)))
                 .andExpect(jsonPath("$.version",
                         equalTo(applicationUpdate.getVersion())))
-                .andExpect(jsonPath("$.application.name",
-                        equalTo(applicationUpdate.getApplication().getName())))
-                .andExpect(jsonPath("$.application.state",
-                        equalTo(applicationUpdate.getApplication().getState().getState())))
+                .andExpect(jsonPath("$.name",
+                        equalTo(applicationUpdate.getName())))
+                .andExpect(jsonPath("$.state",
+                        equalTo(AppState.Active.getState())))
                 .andExpect(status().isOk());
     }
 }

@@ -17,6 +17,8 @@
 package io._29cu.usmserver.core.model.entities;
 
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,8 +29,9 @@ import java.io.Serializable;
 @Entity
 public class User implements Serializable {
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    private String id;
     @Column(unique = true)
     private String email;
     @NotNull
@@ -52,11 +55,11 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

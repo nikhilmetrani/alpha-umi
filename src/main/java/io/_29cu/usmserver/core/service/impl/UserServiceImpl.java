@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUser(Long id) {
+    public User findUser(String id) {
         return userRepository.findOne(id);
     }
 
@@ -60,11 +60,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User validateUserIdWithPrincipal(Long userId) {
+    public User validateUserIdWithPrincipal(String userId) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!(principal instanceof String)) return null;
 
         User user = findUserByPrincipal(principal.toString());
-        return (user.getId() == userId) ? user : null;
+        return (userId.equals(user.getId())) ? user : null;
     }
 }

@@ -25,5 +25,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface DeveloperProfileRepository extends CrudRepository<DeveloperProfile, Long>{
     @Query("select p from DeveloperProfile p where p.owner.id = :id")
-    DeveloperProfile findDeveloperProfileByUserId(@Param("id") Long id);
+    DeveloperProfile findDeveloperProfileByUserId(@Param("id") String id);
 }
