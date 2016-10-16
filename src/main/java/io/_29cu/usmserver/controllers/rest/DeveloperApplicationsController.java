@@ -224,7 +224,7 @@ public class DeveloperApplicationsController {
     // Recall Application
     @RequestMapping(path = "/{userId}/application/{appId}/recall", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> recallDeveloperApplication(
-            @PathVariable Long userId,
+            @PathVariable String userId,
             @PathVariable String appId
     ) {
         // Let's get the user from principal and validate the userId against it.
