@@ -186,4 +186,41 @@ public class DeveloperApplicationsController {
 //    ) {
 //
 //    }
+
+    // Recall Application
+    @RequestMapping(path = "/{userId}/application/{appId}/recall", method = RequestMethod.POST)
+    public ResponseEntity<ApplicationResource> recallDeveloperApplication(
+            @PathVariable Long userId,
+            @PathVariable String appId
+    ) {
+        // Let's get the user from principal and validate the userId against it.
+        User user = userService.validateUserIdWithPrincipal(userId);
+        if (user == null)
+            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+
+        try{
+            //ApplicationUpdate applicationUpdate = ApplicationResource.toEntity();
+            Application application = applicationService.findApplicationByDeveloperAndId(userId, appId);
+            // If the application state is 'Active'
+            if(application.getState().equals(AppState.Active)) {
+                //get top 1 application from history based on date (desc).
+
+                //set the history application value to application
+
+                //if there is no history app, then set the state to "Recalled"
+                application.setState(AppState.Recalled);
+
+                //create new history app
+
+                //return the application
+                ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application);
+                return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
