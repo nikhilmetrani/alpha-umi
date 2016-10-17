@@ -34,8 +34,9 @@ public class CustomErrorController implements ErrorController {
     }
 
     @RequestMapping
-    public String error(HttpServletRequest request){
-        return "error/404.html";
+    public ResponseEntity<String> error(HttpServletRequest request){
+        String errorResponseJson = "{'error': 'Request could not be processed'}".replaceAll("'", "\"");
+        return new ResponseEntity<String>(errorResponseJson, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private boolean getTraceParameter(HttpServletRequest request) {
