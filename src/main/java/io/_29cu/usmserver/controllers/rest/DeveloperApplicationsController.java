@@ -57,7 +57,7 @@ public class DeveloperApplicationsController {
     private ApplicationUpdateService applicationUpdateService;
 
     // Skeleton methods
-    // Add similar methods for create, modify and publish updates
+    // Add similar methods for create, update and publish updates
     // And publish application
 
     // Get all applications
@@ -108,8 +108,8 @@ public class DeveloperApplicationsController {
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
         Application receivedApplication = applicationResource.toEntity();
-        receivedApplication.setDeveloper(user); 
-        Application application = applicationService.createApplication(receivedApplication); 
+        receivedApplication.setDeveloper(user);
+        Application application = applicationService.createApplication(receivedApplication);
         ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application); 
         return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
     }
@@ -135,35 +135,28 @@ public class DeveloperApplicationsController {
         }
     }
 
-    // Modify Application
-    @RequestMapping(path = "/{userId}/applications/{appId}/modify", method = RequestMethod.POST)
-    public ResponseEntity<ApplicationResource> ModifyDeveloperApplication(
+    // Update Application
+    @RequestMapping(path = "/{userId}/applications/{appId}/update", method = RequestMethod.POST)
+    public ResponseEntity<ApplicationResource> UpdateDeveloperApplication(
             @PathVariable String userId,
             @PathVariable String appId,
             @RequestBody ApplicationResource applicationResource
     ) {
-        // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
-        if (user == null)
-            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+	    // Let's get the user from principal and validate the userId against it.
+	    User user = userService.validateUserIdWithPrincipal(userId);
+	    if (user == null)
+		    return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
 
-	    try{
-		    Application application = applicationService.findApplicationByDeveloperAndId(userId, appId);
+	    Application application = applicationService.findApplicationByDeveloperAndId(userId, appId);
+	    if (application == null)
+		    return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
 
-		    if (application == null) {
-			    return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
-		    }
-
-		    Application receivedApplication = applicationResource.toEntity();
-		    receivedApplication.setDeveloper(user);
-		    receivedApplication.setId(appId);
-	        application = applicationService.modifyApplication(receivedApplication);
-	        ApplicationResource modifiedApplicationResource = new ApplicationResourceAssembler().toResource(application);
-	        return new ResponseEntity<ApplicationResource>(modifiedApplicationResource, HttpStatus.OK);
-	    }catch(Exception ex){
-		    ex.printStackTrace();
-		    return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
-	    }
+	    Application receivedApplication = applicationResource.toEntity();
+	    receivedApplication.setDeveloper(user);
+	    receivedApplication.setId(appId);
+	    application = applicationService.updateApplication(receivedApplication);
+	    ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application);
+	    return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
     }
 
     // Publish Application
@@ -200,26 +193,6 @@ public class DeveloperApplicationsController {
         	return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
         }
     }
-
-//
-    // Get Application
-//    @RequestMapping(path = "/{userId}/application/{appId}/updates", method = RequestMethod.GET)
-//    public ResponseEntity<ApplicationResource> modifyDeveloperApplication(
-//            @PathVariable Long userId,
-//            @PathVariable Long appId,
-//    ) {
-//
-//    }
-
-    // Modify Application
-//    @RequestMapping(path = "/{userId}/application/{appId}", method = RequestMethod.POST)
-//    public ResponseEntity<ApplicationResource> modifyDeveloperApplication(
-//            @PathVariable Long userId,
-//            @PathVariable Long appId,
-//            @RequestBody ApplicationResource applicationResource
-//    ) {
-//
-//    }
 
     // Recall Application
     @RequestMapping(path = "/{userId}/application/{appId}/recall", method = RequestMethod.POST)

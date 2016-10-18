@@ -76,6 +76,7 @@ public class DeveloperApplicationControllerTests {
     private Application application;
     private ApplicationUpdate applicationUpdate;
     private Application existingApplication;
+	private Application updatedApplication;
     private String uuid;
 
     @Before
@@ -115,6 +116,15 @@ public class DeveloperApplicationControllerTests {
         existingApplication.setDeveloper(developer);
         existingApplication.setDescription("test description");
 
+	    updatedApplication = new Application();
+	    updatedApplication.setId(uuid);
+	    updatedApplication.setCategory(new Category("LifeStyle"));
+	    updatedApplication.setName("PhotoShop");
+	    updatedApplication.setState(AppState.Staging);
+	    updatedApplication.setVersion("1.1");
+	    updatedApplication.setDeveloper(developer);
+	    updatedApplication.setDescription("PhotoShop Description");
+	    
         // Let's mock the security context
         authenticationMocked = Mockito.mock(Authentication.class);
         securityContextMocked = Mockito.mock(SecurityContext.class);
@@ -185,29 +195,31 @@ public class DeveloperApplicationControllerTests {
     }
 
     @Test
-    public void testModifyDeveloperApplication() throws Exception {
+    public void testUpdateDeveloperApplication() throws Exception {
+	    when(userService.findUser(uuid)).thenReturn(developer);
         when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
         when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
         when(authenticationMocked.getPrincipal()).thenReturn(uuid);
         when(applicationService.findApplicationByDeveloperAndId(uuid, uuid)).thenReturn(application);
-        when(applicationService.modifyApplication(any(Application.class))).thenReturn(application);
+	    application = applicationService.createApplication(application);
+	    when(applicationService.updateApplication(any(Application.class))).thenReturn(updatedApplication);
 
-        mockMvc.perform(post("/api/0/developer/"+ uuid +"/applications/" + uuid +"/modify")
-                .content("{'name':'dreamweaver_updated','downloadUrl':'https://test.com/updated', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'updated test description'}".replaceAll("'",  "\""))
+	    mockMvc.perform(post("/api/0/developer/"+ uuid +"/applications/" + uuid +"/update")
+                .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
-                // .andDo(print())
+			    .andDo(print())
 		        .andExpect(jsonPath("$.name",
-				        equalTo(application.getName())))
+				        equalTo(updatedApplication.getName())))
 		        .andExpect(jsonPath("$.rid",
 				        equalTo(uuid)))
 		        .andExpect(jsonPath("$.version",
-				        equalTo(application.getVersion())))
+				        equalTo(updatedApplication.getVersion())))
 		        .andExpect(jsonPath("$.state",
-				        equalTo(application.getState().name())))
+				        equalTo(updatedApplication.getState().name())))
 		        .andExpect(jsonPath("$.category.name",
-				        equalTo(application.getCategory().getName())))
+				        equalTo(updatedApplication.getCategory().getName())))
 		        .andExpect(jsonPath("$.description",
-				        equalTo(application.getDescription())))
+				        equalTo(updatedApplication.getDescription())))
 		        .andExpect(status().isOk());
     }
 

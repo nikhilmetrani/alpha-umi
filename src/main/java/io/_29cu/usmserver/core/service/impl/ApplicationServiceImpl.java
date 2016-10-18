@@ -56,7 +56,7 @@ public class ApplicationServiceImpl implements ApplicationService{
     }
 
     @Override
-    public Application modifyApplication(Application application) {
+    public Application updateApplication(Application application) {
         return applicationRepository.save(application);
     }
 
@@ -89,11 +89,5 @@ public class ApplicationServiceImpl implements ApplicationService{
         ApplicationList applicationList = new ApplicationList();
         applicationList.setApplications(appList);
         return  applicationList;
-    }
-
-    @Override
-    public Application updateApplication(Application application) {
-        application = applicationRepository.save(application);
-        return application;
     }
 }

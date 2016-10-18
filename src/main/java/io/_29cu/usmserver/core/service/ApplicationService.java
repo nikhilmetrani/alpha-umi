@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 public interface ApplicationService {
     public ApplicationList getAllApplications();
     public Application createApplication(Application application);
-    public Application modifyApplication(Application application);
     public Application updateApplication(Application application);
     public Application findApplicationByDeveloperAndName(String developerId, String applicationName);
     public Application findApplicationByDeveloperAndId(String developerId, String applicationId);
