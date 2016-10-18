@@ -25,6 +25,9 @@ import io._29cu.usmserver.core.repositories.ApplicationRepository;
 import io._29cu.usmserver.core.repositories.ApplicationUpdateRepository;
 import io._29cu.usmserver.core.service.ApplicationUpdateService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
     @Autowired
@@ -45,4 +48,33 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
     	return applicationUpdate;
     }
 
+    /**
+     * appListToBePublished - List of applications to be Published
+     **/
+
+    @Override
+    public List<ApplicationUpdate> createApplicationUpdateByDeveloper(String developerId, List<ApplicationUpdate> appListToBePublished) {
+        if(appListToBePublished != null && !appListToBePublished.isEmpty()){
+            // updatedAppList - List of applications for which update to be Published, this excludes all the staging applications
+            List<ApplicationUpdate> updatedAppList = new ArrayList<ApplicationUpdate>();
+            // fetches all the existing applications(existingAppList) by the developer
+            List<Application> existingAppList = applicationRepository.findApplicationsByDeveloper(developerId);
+            if(existingAppList != null && !existingAppList.isEmpty()){
+                for(ApplicationUpdate appToBePublished : appListToBePublished){
+                    for(Application updatedApp : existingAppList){
+                        if(updatedApp.getName().equals(appToBePublished.getName()) && updatedApp.getDeveloper().getName().equals(appToBePublished.getTarget().getDeveloper().getName())){
+                            updatedAppList.add(appToBePublished);
+                        }
+                    }
+                }
+            }
+            if(!updatedAppList.isEmpty()){
+                for(ApplicationUpdate applicationUpdate : updatedAppList ){
+                    applicationUpdate = createApplicationUpdate(applicationUpdate);
+                }
+                return updatedAppList;
+            }
+        }
+        return appListToBePublished;
+    }
 }
