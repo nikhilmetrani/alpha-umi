@@ -200,7 +200,6 @@ public class DeveloperProfileControllerTests {
         mockMvc.perform(post("/api/0/developer/"+uuid+"/profile")
                 .content("{\"email\":\"test@test.com\",\"website\":\"https://test.com\",\"jobTitle\":\"jobTitle\",\"address\":\"address\",\"city\":\"city\",\"state\":\"state\",\"zipCode\":12345,\"country\":\"country\",\"workPhone\":567890,\"homePhone\":123456,\"dateOfBirth\":978278400000,\"gender\":\"gender\",\"joinDate\":1478707200000,\"logo\":\"logo_path_detail\"}")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(jsonPath("$.email",
                         equalTo(profile.getEmail())))
                 .andExpect(jsonPath("$.rid",

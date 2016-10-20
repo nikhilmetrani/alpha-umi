@@ -207,7 +207,6 @@ public class DeveloperApplicationControllerTests {
 	    mockMvc.perform(post("/api/0/developer/"+ uuid +"/applications/" + uuid +"/update")
                 .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
-			    .andDo(print())
 		        .andExpect(jsonPath("$.name",
 				        equalTo(updatedApplication.getName())))
 		        .andExpect(jsonPath("$.rid",
@@ -236,7 +235,6 @@ public class DeveloperApplicationControllerTests {
         mockMvc.perform(post("/api/0/developer/"+ uuid +"/applications/" + uuid +"/publish")
                 .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(jsonPath("$.whatsNew",
                         equalTo(applicationUpdate.getWhatsNew())))
                 .andExpect(jsonPath("$.rid",

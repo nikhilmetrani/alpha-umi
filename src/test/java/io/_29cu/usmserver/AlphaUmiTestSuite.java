@@ -16,17 +16,19 @@
 
 package io._29cu.usmserver;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.springframework.test.context.ActiveProfiles;
+
 import io._29cu.usmserver.common.utilities.AppHelperTests;
 import io._29cu.usmserver.controllers.rest.ApplicationControllerTests;
+import io._29cu.usmserver.controllers.rest.DeveloperApplicationControllerTests;
 import io._29cu.usmserver.controllers.rest.DeveloperProfileControllerTests;
 import io._29cu.usmserver.controllers.rest.StoreControllerTests;
 import io._29cu.usmserver.core.repositories.UserRepositoryTests;
 import io._29cu.usmserver.core.service.ApplicationServiceTests;
 import io._29cu.usmserver.core.service.UserServiceTests;
 import io._29cu.usmserver.core.service.utilities.ApplicationListTests;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.springframework.test.context.ActiveProfiles;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -38,6 +40,7 @@ import org.springframework.test.context.ActiveProfiles;
     ApplicationListTests.class,
     StoreControllerTests.class,
     ApplicationControllerTests.class,
+    DeveloperApplicationControllerTests.class,
     DeveloperProfileControllerTests.class
 })
 @ActiveProfiles("test")
