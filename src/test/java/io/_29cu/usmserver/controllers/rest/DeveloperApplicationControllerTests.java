@@ -87,12 +87,12 @@ public class DeveloperApplicationControllerTests {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(developerApplicationController).build();
 
+        uuid = UUID.randomUUID().toString();
+
         developer = new User();
         developer.setId(uuid);
         developer.setEmail("owner@test.com");
         developer.setName("Test Owner");
-
-        uuid = UUID.randomUUID().toString();
 
         application = new Application();
         application.setId(uuid);
