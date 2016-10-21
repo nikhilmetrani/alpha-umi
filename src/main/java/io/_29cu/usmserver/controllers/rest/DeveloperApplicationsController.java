@@ -32,7 +32,6 @@ import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationUpdateResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
-import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationUpdateResourceAssembler;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
 import io._29cu.usmserver.core.model.entities.User;
@@ -174,8 +173,13 @@ public class DeveloperApplicationsController {
         try{
 	        ApplicationUpdate applicationUpdate = applicationUpdateResource.toEntity();
 	        Application application = applicationService.findApplicationByDeveloperAndId(userId, appId);
-	        // If the application state is not 'blocked' AND there is no existing Application Update, then proceed for Publish
-	        if(!application.getState().equals(AppState.Blocked) && applicationUpdateService.findByApplication(appId)==null) {
+	        // If the application state is not 'blocked' 
+	        if(!application.getState().equals(AppState.Blocked)) {
+	        	ApplicationUpdate dbApplicationUpdate = applicationUpdateService.findByApplication(appId);
+	        	// If there is existing ApplicationUpdate, then Update the ApplicationUpdate and Publish
+	        	if(dbApplicationUpdate != null){
+	        		applicationUpdate.setId(dbApplicationUpdate.getId());
+	        	}
 	        	application.setState(AppState.Active);
 	        	application.setVersion(applicationUpdate.getVersion());
                 application.setDescription(applicationUpdate.getDescription());
@@ -189,7 +193,7 @@ public class DeveloperApplicationsController {
 	        	return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
 	        }
         }catch(Exception ex){
-        	ex.printStackTrace();
+        	//ex.printStackTrace();
         	return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
         }
     }

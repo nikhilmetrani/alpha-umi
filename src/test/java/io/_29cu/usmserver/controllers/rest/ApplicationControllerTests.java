@@ -16,10 +16,15 @@
 
 package io._29cu.usmserver.controllers.rest;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.Category;
-import io._29cu.usmserver.core.model.entities.User;
-import io._29cu.usmserver.core.service.ApplicationService;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.UUID;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,13 +36,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import java.util.UUID;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.service.ApplicationService;
+import io._29cu.usmserver.core.service.utilities.ApplicationList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -52,6 +56,7 @@ public class ApplicationControllerTests {
     private MockMvc mockMvc;
 
     private User appOwner;
+    private ApplicationList applicationList;
     Application app;
     private String uuid;
 
@@ -71,6 +76,11 @@ public class ApplicationControllerTests {
         app.setName("Application A");
         app.setId(uuid);
         app.setCategory(new Category("Productivity"));
+        
+        applicationList = new ApplicationList();
+        ArrayList<Application> appList = new ArrayList<Application>();
+        appList.add(app);
+        applicationList.setApplications(appList);
 
     }
 
@@ -90,5 +100,18 @@ public class ApplicationControllerTests {
 
         mockMvc.perform(get("/api/1/store/application/" + uuid))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void  testGetApplicationsByDeveloper() throws Exception {
+        when(applicationService.findApplicationsByDeveloper(uuid)).thenReturn(null);
+
+        mockMvc.perform(get("/api/1/store/application/developer/" + uuid))
+                .andExpect(status().isNotFound());
+
+    	when(applicationService.findApplicationsByDeveloper(uuid)).thenReturn(applicationList);
+
+        mockMvc.perform(get("/api/1/store/application/developer/" + uuid))
+                .andExpect(status().isOk());
     }
 }
