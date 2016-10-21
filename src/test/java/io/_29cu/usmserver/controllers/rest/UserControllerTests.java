@@ -83,4 +83,17 @@ public class UserControllerTests {
                         equalTo(user.getName())))
                 .andExpect(status().isOk());
     }
+    
+    @Test
+    public void  testGetUser() throws Exception {
+    	when(userService.findUser("22")).thenReturn(null);
+        mockMvc.perform(get("/user/22"))
+                .andExpect(status().isNotFound());
+
+        when(userService.findUser(uuid)).thenReturn(user);
+        mockMvc.perform(get("/user/"+uuid))
+                .andExpect(jsonPath("$.name",
+                        equalTo(user.getName())))
+                .andExpect(status().isOk());
+    }
 }
