@@ -38,7 +38,7 @@ import java.net.URI;
 
 @Controller
 @RequestMapping("/api/0/developer")
-@EnableResourceServer
+//@EnableResourceServer
 public class DeveloperProfileController {
     @Autowired
     private UserService userService;

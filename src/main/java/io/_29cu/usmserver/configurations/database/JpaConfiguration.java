@@ -74,12 +74,6 @@ public class JpaConfiguration {
     }
 
     @Bean
-    @ConfigurationProperties("database")
-    ClientResources dataSorurceResource() {
-        return new ClientResources();
-    }
-
-    @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws SQLException {
 
         LocalContainerEntityManagerFactoryBean lef = new LocalContainerEntityManagerFactoryBean();

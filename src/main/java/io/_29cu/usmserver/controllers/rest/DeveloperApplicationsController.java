@@ -44,7 +44,7 @@ import io._29cu.usmserver.core.service.utilities.ApplicationList;
 
 @Controller
 @RequestMapping("/api/0/developer")
-@EnableResourceServer
+//@EnableResourceServer
 public class DeveloperApplicationsController {
     @Autowired
     private UserService userService;

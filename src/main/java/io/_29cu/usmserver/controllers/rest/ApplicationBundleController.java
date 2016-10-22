@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/0/developer")
-@EnableResourceServer
+//@EnableResourceServer
 public class ApplicationBundleController {
     @Autowired
     private UserService userService;

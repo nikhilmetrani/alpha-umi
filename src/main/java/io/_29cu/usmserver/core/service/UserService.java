@@ -16,11 +16,13 @@
 
 package io._29cu.usmserver.core.service;
 
+import io._29cu.usmserver.core.model.entities.AuUser;
 import io._29cu.usmserver.core.model.entities.User;
 import java.security.Principal;
 
 public interface UserService {
     User createUser(User user);
+    AuUser createUser(AuUser auUser);
     User findUser(String id);
     User findUserByPrincipal(String principal);
     User createUser(Principal principal);

@@ -16,6 +16,10 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.configurations.security.JwtUser;
+import io._29cu.usmserver.configurations.security.JwtUserFactory;
+import io._29cu.usmserver.controllers.rest.resources.AuUserResource;
+import io._29cu.usmserver.core.model.entities.AuUser;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.controllers.rest.resources.UserResource;
@@ -29,9 +33,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@Controller
+@RestController
 @RequestMapping("/user")
-@EnableResourceServer
+//@EnableResourceServer
 public class UserController {
     @Autowired
     private UserService userService;
@@ -64,5 +68,13 @@ public class UserController {
 
         UserResource userResource = new UserResourceAssembler().toResource(user);
         return new ResponseEntity<UserResource>(userResource, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public JwtUser createUser(
+            @RequestBody AuUserResource auUserResource
+            ) {
+        AuUser createdAuUser = userService.createUser(auUserResource.toEntity());
+        return JwtUserFactory.create(createdAuUser);
     }
 }

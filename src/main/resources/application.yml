@@ -66,4 +66,19 @@ spring:
   resources:
     chain:
       enabled: true
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
 
+# config context path to "/" by setting an empty string
+server:
+  contextPath:
+
+jwt:
+  header: Authorization
+  secret: auSecret
+  expiration: 604800
+  route:
+    authentication:
+      path: auth
+      refresh: refresh
