@@ -26,6 +26,6 @@ import java.util.List;
 public interface ApplicationUpdateService {
 	public ApplicationUpdate findByApplication(String applicationId);
     public ApplicationUpdate createApplicationUpdate(ApplicationUpdate applicationUpdate);
-    public List<ApplicationUpdate> createApplicationUpdateByDeveloper(String developerId, List<ApplicationUpdate> appListToBePublished);
-
-}
+    public ApplicationUpdate createApplicationUpdateByDeveloper(String developerId, ApplicationUpdate appToBePublished);
+    public ApplicationUpdate modifyApplicationUpdateByDeveloper(String developerId, ApplicationUpdate appToBeModified);
+ }

@@ -101,7 +101,7 @@ public class ApplicationUpdateServiceTests {
         application2 = new Application();
         application2.setName("application2");
         application2.setDeveloper(developer);
-        application2.setState(AppState.Active);
+        application2.setState(AppState.Staging);
         application2.setDescription("test description1");
         application2.setVersion("1.0");
         application2.setWhatsNew("test");
@@ -149,12 +149,18 @@ public class ApplicationUpdateServiceTests {
     @Test
     @Transactional
     public void testCreateApplicationUpdateByDeveloper() {
-        List<ApplicationUpdate> appListToBePublished = new ArrayList<ApplicationUpdate>();
-        appListToBePublished.add(applicationUpdate1);
-        appListToBePublished.add(applicationUpdate2);
-        List<ApplicationUpdate> applicationUpdateList = appUpdateService.createApplicationUpdateByDeveloper(application1.getDeveloper().getId(), appListToBePublished);
-        assertNotNull("List should not be not null",applicationUpdateList);
-        assertEquals("Size should be 2", applicationUpdateList.size(),2);
-        assertEquals("Developer should be same",applicationUpdateList.get(0).getTarget().getDeveloper().getId(),applicationUpdateList.get(1).getTarget().getDeveloper().getId());
+        ApplicationUpdate applicationUpdate = appUpdateService.createApplicationUpdateByDeveloper(application1.getDeveloper().getId(), applicationUpdate1);
+        assertNotNull("applicationUpdate should not be not null",applicationUpdate);
+        assertEquals("Developer should be same",applicationUpdate1.getTarget().getDeveloper().getId(),application1.getDeveloper().getId());
+        assertEquals("Returned Application state should be Active",applicationUpdate.getTarget().getState(),AppState.Active);
+    }
+
+    @Test
+    @Transactional
+    public void testModifyApplicationUpdateByDeveloper() {
+        ApplicationUpdate applicationUpdate = appUpdateService.modifyApplicationUpdateByDeveloper(application2.getDeveloper().getId(), applicationUpdate2);
+        assertNotNull("applicationUpdate should not be not null",applicationUpdate);
+        assertEquals("Developer should be same",applicationUpdate2.getTarget().getDeveloper().getId(),application2.getDeveloper().getId());
+        assertEquals("Returned Application state should be Staging",applicationUpdate.getTarget().getState(),AppState.Staging);
     }
 }
