@@ -41,7 +41,7 @@ public class ApplicationBundle {
 	private User developer;
 	@ManyToOne
 	private Category category;
-	@OneToOne
+	@OneToMany
 	private List<Application> applications;
 
 	public String getId() {
