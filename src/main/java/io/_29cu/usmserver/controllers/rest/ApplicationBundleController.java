@@ -159,8 +159,8 @@ public class ApplicationBundleController {
 	    receivedApplicationBundle.setDeveloper(user);
 	    receivedApplicationBundle.setId(appBundleId);
 	    applicationBundle = applicationBundleService.updateApplicationBundle(receivedApplicationBundle);
-	    ApplicationBundleResource createdApplicationBundleResource = new ApplicationBundleResourceAssembler().toResource(applicationBundle);
-	    return new ResponseEntity<ApplicationBundleResource>(createdApplicationBundleResource, HttpStatus.OK);
+	    ApplicationBundleResource updatedApplicationBundleResource = new ApplicationBundleResourceAssembler().toResource(applicationBundle);
+	    return new ResponseEntity<ApplicationBundleResource>(updatedApplicationBundleResource, HttpStatus.OK);
     }
 
     // Publish ApplicationBundle
