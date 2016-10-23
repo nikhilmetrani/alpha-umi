@@ -16,6 +16,7 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.core.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,10 +37,6 @@ import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
-import io._29cu.usmserver.core.service.ApplicationService;
-import io._29cu.usmserver.core.service.ApplicationUpdateService;
-import io._29cu.usmserver.core.service.DeveloperProfileService;
-import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 
 @Controller
@@ -54,6 +51,8 @@ public class DeveloperApplicationsController {
     private ApplicationService applicationService;
     @Autowired
     private ApplicationUpdateService applicationUpdateService;
+    @Autowired
+    private CategoryService categoryService;
 
     // Skeleton methods
     // Add similar methods for create, update and publish updates
@@ -108,6 +107,7 @@ public class DeveloperApplicationsController {
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
         Application receivedApplication = applicationResource.toEntity();
         receivedApplication.setDeveloper(user);
+        receivedApplication.setCategory(categoryService.findCategoryByName(receivedApplication.getCategory().getName()));
         Application application = applicationService.createApplication(receivedApplication);
         ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application); 
         return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
