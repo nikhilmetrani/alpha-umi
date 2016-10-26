@@ -34,13 +34,13 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api")
 //@EnableResourceServer
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ResponseEntity<UserResource> user(
             Principal principal /**/
     ) {
@@ -70,11 +70,25 @@ public class UserController {
         return new ResponseEntity<UserResource>(userResource, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+//    @RequestMapping(value = "{id:\\d+}")
+//    public UserDTO show(@PathVariable("id") Long id) {
+//        return userService.findOne(id).orElseThrow(UserNotFoundException::new);
+//    }
+
+    @RequestMapping(value = "/0/user", method = RequestMethod.GET)
+    public JwtUser showMe() {
+        return JwtUserFactory.create(userService.findUser()); //.orElseThrow(UserNotFoundException::new);
+    }
+
+    @RequestMapping(value = "/1/signup", method = RequestMethod.POST)
     public JwtUser createUser(
             @RequestBody AuUserResource auUserResource
             ) {
         AuUser createdAuUser = userService.createUser(auUserResource.toEntity());
         return JwtUserFactory.create(createdAuUser);
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No user")
+    private class UserNotFoundException extends RuntimeException {
     }
 }

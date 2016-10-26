@@ -22,6 +22,7 @@ import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AuthorityName;
 import io._29cu.usmserver.core.repositories.AuUserRepository;
 import io._29cu.usmserver.core.repositories.AuthorityRepository;
+import io._29cu.usmserver.core.service.SecurityContextService;
 import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -46,6 +44,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AuthorityRepository authorityRepository;
+
+    @Autowired
+    private SecurityContextService securityContextService;
 
     @Override
     public User createUser(User user) {
@@ -90,7 +91,20 @@ public class UserServiceImpl implements UserService {
         authorityRepository.save(authority);
         List<Authority> authorities = new ArrayList<>();
         authorities.add(authority);
+
+        authority = new Authority();
+        authority.setName(AuthorityName.ROLE_DEVELOPER);
+        authorityRepository.save(authority);
+        authorities.add(authority);
+
         newUser.setAuthorities(authorities);
-        return auUserRepository.save(auUser);
+
+        return auUserRepository.save(newUser);
+    }
+
+    @Override
+    public AuUser findUser() {
+        final AuUser currentUser = securityContextService.getLoggedInUser();
+        return auUserRepository.findOne(currentUser.getId());
     }
 }

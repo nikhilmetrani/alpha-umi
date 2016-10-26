@@ -70,14 +70,14 @@ public class UserControllerTests {
     public void  testUser() throws Exception {
     	when(userService.createUser(principal)).thenReturn(user);
     	when(userService.findUserByPrincipal(principal.getName())).thenReturn(null);
-        mockMvc.perform(get("/user")
+        mockMvc.perform(get("/api/user")
         		.principal(principal))
                 .andExpect(jsonPath("$.name",
                         equalTo(principal.getName())))
                 .andExpect(status().isOk());
 
     	when(userService.findUserByPrincipal(principal.getName())).thenReturn(user);
-        mockMvc.perform(get("/user")
+        mockMvc.perform(get("/api/user")
         		.principal(principal))
                 .andExpect(jsonPath("$.name",
                         equalTo(user.getName())))
@@ -86,12 +86,12 @@ public class UserControllerTests {
     
     @Test
     public void  testGetUser() throws Exception {
-    	when(userService.findUser("22")).thenReturn(null);
-        mockMvc.perform(get("/user/22"))
+    	when(userService.findUser("uuid")).thenReturn(null);
+        mockMvc.perform(get("/api/user/" + uuid))
                 .andExpect(status().isNotFound());
 
         when(userService.findUser(uuid)).thenReturn(user);
-        mockMvc.perform(get("/user/"+uuid))
+        mockMvc.perform(get("/api/" + uuid))
                 .andExpect(jsonPath("$.name",
                         equalTo(user.getName())))
                 .andExpect(status().isOk());
