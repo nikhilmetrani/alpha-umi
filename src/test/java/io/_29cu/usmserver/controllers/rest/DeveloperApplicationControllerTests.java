@@ -80,6 +80,8 @@ public class DeveloperApplicationControllerTests {
     private ApplicationUpdate applicationUpdate;
     private Application existingApplication;
 	private Application updatedApplication;
+    private Application recalledApplication;
+    private Application activeApplication;
     private String uuid;
 
     @Before
@@ -127,7 +129,26 @@ public class DeveloperApplicationControllerTests {
 	    updatedApplication.setVersion("1.1");
 	    updatedApplication.setDeveloper(developer);
 	    updatedApplication.setDescription("PhotoShop Description");
-	    
+
+        recalledApplication = new Application();
+        recalledApplication.setId(uuid);
+        recalledApplication.setCategory(new Category("LifeStyle"));
+        recalledApplication.setName("PhotoShop");
+        recalledApplication.setState(AppState.Recalled);
+        recalledApplication.setVersion("1.1");
+        recalledApplication.setDeveloper(developer);
+        recalledApplication.setDescription("PhotoShop Description");
+
+        activeApplication = new Application();
+        activeApplication.setId(uuid);
+        activeApplication.setCategory(new Category("LifeStyle"));
+        activeApplication.setName("PhotoShop");
+        activeApplication.setState(AppState.Active);
+        activeApplication.setVersion("1.1");
+        activeApplication.setDeveloper(developer);
+        activeApplication.setDescription("PhotoShop Description");
+
+
         applicationList = new ApplicationList();
         ArrayList<Application> appList = new ArrayList<Application>();
         appList.add(existingApplication);
@@ -288,6 +309,7 @@ public class DeveloperApplicationControllerTests {
 		        .andExpect(status().isOk());
     }
 
+
     @Test
     public void  testPublishDeveloperApplication() throws Exception {
     	when(userService.validateUserIdWithPrincipal("22")).thenReturn(null);
@@ -331,5 +353,40 @@ public class DeveloperApplicationControllerTests {
                 .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isPreconditionFailed());
+    }
+
+    @Test
+    public void testRecallDeveloperApplication() throws Exception {
+        when(userService.findUserByPrincipal(uuid)).thenReturn(null);
+
+        mockMvc.perform(post("/api/0/developer/22/applications/"+ uuid +"/recall")
+                .content("")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
+        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
+        when(applicationService.findApplicationByDeveloperAndId(uuid, uuid)).thenReturn(null);
+
+        mockMvc.perform(post("/api/0/developer/"+ uuid +"/applications/22/recall")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isPreconditionFailed());
+
+
+        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
+        when(applicationService.findApplicationByDeveloperAndId(uuid, uuid)).thenReturn(application);
+        mockMvc.perform(post("/api/0/developer/"+ uuid +"/applications/" + uuid +"/recall")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isPreconditionFailed());
+
+        when(applicationService.findApplicationByDeveloperAndId(uuid, uuid)).thenReturn(activeApplication);
+        when(applicationService.updateApplication(any(Application.class))).thenReturn(recalledApplication);
+
+        mockMvc.perform(post("/api/0/developer/"+ uuid +"/applications/" + uuid +"/recall")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.state",
+                        equalTo(AppState.Recalled.getState())))
+                .andExpect(jsonPath("$.rid",
+                        equalTo(uuid)))
+                .andExpect(status().isOk());
     }
 }

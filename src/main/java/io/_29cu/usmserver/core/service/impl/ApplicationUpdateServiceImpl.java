@@ -17,6 +17,7 @@
 package io._29cu.usmserver.core.service.impl;
 
 import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.enumerations.AppState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,6 @@ import io._29cu.usmserver.core.repositories.ApplicationRepository;
 import io._29cu.usmserver.core.repositories.ApplicationUpdateRepository;
 import io._29cu.usmserver.core.service.ApplicationUpdateService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -48,33 +48,41 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
     	return applicationUpdate;
     }
 
-    /**
-     * appListToBePublished - List of applications to be Published
-     **/
 
     @Override
-    public List<ApplicationUpdate> createApplicationUpdateByDeveloper(String developerId, List<ApplicationUpdate> appListToBePublished) {
-        if(appListToBePublished != null && !appListToBePublished.isEmpty()){
-            // updatedAppList - List of applications for which update to be Published, this excludes all the staging applications
-            List<ApplicationUpdate> updatedAppList = new ArrayList<ApplicationUpdate>();
+    public ApplicationUpdate createApplicationUpdateByDeveloper(String developerId, ApplicationUpdate appToBePublished) {
+        if(appToBePublished != null && developerId != null){
+            // appToBePublished - application for which update to be Published, this excludes all the staging applications
             // fetches all the existing applications(existingAppList) by the developer
             List<Application> existingAppList = applicationRepository.findApplicationsByDeveloper(developerId);
             if(existingAppList != null && !existingAppList.isEmpty()){
-                for(ApplicationUpdate appToBePublished : appListToBePublished){
-                    for(Application updatedApp : existingAppList){
-                        if(updatedApp.getName().equals(appToBePublished.getName()) && updatedApp.getDeveloper().getName().equals(appToBePublished.getTarget().getDeveloper().getName())){
-                            updatedAppList.add(appToBePublished);
-                        }
+                for(Application updatedApp : existingAppList){
+                    if((AppState.Active.equals(updatedApp.getState())) && updatedApp.getName().equals(appToBePublished.getName()) && updatedApp.getDeveloper().getName().equals(appToBePublished.getTarget().getDeveloper().getName())){
+                        appToBePublished = createApplicationUpdate(appToBePublished);
+                        return appToBePublished;
                     }
                 }
             }
-            if(!updatedAppList.isEmpty()){
-                for(ApplicationUpdate applicationUpdate : updatedAppList ){
-                    applicationUpdate = createApplicationUpdate(applicationUpdate);
+        }
+        return appToBePublished;
+    }
+
+
+    @Override
+    public ApplicationUpdate modifyApplicationUpdateByDeveloper(String developerId, ApplicationUpdate appToBeModified) {
+        if(appToBeModified != null && developerId != null){
+            // appToBePublished - application for which update to be Published, this is the application in staging area only
+            // fetches all the existing applications(existingAppList) by the developer
+            List<Application> existingAppList = applicationRepository.findApplicationsByDeveloper(developerId);
+            if(existingAppList != null && !existingAppList.isEmpty()){
+                for(Application updatedApp : existingAppList){
+                    if((AppState.Staging.equals(updatedApp.getState())) && updatedApp.getName().equals(appToBeModified.getName()) && updatedApp.getDeveloper().getName().equals(appToBeModified.getTarget().getDeveloper().getName())){
+                        appToBeModified = createApplicationUpdate(appToBeModified);
+                        return appToBeModified;
+                    }
                 }
-                return updatedAppList;
             }
         }
-        return appListToBePublished;
+        return appToBeModified;
     }
 }

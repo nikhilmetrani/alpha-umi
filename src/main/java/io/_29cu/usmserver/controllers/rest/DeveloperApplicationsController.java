@@ -16,6 +16,7 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.core.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,10 +37,6 @@ import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
-import io._29cu.usmserver.core.service.ApplicationService;
-import io._29cu.usmserver.core.service.ApplicationUpdateService;
-import io._29cu.usmserver.core.service.DeveloperProfileService;
-import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 
 @Controller
@@ -54,6 +51,8 @@ public class DeveloperApplicationsController {
     private ApplicationService applicationService;
     @Autowired
     private ApplicationUpdateService applicationUpdateService;
+    @Autowired
+    private CategoryService categoryService;
 
     // Skeleton methods
     // Add similar methods for create, update and publish updates
@@ -108,6 +107,7 @@ public class DeveloperApplicationsController {
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
         Application receivedApplication = applicationResource.toEntity();
         receivedApplication.setDeveloper(user);
+        receivedApplication.setCategory(categoryService.findCategoryByName(receivedApplication.getCategory().getName()));
         Application application = applicationService.createApplication(receivedApplication);
         ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application); 
         return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
@@ -199,7 +199,7 @@ public class DeveloperApplicationsController {
     }
 
     // Recall Application
-    @RequestMapping(path = "/{userId}/application/{appId}/recall", method = RequestMethod.POST)
+    @RequestMapping(path = "/{userId}/applications/{appId}/recall", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> recallDeveloperApplication(
             @PathVariable String userId,
             @PathVariable String appId
@@ -208,24 +208,26 @@ public class DeveloperApplicationsController {
         User user = userService.validateUserIdWithPrincipal(userId);
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
-
         try{
             //ApplicationUpdate applicationUpdate = ApplicationResource.toEntity();
             Application application = applicationService.findApplicationByDeveloperAndId(userId, appId);
+            if (application == null)
+                return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
             // If the application state is 'Active'
             if(application.getState().equals(AppState.Active)) {
                 //get top 1 application from history based on date (desc).
 
                 //set the history application value to application
 
-                //if there is no history app, then set the state to "Recalled"
-                application.setState(AppState.Recalled);
-
                 //create new history app
 
                 //return the application
-                ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application);
-                return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
+
+                //if there is no history app, then set the state to "Recalled"
+                application.setState(AppState.Recalled);
+                application = applicationService.updateApplication(application);
+                ApplicationResource updateApplicationResource = new ApplicationResourceAssembler().toResource(application);
+                return new ResponseEntity<ApplicationResource>(updateApplicationResource, HttpStatus.OK);
             }else{
                 return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
             }
