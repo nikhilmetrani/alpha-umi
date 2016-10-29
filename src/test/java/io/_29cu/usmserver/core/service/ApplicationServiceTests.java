@@ -17,9 +17,12 @@
 package io._29cu.usmserver.core.service;
 
 import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.Authority;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 
+import io._29cu.usmserver.core.model.enumerations.AuthorityName;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +32,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -42,17 +48,25 @@ public class ApplicationServiceTests {
     @Autowired
     private UserService userService;
 
-    private User developer;
+    private AuUser developer;
     private Application application;
 
     @Before
     @Transactional
     @Rollback(false)
     public void setup() {
-        developer = new User();
-        developer.setName("developer");
+        developer = new AuUser();
+        developer.setUsername("developer");
         developer.setEmail("developer@email.com");
-        userService.createUser(developer);
+        Authority authority = new Authority();
+        authority.setName(AuthorityName.ROLE_USER);
+        List<Authority> authList = new ArrayList<>();
+        authList.add(authority);
+        authority = new Authority();
+        authority.setName(AuthorityName.ROLE_DEVELOPER);
+        developer.setAuthorities(authList);
+        developer.setEnabled(true);
+        developer = userService.createUser(developer);
 
         application = new Application();
         application.setName("application");
@@ -75,8 +89,8 @@ public class ApplicationServiceTests {
 
     @Test
     @Transactional
-    public void testFindApplicationByDeveloperAndName() {
-        Application fromDb = service.findApplicationByDeveloperAndName(developer.getId(), application.getName());
+    public void testFindApplicationByUsernameAndAppName() {
+        Application fromDb = service.findApplicationByUsernameAndAppName(developer.getUsername(), application.getName());
         assertNotNull(fromDb);
         assertEquals("Application name does not match", application.getName(), fromDb.getName());
         assertEquals("Application developer does not match", application.getDeveloper(), fromDb.getDeveloper());
@@ -84,8 +98,26 @@ public class ApplicationServiceTests {
 
     @Test
     @Transactional
-    public void testFindApplicationByDeveloperAndId() {
-        Application fromDb = service.findApplicationByDeveloperAndId(developer.getId(), application.getId());
+    public void testFindApplicationByUsernameNameAndAppId() {
+        Application fromDb = service.findApplicationByUsernameAndAppId(developer.getUsername(), application.getId());
+        assertNotNull(fromDb);
+        assertEquals("Application Id does not match", application.getId(), fromDb.getId());
+        assertEquals("Application developer does not match", application.getDeveloper(), fromDb.getDeveloper());
+    }
+
+    @Test
+    @Transactional
+    public void testFindApplicationByDeveloperIdAndAppId() {
+        Application fromDb = service.findApplicationByDeveloperIdAndAppId(developer.getId(), application.getId());
+        assertNotNull(fromDb);
+        assertEquals("Application Id does not match", application.getId(), fromDb.getId());
+        assertEquals("Application developer does not match", application.getDeveloper(), fromDb.getDeveloper());
+    }
+
+    @Test
+    @Transactional
+    public void testFindApplicationByDeveloperIdAndAppName() {
+        Application fromDb = service.findApplicationByDeveloperIdAndAppName(developer.getId(), application.getName());
         assertNotNull(fromDb);
         assertEquals("Application Id does not match", application.getId(), fromDb.getId());
         assertEquals("Application developer does not match", application.getDeveloper(), fromDb.getDeveloper());

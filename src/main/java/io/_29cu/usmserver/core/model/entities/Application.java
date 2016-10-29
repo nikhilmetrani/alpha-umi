@@ -27,7 +27,7 @@ public class Application extends ApplicationBase{
     @NotNull
     private AppState state;
     @ManyToOne
-    private User developer;
+    private AuUser developer;
     @ManyToOne
     private Category category;
 
@@ -43,11 +43,11 @@ public class Application extends ApplicationBase{
 
     public void setState(AppState state) { this.state = state; }
 
-    public User getDeveloper() {
+    public AuUser getDeveloper() {
         return developer;
     }
 
-    public void setDeveloper(User developer) {
+    public void setDeveloper(AuUser developer) {
         this.developer = developer;
     }
 

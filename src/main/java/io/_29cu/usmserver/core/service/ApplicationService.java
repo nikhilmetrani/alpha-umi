@@ -25,8 +25,10 @@ public interface ApplicationService {
     public ApplicationList getAllApplications();
     public Application createApplication(Application application);
     public Application updateApplication(Application application);
-    public Application findApplicationByDeveloperAndName(String developerId, String applicationName);
-    public Application findApplicationByDeveloperAndId(String developerId, String applicationId);
+    public Application findApplicationByDeveloperIdAndAppName(Long developerId, String applicationName);
+    public Application findApplicationByDeveloperIdAndAppId(Long developerId, String applicationId);
+    public Application findApplicationByUsernameAndAppName(String username, String applicationName);
+    public Application findApplicationByUsernameAndAppId(String username, String applicationId);
     public Application findApplication(String id);
     public ApplicationList findApplicationsByDeveloper(String developerId);
     public ApplicationList findApplicationsByCategory(String category);

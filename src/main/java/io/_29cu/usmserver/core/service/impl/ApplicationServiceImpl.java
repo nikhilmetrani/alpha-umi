@@ -18,6 +18,7 @@ package io._29cu.usmserver.core.service.impl;
 
 import java.util.List;
 
+import io._29cu.usmserver.core.repositories.AuUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +35,7 @@ import io._29cu.usmserver.core.service.utilities.DummyData;
 public class ApplicationServiceImpl implements ApplicationService{
 
     @Autowired
-    UserRepository userRepository;
+    AuUserRepository userRepository;
 
     @Autowired
     ApplicationRepository applicationRepository;
@@ -61,13 +62,23 @@ public class ApplicationServiceImpl implements ApplicationService{
     }
 
     @Override
-    public Application findApplicationByDeveloperAndName(String developerId, String applicationName) {
-        return applicationRepository.findApplicationByDeveloperAndName(developerId, applicationName);
+    public Application findApplicationByDeveloperIdAndAppName(Long developerId, String applicationName) {
+        return applicationRepository.findApplicationByDeveloperIdAndAppName(developerId, applicationName);
     }
 
     @Override
-    public Application findApplicationByDeveloperAndId(String developerId, String applicationId) {
-        return applicationRepository.findApplicationByDeveloperAndId(developerId, applicationId);
+    public Application findApplicationByDeveloperIdAndAppId(Long developerId, String applicationId) {
+        return applicationRepository.findApplicationByDeveloperIdAndAppId(developerId, applicationId);
+    }
+
+    @Override
+    public Application findApplicationByUsernameAndAppName(String username, String applicationName) {
+        return applicationRepository.findApplicationByUsernameAndAppName(username, applicationName);
+    }
+
+    @Override
+    public Application findApplicationByUsernameAndAppId(String username, String applicationId) {
+        return applicationRepository.findApplicationByUsernameAndAppId(username, applicationId);
     }
 
     @Override

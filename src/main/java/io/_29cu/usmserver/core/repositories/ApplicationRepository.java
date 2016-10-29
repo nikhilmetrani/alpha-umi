@@ -26,15 +26,21 @@ import java.util.List;
 
 @Component
 public interface ApplicationRepository extends CrudRepository<Application, String> {
-    @Query("select u from Application u where u.developer.id = :id")
-    List<Application> findApplicationsByDeveloper(@Param("id") String id);
+    @Query("select u from Application u where LOWER(u.developer.username) = lower(:username)")
+    List<Application> findApplicationsByDeveloper(@Param("username") String username);
 
     @Query("select u from Application u where u.category.name = :category")
     List<Application> findApplicationsByCategory(@Param("category") String category);
 
-    @Query("select a from Application a where a.developer.id = :id and a.name = :applicationName")
-    Application findApplicationByDeveloperAndName(@Param("id") String id, @Param("applicationName") String applicationName);
+    @Query("select a from Application a where LOWER(a.developer.username) = LOWER(:username) and a.name = :applicationName")
+    Application findApplicationByUsernameAndAppName(@Param("username") String username, @Param("applicationName") String applicationName);
 
-    @Query("select a from Application a where a.developer.id = :id and a.id = :applicationId")
-    Application findApplicationByDeveloperAndId(@Param("id") String id, @Param("applicationId") String applicationId);
+    @Query("select a from Application a where LOWER(a.developer.username) = LOWER(:username) and a.id = :applicationId")
+    Application findApplicationByUsernameAndAppId(@Param("username") String username, @Param("applicationId") String applicationId);
+
+    @Query("select a from Application a where LOWER(a.developer.id) = LOWER(:id) and a.name = :applicationName")
+    Application findApplicationByDeveloperIdAndAppName(@Param("id") Long id, @Param("applicationName") String applicationName);
+
+    @Query("select a from Application a where LOWER(a.developer.id) = LOWER(:id) and a.id = :applicationId")
+    Application findApplicationByDeveloperIdAndAppId(@Param("id") Long id, @Param("applicationId") String applicationId);
 }

@@ -19,6 +19,7 @@ package io._29cu.usmserver.core.service.utilities;
 import io._29cu.usmserver.common.utilities.AppHelper;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
+import io._29cu.usmserver.core.repositories.AuUserRepository;
 import io._29cu.usmserver.core.repositories.CategoryRepository;
 import io._29cu.usmserver.core.repositories.UserRepository;
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class ApplicationListTests {
     private ApplicationRepository applicationRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private AuUserRepository userRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;

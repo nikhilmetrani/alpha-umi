@@ -16,6 +16,7 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.core.model.entities.AuUser;
 import io._29cu.usmserver.core.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,16 +60,14 @@ public class DeveloperApplicationsController {
     // And publish application
 
     // Get all applications
-    @RequestMapping(path = "/{userId}/applications", method = RequestMethod.GET)
-    public ResponseEntity<ApplicationListResource> getApplications(
-            @PathVariable String userId
-    ){
+    @RequestMapping(path = "/applications", method = RequestMethod.GET)
+    public ResponseEntity<ApplicationListResource> getApplications(){
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<ApplicationListResource>(HttpStatus.FORBIDDEN);
         try {
-            ApplicationList appList = applicationService.findApplicationsByDeveloper(userId);
+            ApplicationList appList = applicationService.findApplicationsByDeveloper(user.getUsername());
             ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(appList);
             return new ResponseEntity<ApplicationListResource>(appListResource, HttpStatus.OK);
         } catch (Exception ex) {
@@ -77,17 +76,16 @@ public class DeveloperApplicationsController {
     }
 
     // Get all applications
-    @RequestMapping(path = "/{userId}/applications/{appId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/applications/{appId}", method = RequestMethod.GET)
     public ResponseEntity<ApplicationResource> getApplication(
-            @PathVariable String userId,
             @PathVariable String appId
     ){
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
         try {
-            Application application = applicationService.findApplicationByDeveloperAndId(userId, appId);
+            Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
             ApplicationResource applicationResource = new ApplicationResourceAssembler().toResource(application);
             return new ResponseEntity<ApplicationResource>(applicationResource, HttpStatus.OK);
         } catch (Exception ex) {
@@ -96,13 +94,12 @@ public class DeveloperApplicationsController {
     }
 
     // Create Application
-    @RequestMapping(path = "/{userId}/applications/create", method = RequestMethod.POST)
+    @RequestMapping(path = "/applications/create", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> createDeveloperApplication(
-            @PathVariable String userId,
             @RequestBody ApplicationResource applicationResource
     ) {
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
         Application receivedApplication = applicationResource.toEntity();
@@ -114,18 +111,17 @@ public class DeveloperApplicationsController {
     }
 
     // Create Application
-    @RequestMapping(path = "/{userId}/applications/create", method = RequestMethod.GET)
+    @RequestMapping(path = "/applications/create", method = RequestMethod.GET)
     public ResponseEntity<ApplicationResource> checkApplicationNameExistsForDeveloper(
-            @PathVariable String userId,
             @RequestParam String name
     ) {
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
 
         //Let's check whether the application is already registered.
-        Application existingApp = applicationService.findApplicationByDeveloperAndName(userId, name);
+        Application existingApp = applicationService.findApplicationByDeveloperIdAndAppName(user.getId(), name);
         if (null == existingApp) { //We can't find the application in our database for the developer.
             return new ResponseEntity<ApplicationResource>(HttpStatus.NO_CONTENT);
         } else {
@@ -135,18 +131,16 @@ public class DeveloperApplicationsController {
     }
 
     // Update Application
-    @RequestMapping(path = "/{userId}/applications/{appId}/update", method = RequestMethod.POST)
+    @RequestMapping(path = "/applications/{appId}/update", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> UpdateDeveloperApplication(
-            @PathVariable String userId,
             @PathVariable String appId,
             @RequestBody ApplicationResource applicationResource
     ) {
 	    // Let's get the user from principal and validate the userId against it.
-	    User user = userService.validateUserIdWithPrincipal(userId);
-	    if (user == null)
-		    return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
-
-	    Application application = applicationService.findApplicationByDeveloperAndId(userId, appId);
+        AuUser user = userService.findUser();
+        if (user == null)
+            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+	    Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
 	    if (application == null)
 		    return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
 
@@ -159,20 +153,19 @@ public class DeveloperApplicationsController {
     }
 
     // Publish Application
-    @RequestMapping(path = "/{userId}/applications/{appId}/publish", method = RequestMethod.POST)
+    @RequestMapping(path = "/applications/{appId}/publish", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> publishDeveloperApplication(
-            @PathVariable String userId,
             @PathVariable String appId,
             @RequestBody ApplicationUpdateResource applicationUpdateResource
     ) {
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
 
         try{
 	        ApplicationUpdate applicationUpdate = applicationUpdateResource.toEntity();
-	        Application application = applicationService.findApplicationByDeveloperAndId(userId, appId);
+	        Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
 	        // If the application state is not 'blocked' 
 	        if(!application.getState().equals(AppState.Blocked)) {
 	        	ApplicationUpdate dbApplicationUpdate = applicationUpdateService.findByApplication(appId);
@@ -199,18 +192,17 @@ public class DeveloperApplicationsController {
     }
 
     // Recall Application
-    @RequestMapping(path = "/{userId}/applications/{appId}/recall", method = RequestMethod.POST)
+    @RequestMapping(path = "/applications/{appId}/recall", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> recallDeveloperApplication(
-            @PathVariable String userId,
             @PathVariable String appId
     ) {
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
         try{
             //ApplicationUpdate applicationUpdate = ApplicationResource.toEntity();
-            Application application = applicationService.findApplicationByDeveloperAndId(userId, appId);
+            Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
             if (application == null)
                 return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
             // If the application state is 'Active'
