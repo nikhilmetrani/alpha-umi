@@ -57,7 +57,7 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
             List<Application> existingAppList = applicationRepository.findApplicationsByDeveloper(developerId);
             if(existingAppList != null && !existingAppList.isEmpty()){
                 for(Application updatedApp : existingAppList){
-                    if((AppState.Active.equals(updatedApp.getState())) && updatedApp.getName().equals(appToBePublished.getName()) && updatedApp.getDeveloper().getName().equals(appToBePublished.getTarget().getDeveloper().getName())){
+                    if((AppState.Active.equals(updatedApp.getState())) && updatedApp.getName().equals(appToBePublished.getName()) && updatedApp.getDeveloper().getUsername().equals(appToBePublished.getTarget().getDeveloper().getUsername())){
                         appToBePublished = createApplicationUpdate(appToBePublished);
                         return appToBePublished;
                     }
@@ -76,7 +76,7 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
             List<Application> existingAppList = applicationRepository.findApplicationsByDeveloper(developerId);
             if(existingAppList != null && !existingAppList.isEmpty()){
                 for(Application updatedApp : existingAppList){
-                    if((AppState.Staging.equals(updatedApp.getState())) && updatedApp.getName().equals(appToBeModified.getName()) && updatedApp.getDeveloper().getName().equals(appToBeModified.getTarget().getDeveloper().getName())){
+                    if((AppState.Staging.equals(updatedApp.getState())) && updatedApp.getName().equals(appToBeModified.getName()) && updatedApp.getDeveloper().getUsername().equals(appToBeModified.getTarget().getDeveloper().getUsername())){
                         appToBeModified = createApplicationUpdate(appToBeModified);
                         return appToBeModified;
                     }

@@ -1,23 +1,29 @@
-facebook:
-  client:
-    clientId: 1564256310547655
-    clientSecret: 3f3b27fca4160a1e692e3a1687af6ec9
-    accessTokenUri: https://graph.facebook.com/oauth/access_token
-    userAuthorizationUri: https://www.facebook.com/dialog/oauth
-    tokenName: oauth_token
-    authenticationScheme: query
-    clientAuthenticationScheme: form
-  resource:
-    userInfoUri: https://graph.facebook.com/me
-github:
-  client:
-    clientId: 73f614184d71565f7233
-    clientSecret: c19989e5d94f2880722d40009f25f1a26b00bc97
-    accessTokenUri: https://github.com/login/oauth/access_token
-    userAuthorizationUri: https://github.com/login/oauth/authorize
-    clientAuthenticationScheme: form
-  resource:
-    userInfoUri: https://api.github.com/user
+#facebook:
+#  client:
+#    clientId: 1564256310547655
+#    clientSecret: 3f3b27fca4160a1e692e3a1687af6ec9
+#    accessTokenUri: https://graph.facebook.com/oauth/access_token
+#    userAuthorizationUri: https://www.facebook.com/dialog/oauth
+#    tokenName: oauth_token
+#    authenticationScheme: query
+#    clientAuthenticationScheme: form
+#  resource:
+#    userInfoUri: https://graph.facebook.com/me
+#github:
+#  client:
+#    clientId: 73f614184d71565f7233
+#    clientSecret: c19989e5d94f2880722d40009f25f1a26b00bc97
+#    accessTokenUri: https://github.com/login/oauth/access_token
+#    userAuthorizationUri: https://github.com/login/oauth/authorize
+#    clientAuthenticationScheme: form
+#  resource:
+#    userInfoUri: https://api.github.com/user
+
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://localhost:8080/auth
+      user-info-uri:  http://localhost:8080/user
 
 logging:
   level:
@@ -39,4 +45,19 @@ spring:
   resources:
     chain:
       enabled: true
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
 
+# config context path to "/" by setting an empty string
+server:
+  contextPath:
+
+jwt:
+  header: Authorization
+  secret: auSecret
+  expiration: 604800
+  route:
+    authentication:
+      path: auth
+      refresh: refresh

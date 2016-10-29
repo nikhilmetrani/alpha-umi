@@ -19,6 +19,8 @@ package io._29cu.usmserver.core.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import io._29cu.usmserver.core.model.entities.*;
+import io._29cu.usmserver.core.model.enumerations.AuthorityName;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,9 +31,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
-import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class ApplicationUpdateServiceTests {
     @Autowired
     private UserService userService;
 
-    private User developer;
+    private AuUser developer;
     private Application application;
     private Application application1;
     private Application application2;
@@ -60,9 +59,17 @@ public class ApplicationUpdateServiceTests {
     @Transactional
     @Rollback(false)
     public void setup() {
-        developer = new User();
-        developer.setName("developer");
+        developer = new AuUser();
+        developer.setUsername("developer");
         developer.setEmail("developer@email.com");
+        Authority authority = new Authority();
+        authority.setName(AuthorityName.ROLE_USER);
+        List<Authority> authList = new ArrayList<>();
+        authList.add(authority);
+        authority = new Authority();
+        authority.setName(AuthorityName.ROLE_DEVELOPER);
+        developer.setAuthorities(authList);
+        developer.setEnabled(true);
         developer = userService.createUser(developer);
 
         application = new Application();
@@ -149,7 +156,7 @@ public class ApplicationUpdateServiceTests {
     @Test
     @Transactional
     public void testCreateApplicationUpdateByDeveloper() {
-        ApplicationUpdate applicationUpdate = appUpdateService.createApplicationUpdateByDeveloper(application1.getDeveloper().getId(), applicationUpdate1);
+        ApplicationUpdate applicationUpdate = appUpdateService.createApplicationUpdateByDeveloper(application1.getDeveloper().getUsername(), applicationUpdate1);
         assertNotNull("applicationUpdate should not be not null",applicationUpdate);
         assertEquals("Developer should be same",applicationUpdate1.getTarget().getDeveloper().getId(),application1.getDeveloper().getId());
         assertEquals("Returned Application state should be Active",applicationUpdate.getTarget().getState(),AppState.Active);
@@ -158,7 +165,7 @@ public class ApplicationUpdateServiceTests {
     @Test
     @Transactional
     public void testModifyApplicationUpdateByDeveloper() {
-        ApplicationUpdate applicationUpdate = appUpdateService.modifyApplicationUpdateByDeveloper(application2.getDeveloper().getId(), applicationUpdate2);
+        ApplicationUpdate applicationUpdate = appUpdateService.modifyApplicationUpdateByDeveloper(application2.getDeveloper().getUsername(), applicationUpdate2);
         assertNotNull("applicationUpdate should not be not null",applicationUpdate);
         assertEquals("Developer should be same",applicationUpdate2.getTarget().getDeveloper().getId(),application2.getDeveloper().getId());
         assertEquals("Returned Application state should be Staging",applicationUpdate.getTarget().getState(),AppState.Staging);

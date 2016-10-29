@@ -17,6 +17,7 @@
 package io._29cu.usmserver.controllers.rest.resources;
 
 import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.AuUser;
 import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
@@ -25,7 +26,7 @@ public class ApplicationResource extends EntityResourceBase<Application> {
 
     private String rid;
     private String name;
-    private User developer;
+    private AuUser developer;
     private Category category;
     private AppState state;
     private String downloadUrl;
@@ -81,11 +82,11 @@ public class ApplicationResource extends EntityResourceBase<Application> {
         this.name = name;
     }
 
-    public User getDeveloper() {
+    public AuUser getDeveloper() {
         return developer;
     }
 
-    public void setDeveloper(User developer) {
+    public void setDeveloper(AuUser developer) {
         this.developer = developer;
     }
 

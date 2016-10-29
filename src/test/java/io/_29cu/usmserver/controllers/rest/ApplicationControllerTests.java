@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.UUID;
 
+import io._29cu.usmserver.core.model.entities.AuUser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,7 +56,7 @@ public class ApplicationControllerTests {
 
     private MockMvc mockMvc;
 
-    private User appOwner;
+    private AuUser appOwner;
     private ApplicationList applicationList;
     Application app;
     private String uuid;
@@ -67,10 +68,10 @@ public class ApplicationControllerTests {
 
         uuid = UUID.randomUUID().toString();
 
-        appOwner = new User();
-        appOwner.setId(uuid);
+        appOwner = new AuUser();
+        appOwner.setId(1L);
         appOwner.setEmail("owner@test.com");
-        appOwner.setName("Test Owner");
+        appOwner.setUsername("Test Owner");
         app = new Application();
         app.setDeveloper(appOwner);
         app.setName("Application A");

@@ -16,6 +16,10 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.configurations.security.JwtUser;
+import io._29cu.usmserver.configurations.security.JwtUserFactory;
+import io._29cu.usmserver.controllers.rest.resources.AuUserResource;
+import io._29cu.usmserver.core.model.entities.AuUser;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.controllers.rest.resources.UserResource;
@@ -29,14 +33,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@Controller
-@RequestMapping("/user")
-@EnableResourceServer
+@RestController
+@RequestMapping("/api")
+//@EnableResourceServer
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ResponseEntity<UserResource> user(
             Principal principal /**/
     ) {
@@ -64,5 +68,27 @@ public class UserController {
 
         UserResource userResource = new UserResourceAssembler().toResource(user);
         return new ResponseEntity<UserResource>(userResource, HttpStatus.OK);
+    }
+
+//    @RequestMapping(value = "{id:\\d+}")
+//    public UserDTO show(@PathVariable("id") Long id) {
+//        return userService.findOne(id).orElseThrow(UserNotFoundException::new);
+//    }
+
+    @RequestMapping(value = "/0/user", method = RequestMethod.GET)
+    public JwtUser showMe() {
+        return JwtUserFactory.create(userService.findUser()); //.orElseThrow(UserNotFoundException::new);
+    }
+
+    @RequestMapping(value = "/1/signup", method = RequestMethod.POST)
+    public JwtUser createUser(
+            @RequestBody AuUserResource auUserResource
+            ) {
+        AuUser createdAuUser = userService.createUser(auUserResource.toEntity());
+        return JwtUserFactory.create(createdAuUser);
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No user")
+    private class UserNotFoundException extends RuntimeException {
     }
 }
