@@ -19,7 +19,6 @@ package io._29cu.usmserver.controllers.rest.resources;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.AuUser;
 import io._29cu.usmserver.core.model.entities.Category;
-import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 
 public class ApplicationResource extends EntityResourceBase<Application> {

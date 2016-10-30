@@ -16,17 +16,14 @@
 
 package io._29cu.usmserver.controllers.rest.resources;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.ApplicationBundle;
-import io._29cu.usmserver.core.model.entities.Category;
-import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.entities.*;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 
 public class ApplicationBundleResource extends EntityResourceBase<ApplicationBundle> {
 
     private String rid;
     private String name;
-    private User developer;
+    private AuUser developer;
     private Category category;
     private AppState state;
     private String description;
@@ -63,11 +60,11 @@ public class ApplicationBundleResource extends EntityResourceBase<ApplicationBun
         this.name = name;
     }
 
-    public User getDeveloper() {
+    public AuUser getDeveloper() {
         return developer;
     }
 
-    public void setDeveloper(User developer) {
+    public void setDeveloper(AuUser developer) {
         this.developer = developer;
     }
 

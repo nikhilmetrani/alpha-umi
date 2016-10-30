@@ -18,26 +18,18 @@ package io._29cu.usmserver.core.service.impl;
 
 import io._29cu.usmserver.core.model.entities.AuUser;
 import io._29cu.usmserver.core.model.entities.Authority;
-import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AuthorityName;
 import io._29cu.usmserver.core.repositories.AuUserRepository;
 import io._29cu.usmserver.core.repositories.AuthorityRepository;
 import io._29cu.usmserver.core.service.SecurityContextService;
 import io._29cu.usmserver.core.service.UserService;
-import io._29cu.usmserver.core.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
 
-import java.security.Principal;
 import java.util.*;
 
 @Component
 public class UserServiceImpl implements UserService {
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private AuUserRepository auUserRepository;
@@ -47,40 +39,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private SecurityContextService securityContextService;
-
-    @Override
-    public User createUser(User user) {
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User findUser(String id) {
-        return userRepository.findOne(id);
-    }
-
-    @Override
-    public User findUserByPrincipal(String principal){
-        return userRepository.findUserByPrincipal(principal);
-    }
-
-    @Override
-    public User createUser(Principal principal) {
-        OAuth2Authentication oAuth2Authentication = (OAuth2Authentication) principal;
-        User user = new User();
-        HashMap details = (LinkedHashMap)oAuth2Authentication.getUserAuthentication().getDetails();
-        user.setName(details.get("name").toString());
-        user.setPrincipal(principal.getName());
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User validateUserIdWithPrincipal(String userId) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!(principal instanceof String)) return null;
-
-        User user = findUserByPrincipal(principal.toString());
-        return (userId.equals(user.getId())) ? user : null;
-    }
 
     @Override
     public AuUser createUser(AuUser auUser) {
@@ -106,5 +64,10 @@ public class UserServiceImpl implements UserService {
     public AuUser findUser() {
         final AuUser currentUser = securityContextService.getLoggedInUser();
         return auUserRepository.findOne(currentUser.getId());
+    }
+
+    @Override
+    public  AuUser findUser(Long id) {
+        return auUserRepository.findOne(id);
     }
 }

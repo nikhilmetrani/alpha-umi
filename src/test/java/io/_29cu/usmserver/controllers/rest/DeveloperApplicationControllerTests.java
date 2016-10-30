@@ -164,7 +164,6 @@ public class DeveloperApplicationControllerTests {
 
     @Test
     public void  testGetApplicationsIsForbidden() throws Exception {
-        when(userService.findUser()).thenReturn(null);
     	when(userService.findUser()).thenReturn(null);
     	
         mockMvc.perform(get("/api/0/developer/applications"))

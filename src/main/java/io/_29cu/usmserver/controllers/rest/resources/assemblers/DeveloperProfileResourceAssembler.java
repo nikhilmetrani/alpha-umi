@@ -48,7 +48,7 @@ public class DeveloperProfileResourceAssembler extends ResourceAssemblerSupport<
         developerProfileResource.setDateOfBirth(developerProfile.getDateOfBirth());
         developerProfileResource.setLogo(developerProfile.getLogo());
         developerProfileResource.setWorkPhone(developerProfile.getWorkPhone());
-        developerProfileResource.add(linkTo(methodOn(DeveloperProfileController.class).developerProfile(developerProfile.getOwner().getId())).withSelfRel());
+        developerProfileResource.add(linkTo(methodOn(DeveloperProfileController.class).developerProfile()).withSelfRel());
         return developerProfileResource;
     }
 }

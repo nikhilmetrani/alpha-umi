@@ -21,7 +21,6 @@ import io._29cu.usmserver.core.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +35,6 @@ import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListR
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
-import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 

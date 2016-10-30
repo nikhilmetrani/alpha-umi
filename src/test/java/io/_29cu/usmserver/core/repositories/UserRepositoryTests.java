@@ -16,7 +16,7 @@
 
 package io._29cu.usmserver.core.repositories;
 
-import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.entities.AuUser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,23 +35,25 @@ import static org.junit.Assert.assertNotNull;
 @ActiveProfiles("test")
 public class UserRepositoryTests {
     @Autowired
-    private UserRepository repo;
+    private AuUserRepository repo;
 
-    private User account;
+    private AuUser account;
 
     @Before
     @Transactional
     @Rollback(false)
     public void setup() {
-        account = new User();
-        account.setEmail("name");
+        account = new AuUser();
+        account.setEmail("name@email.com");
+        account.setUsername("name");
+        account.setEnabled(true);
         repo.save(account);
     }
 
     @Test
     @Transactional
     public void testFind() {
-        User fromDb = repo.findOne(account.getId());
+        AuUser fromDb = repo.findOne(account.getId());
         assertNotNull(fromDb);
         assertEquals("User email does not match", account.getEmail(), fromDb.getEmail());
     }

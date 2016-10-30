@@ -29,7 +29,7 @@ public class DeveloperProfileServiceImpl implements DeveloperProfileService{
     private DeveloperProfileRepository developerProfileRepository;
 
     @Override
-    public DeveloperProfile findProfileByUserId(String id) {
+    public DeveloperProfile findProfileByUserId(Long id) {
         return developerProfileRepository.findDeveloperProfileByUserId(id);
     }
 

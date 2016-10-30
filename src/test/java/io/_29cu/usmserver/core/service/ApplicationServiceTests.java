@@ -19,7 +19,6 @@ package io._29cu.usmserver.core.service;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.AuUser;
 import io._29cu.usmserver.core.model.entities.Authority;
-import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 
 import io._29cu.usmserver.core.model.enumerations.AuthorityName;

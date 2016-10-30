@@ -40,7 +40,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Category;
-import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 

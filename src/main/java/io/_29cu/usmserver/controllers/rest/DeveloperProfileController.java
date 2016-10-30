@@ -18,19 +18,16 @@ package io._29cu.usmserver.controllers.rest;
 
 import io._29cu.usmserver.controllers.rest.resources.DeveloperProfileResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.DeveloperProfileResourceAssembler;
+import io._29cu.usmserver.core.model.entities.AuUser;
 import io._29cu.usmserver.core.model.entities.DeveloperProfile;
-import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.DeveloperProfileService;
 import io._29cu.usmserver.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -38,7 +35,6 @@ import java.net.URI;
 
 @Controller
 @RequestMapping("/api/0/developer")
-//@EnableResourceServer
 public class DeveloperProfileController {
     @Autowired
     private UserService userService;
@@ -46,16 +42,14 @@ public class DeveloperProfileController {
     private DeveloperProfileService developerProfileService;
 
     // userId path variable imposes a security risk. Need to remove it.
-    @RequestMapping(path = "/{userId}/profile", method = RequestMethod.GET)
-    public ResponseEntity<DeveloperProfileResource> developerProfile(
-            @PathVariable String userId
-    ) {
+    @RequestMapping(path = "/profile", method = RequestMethod.GET)
+    public ResponseEntity<DeveloperProfileResource> developerProfile() {
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
         try {
-            DeveloperProfile developerProfile = developerProfileService.findProfileByUserId(userId);
+            DeveloperProfile developerProfile = developerProfileService.findProfileByUserId(user.getId());
             if (null == developerProfile) {
                 developerProfile = new DeveloperProfile(); //Create an empty profile object
                 developerProfile.setOwner(user);
@@ -69,13 +63,12 @@ public class DeveloperProfileController {
         }
     }
 
-    @RequestMapping(path = "/{userId}/profile", method = RequestMethod.POST)
+    @RequestMapping(path = "/profile", method = RequestMethod.POST)
     public ResponseEntity<DeveloperProfileResource> createDeveloperProfile(
-            @PathVariable String userId,
             @RequestBody DeveloperProfileResource developerProfileResource
     ) {
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
         try {

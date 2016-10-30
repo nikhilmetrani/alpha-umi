@@ -28,15 +28,15 @@ import java.util.List;
 @Component
 public interface ApplicationBundleRepository extends CrudRepository<ApplicationBundle, String> {
     @Query("select u from ApplicationBundle u where u.developer.id = :id")
-    List<ApplicationBundle> findApplicationBundlesByDeveloper(@Param("id") String id);
+    List<ApplicationBundle> findApplicationBundlesByDeveloper(@Param("id") Long id);
 
     //TODO may not needed
     @Query("select u from ApplicationBundle u where u.category.name = :category")
     List<ApplicationBundle> findApplicationBundlesByCategory(@Param("category") String category);
 
     @Query("select a from ApplicationBundle a where a.developer.id = :id and a.name = :applicationBundleName")
-    ApplicationBundle findApplicationBundleByDeveloperAndName(@Param("id") String id, @Param("applicationBundleName") String applicationBundleName);
+    ApplicationBundle findApplicationBundleByDeveloperAndName(@Param("id") Long id, @Param("applicationBundleName") String applicationBundleName);
 
     @Query("select a from ApplicationBundle a where a.developer.id = :id and a.id = :applicationBundleId")
-    ApplicationBundle findApplicationBundleByDeveloperAndId(@Param("id") String id, @Param("applicationBundleId") String applicationBundleId);
+    ApplicationBundle findApplicationBundleByDeveloperAndId(@Param("id") Long id, @Param("applicationBundleId") String applicationBundleId);
 }

@@ -30,7 +30,7 @@ public class Subscription {
     private Application application;
     @ManyToOne
     @NaturalId
-    private User user;
+    private AuUser user;
     private String dateSubscribed;
 
     public Long getId() {
@@ -49,11 +49,11 @@ public class Subscription {
         this.application = application;
     }
 
-    public User getUser() {
+    public AuUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(AuUser user) {
         this.user = user;
     }
 

@@ -25,10 +25,10 @@ public interface ApplicationBundleService {
     public ApplicationBundleList getAllApplicationBundles();
 	public ApplicationBundle createApplicationBundle(ApplicationBundle applicationBundle);
 	public ApplicationBundle updateApplicationBundle(ApplicationBundle applicationBundle);
-	public ApplicationBundle findApplicationBundleByDeveloperAndName(String developerId, String applicationBundleName); //TODO may not needed
-	public ApplicationBundle findApplicationBundleByDeveloperAndId(String developerId, String applicationBundleId);
+	public ApplicationBundle findApplicationBundleByDeveloperAndName(Long developerId, String applicationBundleName); //TODO may not needed
+	public ApplicationBundle findApplicationBundleByDeveloperAndId(Long developerId, String applicationBundleId);
 	public ApplicationBundle findApplicationBundle(String applicationBundleId);
-	public ApplicationBundleList findApplicationBundlesByDeveloper(String developerId);
+	public ApplicationBundleList findApplicationBundlesByDeveloper(Long developerId);
 	public ApplicationBundleList findApplicationBundlesByCategory(String category);
 
 }

@@ -16,7 +16,6 @@
 
 package io._29cu.usmserver.core.model.entities;
 
-import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -38,7 +37,7 @@ public class ApplicationBundle {
 	@NotNull
 	private AppState state;
 	@ManyToOne
-	private User developer;
+	private AuUser developer;
 	@ManyToOne
 	private Category category;
 	@OneToMany
@@ -76,11 +75,11 @@ public class ApplicationBundle {
 		this.state = state;
 	}
 
-	public User getDeveloper() {
+	public AuUser getDeveloper() {
 		return developer;
 	}
 
-	public void setDeveloper(User developer) {
+	public void setDeveloper(AuUser developer) {
 		this.developer = developer;
 	}
 

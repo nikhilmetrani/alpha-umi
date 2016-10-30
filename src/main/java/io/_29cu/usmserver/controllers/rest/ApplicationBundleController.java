@@ -21,10 +21,7 @@ import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationBundl
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationBundleResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.ApplicationBundle;
-import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
-import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.entities.*;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.*;
 import io._29cu.usmserver.core.service.utilities.ApplicationBundleList;
@@ -52,16 +49,14 @@ public class ApplicationBundleController {
     // And publish application
 
     // Get all applications
-    @RequestMapping(path = "/{userId}/applicationBundles", method = RequestMethod.GET)
-    public ResponseEntity<ApplicationBundleListResource> getApplicationBundles(
-            @PathVariable String userId
-    ){
+    @RequestMapping(path = "/applicationBundles", method = RequestMethod.GET)
+    public ResponseEntity<ApplicationBundleListResource> getApplicationBundles(){
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleListResource>(HttpStatus.FORBIDDEN);
         try {
-            ApplicationBundleList appBundleList = applicationBundleService.findApplicationBundlesByDeveloper(userId);
+            ApplicationBundleList appBundleList = applicationBundleService.findApplicationBundlesByDeveloper(user.getId());
             ApplicationBundleListResource appBundleListResource = new ApplicationBundleListResourceAssembler().toResource(appBundleList);
             return new ResponseEntity<ApplicationBundleListResource>(appBundleListResource, HttpStatus.OK);
         } catch (Exception ex) {
@@ -70,45 +65,29 @@ public class ApplicationBundleController {
     }
 
     // Get all applications
-    @RequestMapping(path = "/{userId}/applicationBundles/{appBundleId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/applicationBundles/{appBundleId}", method = RequestMethod.GET)
     public ResponseEntity<ApplicationBundleResource> getApplicationBundle(
-            @PathVariable String userId,
             @PathVariable String appBundleId
     ){
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
         try {
-            ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(userId, appBundleId);
+            ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(user.getId(), appBundleId);
             ApplicationBundleResource applicationBundleResource = new ApplicationBundleResourceAssembler().toResource(applicationBundle);
             return new ResponseEntity<ApplicationBundleResource>(applicationBundleResource, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.BAD_REQUEST);
         }
     }
-
-    // Get all applications
-    @RequestMapping(value = "/{appBundleId}", method = RequestMethod.GET)
-    public ResponseEntity<ApplicationBundleResource> getApplicationBundle(
-            @PathVariable String appBundleId
-    ) {
-        ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundle(appBundleId);
-        if (null == applicationBundle)
-            return new ResponseEntity<ApplicationBundleResource>(HttpStatus.NOT_FOUND);
-
-        ApplicationBundleResource applicationBundleResource = new ApplicationBundleResourceAssembler().toResource(applicationBundle);
-        return new ResponseEntity<ApplicationBundleResource>(applicationBundleResource, HttpStatus.OK);
-    }
-
     // Create Application
-    @RequestMapping(path = "/{userId}/applicationBundles/create", method = RequestMethod.POST)
+    @RequestMapping(path = "/applicationBundles/create", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> createDeveloperApplicationBundle(
-            @PathVariable String userId,
             @RequestBody ApplicationBundleResource applicationBundleResource
     ) {
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
         ApplicationBundle receivedApplicationBundle = applicationBundleResource.toEntity();
@@ -119,18 +98,17 @@ public class ApplicationBundleController {
     }
 
     // Create Application
-    @RequestMapping(path = "/{userId}/applicationBundles/create", method = RequestMethod.GET)
+    @RequestMapping(path = "/applicationBundles/create", method = RequestMethod.GET)
     public ResponseEntity<ApplicationBundleResource> checkApplicationBundleNameExistsForDeveloper(
-            @PathVariable String userId,
             @RequestParam String name
     ) {
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
 
         //Let's check whether the applicationBundle is already registered.
-        ApplicationBundle existingApp = applicationBundleService.findApplicationBundleByDeveloperAndName(userId, name);
+        ApplicationBundle existingApp = applicationBundleService.findApplicationBundleByDeveloperAndName(user.getId(), name);
         if (null == existingApp) { //We can't find the applicationBundle in our database for the developer.
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.NO_CONTENT);
         } else {
@@ -140,18 +118,17 @@ public class ApplicationBundleController {
     }
 
     // Update ApplicationBundle
-    @RequestMapping(path = "/{userId}/applicationBundles/{appBundleId}/update", method = RequestMethod.POST)
+    @RequestMapping(path = "/applicationBundles/{appBundleId}/update", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> UpdateDeveloperApplicationBundle(
-            @PathVariable String userId,
             @PathVariable String appBundleId,
             @RequestBody ApplicationBundleResource applicationBundleResource
     ) {
 	    // Let's get the user from principal and validate the userId against it.
-	    User user = userService.validateUserIdWithPrincipal(userId);
-	    if (user == null)
-		    return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
+        AuUser user = userService.findUser();
+        if (user == null)
+            return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
 
-	    ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(userId, appBundleId);
+	    ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(user.getId(), appBundleId);
 	    if (applicationBundle == null)
 		    return new ResponseEntity<ApplicationBundleResource>(HttpStatus.PRECONDITION_FAILED);
 
@@ -164,18 +141,17 @@ public class ApplicationBundleController {
     }
 
     // Publish ApplicationBundle
-    @RequestMapping(path = "/{userId}/applicationBundles/{appBundleId}/publish", method = RequestMethod.POST)
+    @RequestMapping(path = "/applicationBundles/{appBundleId}/publish", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> publishDeveloperApplicationBundle(
-            @PathVariable String userId,
             @PathVariable String appBundleId
     ) {
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
 
         try{
-	        ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(userId, appBundleId);
+	        ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(user.getId(), appBundleId);
 	        // If the applicationBundle state is not 'blocked' AND there is no existing ApplicationBundle Update, then proceed for Publish
 	        if(!applicationBundle.getState().equals(AppState.Blocked)) {
 	        	applicationBundle.setState(AppState.Active);
@@ -193,19 +169,18 @@ public class ApplicationBundleController {
     }
 
     // Recall ApplicationBundle
-    @RequestMapping(path = "/{userId}/applicationBundle/{appBundleId}/recall", method = RequestMethod.POST)
+    @RequestMapping(path = "/applicationBundle/{appBundleId}/recall", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> recallDeveloperApplicationBundle(
-            @PathVariable String userId,
             @PathVariable String appBundleId
     ) {
         // Let's get the user from principal and validate the userId against it.
-        User user = userService.validateUserIdWithPrincipal(userId);
+        AuUser user = userService.findUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
 
         try{
             //ApplicationBundleUpdate applicationBundleUpdate = ApplicationBundleResource.toEntity();
-            ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(userId, appBundleId);
+            ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(user.getId(), appBundleId);
             // If the applicationBundle state is 'Active'
             if(applicationBundle.getState().equals(AppState.Active)) {
                 //get top 1 applicationBundle from history based on date (desc).

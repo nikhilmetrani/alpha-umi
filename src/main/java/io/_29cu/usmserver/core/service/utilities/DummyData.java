@@ -19,12 +19,10 @@ package io._29cu.usmserver.core.service.utilities;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.AuUser;
 import io._29cu.usmserver.core.model.entities.Category;
-import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
 import io._29cu.usmserver.core.repositories.AuUserRepository;
 import io._29cu.usmserver.core.repositories.CategoryRepository;
-import io._29cu.usmserver.core.repositories.UserRepository;
 
 
 public class DummyData {

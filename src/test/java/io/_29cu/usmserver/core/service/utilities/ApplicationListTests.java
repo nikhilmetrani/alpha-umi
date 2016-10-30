@@ -21,7 +21,6 @@ import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
 import io._29cu.usmserver.core.repositories.AuUserRepository;
 import io._29cu.usmserver.core.repositories.CategoryRepository;
-import io._29cu.usmserver.core.repositories.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

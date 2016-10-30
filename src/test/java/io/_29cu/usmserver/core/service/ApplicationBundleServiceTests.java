@@ -17,7 +17,7 @@
 package io._29cu.usmserver.core.service;
 
 import io._29cu.usmserver.core.model.entities.ApplicationBundle;
-import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.entities.AuUser;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,16 +41,17 @@ public class ApplicationBundleServiceTests {
 	@Autowired
 	private UserService userService;
 
-	private User developer;
+	private AuUser developer;
 	private ApplicationBundle applicationBundle;
 
 	@Before
 	@Transactional
 	@Rollback(false)
 	public void setup() {
-		developer = new User();
-		developer.setName("developer");
+		developer = new AuUser();
+		developer.setUsername("developer");
 		developer.setEmail("developer@email.com");
+		developer.setEnabled(true);
 		userService.createUser(developer);
 
 		applicationBundle = new ApplicationBundle();

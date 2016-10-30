@@ -17,8 +17,8 @@
 package io._29cu.usmserver.controllers.rest;
 
 import io._29cu.usmserver.core.model.entities.ApplicationBundle;
+import io._29cu.usmserver.core.model.entities.AuUser;
 import io._29cu.usmserver.core.model.entities.Category;
-import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationBundleService;
 import io._29cu.usmserver.core.service.ApplicationUpdateService;
@@ -72,7 +72,7 @@ public class ApplicationBundleControllerTests {
 
     private MockMvc mockMvc;
 
-    private User developer;
+    private AuUser developer;
     private ApplicationBundleList applicationBundleList;
     private ApplicationBundle applicationBundle;
     private ApplicationBundle existingApplicationBundle;
@@ -86,10 +86,11 @@ public class ApplicationBundleControllerTests {
 
         uuid = UUID.randomUUID().toString();
 
-        developer = new User();
-        developer.setId(uuid);
+        developer = new AuUser();
+        developer.setId(1L);
         developer.setEmail("owner@test.com");
-        developer.setName("Test Owner");
+        developer.setUsername("Test Owner");
+        developer.setEnabled(true);
 
         applicationBundle = new ApplicationBundle();
         applicationBundle.setId(uuid);
@@ -129,64 +130,59 @@ public class ApplicationBundleControllerTests {
 
     @Test
     public void  testGetApplicationBundles() throws Exception {
-    	when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(null);
+        when(userService.findUser()).thenReturn(null);
     	
-        mockMvc.perform(get("/api/0/developer/22/applicationBundles"))
+        mockMvc.perform(get("/api/0/developer/applicationBundles"))
                 .andExpect(status().isForbidden());
-        
-        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
-        when(applicationBundleService.findApplicationBundlesByDeveloper(uuid)).thenReturn(null);
 
-        mockMvc.perform(get("/api/0/developer/"+ uuid +"/applicationBundles"))
+        when(userService.findUser()).thenReturn(developer);
+        when(applicationBundleService.findApplicationBundlesByDeveloper(developer.getId())).thenReturn(null);
+
+        mockMvc.perform(get("/api/0/developer/applicationBundles"))
                 .andExpect(status().isBadRequest());
 
-    	when(applicationBundleService.findApplicationBundlesByDeveloper(uuid)).thenReturn(applicationBundleList);
+    	when(applicationBundleService.findApplicationBundlesByDeveloper(developer.getId())).thenReturn(applicationBundleList);
 
-        mockMvc.perform(get("/api/0/developer/"+ uuid +"/applicationBundles"))
+        mockMvc.perform(get("/api/0/developer/applicationBundles"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void  testGetApplicationBundle() throws Exception {
-    	when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(null);
+        when(userService.findUser()).thenReturn(null);
     	
-        mockMvc.perform(get("/api/0/developer/22/applicationBundles/" + uuid))
+        mockMvc.perform(get("/api/0/developer/applicationBundles/" + uuid))
                 .andExpect(status().isForbidden());
-    	
-        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
-        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
-        when(applicationBundleService.findApplicationBundleByDeveloperAndId(uuid, uuid)).thenReturn(applicationBundle);
 
-        mockMvc.perform(get("/api/0/developer/"+ uuid +"/applicationBundles/" + uuid))
+
+        when(userService.findUser()).thenReturn(developer);
+        when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), uuid)).thenReturn(applicationBundle);
+
+        mockMvc.perform(get("/api/0/developer/applicationBundles/" + uuid))
 		        .andExpect(status().isOk());
-        
-        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
-        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
-        when(applicationBundleService.findApplicationBundleByDeveloperAndId(uuid, uuid)).thenReturn(null);
 
-        mockMvc.perform(get("/api/0/developer/"+ uuid +"/applicationBundles/22"))
+        when(userService.findUser()).thenReturn(developer);
+        when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), uuid)).thenReturn(null);
+
+        mockMvc.perform(get("/api/0/developer/applicationBundles/22"))
 		        .andExpect(status().isBadRequest());
     }
 
     @Test
     public void  testCreateApplicationBundle() throws Exception {
-    	when(userService.validateUserIdWithPrincipal("22")).thenReturn(null);
+        when(userService.findUser()).thenReturn(null);
     	
-        mockMvc.perform(post("/api/0/developer/22/applicationBundles/create")
+        mockMvc.perform(post("/api/0/developer/applicationBundles/create")
                 .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
-        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
-        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
-        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
-        when(userService.findUser(uuid)).thenReturn(developer);
+        when(userService.findUser()).thenReturn(developer);
         when(applicationBundleService.createApplicationBundle(any(ApplicationBundle.class))).thenReturn(applicationBundle);
 
-        mockMvc.perform(post("/api/0/developer/"+ uuid +"/applicationBundles/create")
+        mockMvc.perform(post("/api/0/developer/applicationBundles/create")
                 .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
-               // .andDo(print())
                 .andExpect(jsonPath("$.name",
                         equalTo(applicationBundle.getName())))
                 .andExpect(jsonPath("$.rid",
@@ -202,60 +198,52 @@ public class ApplicationBundleControllerTests {
 
     @Test
     public void  testCheckApplicationBundleNameExistsForDeveloper() throws Exception {
-    	when(userService.validateUserIdWithPrincipal("22")).thenReturn(null);
+        when(userService.findUser()).thenReturn(null);
     	
-        mockMvc.perform(get("/api/0/developer/22/applicationBundles/create")
+        mockMvc.perform(get("/api/0/developer/applicationBundles/create")
                 .param("name", "Dreamweaver"))
                 .andExpect(status().isForbidden());
 
-        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
-        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
-        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
-        when(applicationBundleService.findApplicationBundleByDeveloperAndName(uuid, "Dreamweaver")).thenReturn(applicationBundle);
+        when(userService.findUser()).thenReturn(developer);
+        when(applicationBundleService.findApplicationBundleByDeveloperAndName(developer.getId(), "Dreamweaver")).thenReturn(applicationBundle);
 
-        mockMvc.perform(get("/api/0/developer/"+ uuid +"/applicationBundles/create")
+        mockMvc.perform(get("/api/0/developer/applicationBundles/create")
         		.param("name", "Dreamweaver"))
 		        .andExpect(status().isOk());
     }
 
     @Test
     public void  testCheckApplicationBundleNameNotExistsForDeveloper() throws Exception {
-        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
-        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
-        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
-        when(applicationBundleService.findApplicationBundleByDeveloperAndName(uuid, "Dreams")).thenReturn(null);
+        when(userService.findUser()).thenReturn(developer);
+        when(applicationBundleService.findApplicationBundleByDeveloperAndName(developer.getId(), "Dreams")).thenReturn(null);
 
-        mockMvc.perform(get("/api/0/developer/"+ uuid +"/applicationBundles/create")
+        mockMvc.perform(get("/api/0/developer/applicationBundles/create")
         		.param("name", "Dreams"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     public void testUpdateApplicationBundle() throws Exception {
-    	when(userService.validateUserIdWithPrincipal("22")).thenReturn(null);
+        when(userService.findUser()).thenReturn(null);
     	
-        mockMvc.perform(post("/api/0/developer/22/applicationBundles/"+ uuid +"/update")
+        mockMvc.perform(post("/api/0/developer/applicationBundles/"+ uuid +"/update")
                 .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
-    	when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
-    	when(applicationBundleService.findApplicationBundleByDeveloperAndId(uuid, uuid)).thenReturn(null);
+        when(userService.findUser()).thenReturn(developer);
+    	when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), uuid)).thenReturn(null);
     	
-        mockMvc.perform(post("/api/0/developer/"+ uuid +"/applicationBundles/22/update")
+        mockMvc.perform(post("/api/0/developer/applicationBundles/22/update")
                 .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isPreconditionFailed());
 
-	    when(userService.findUser(uuid)).thenReturn(developer);
-        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
-        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
-        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
-        when(applicationBundleService.findApplicationBundleByDeveloperAndId(uuid, uuid)).thenReturn(applicationBundle);
-	    applicationBundle = applicationBundleService.createApplicationBundle(applicationBundle);
+        when(userService.findUser()).thenReturn(developer);
+        when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), uuid)).thenReturn(applicationBundle);
 	    when(applicationBundleService.updateApplicationBundle(any(ApplicationBundle.class))).thenReturn(updatedApplicationBundle);
 
-	    mockMvc.perform(post("/api/0/developer/"+ uuid +"/applicationBundles/" + uuid +"/update")
+	    mockMvc.perform(post("/api/0/developer/applicationBundles/" + uuid +"/update")
                 .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
 		        .andExpect(jsonPath("$.name",
@@ -273,26 +261,23 @@ public class ApplicationBundleControllerTests {
 
     @Test
     public void  testPublishApplicationBundle() throws Exception {
-    	when(userService.validateUserIdWithPrincipal("22")).thenReturn(null);
+        when(userService.findUser()).thenReturn(null);
     	
-        mockMvc.perform(post("/api/0/developer/22/applicationBundles/" + uuid +"/publish")
+        mockMvc.perform(post("/api/0/developer/applicationBundles/" + uuid +"/publish")
                 .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
-        
-        when(userService.findUserByPrincipal(uuid)).thenReturn(developer);
-        when(userService.validateUserIdWithPrincipal(uuid)).thenReturn(developer);
-        when(authenticationMocked.getPrincipal()).thenReturn(uuid);
-        
-        when(applicationBundleService.findApplicationBundleByDeveloperAndId(uuid, "22")).thenReturn(null);
-        mockMvc.perform(post("/api/0/developer/" + uuid +"/applicationBundles/22/publish")
+
+        when(userService.findUser()).thenReturn(developer);
+        when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), "22")).thenReturn(null);
+        mockMvc.perform(post("/api/0/developer/applicationBundles/22/publish")
                 .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
         
-        when(applicationBundleService.findApplicationBundleByDeveloperAndId(uuid, uuid)).thenReturn(applicationBundle);
+        when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), uuid)).thenReturn(applicationBundle);
 
-        mockMvc.perform(post("/api/0/developer/"+ uuid +"/applicationBundles/" + uuid +"/publish")
+        mockMvc.perform(post("/api/0/developer/applicationBundles/" + uuid +"/publish")
                 .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.rid",
@@ -304,7 +289,7 @@ public class ApplicationBundleControllerTests {
                 .andExpect(status().isOk());
         
         applicationBundle.setState(AppState.Blocked);
-        mockMvc.perform(post("/api/0/developer/"+ uuid +"/applicationBundles/" + uuid +"/publish")
+        mockMvc.perform(post("/api/0/developer/applicationBundles/" + uuid +"/publish")
                 .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isPreconditionFailed());

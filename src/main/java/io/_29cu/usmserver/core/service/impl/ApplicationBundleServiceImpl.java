@@ -20,10 +20,8 @@ import io._29cu.usmserver.common.utilities.AppHelper;
 import io._29cu.usmserver.core.model.entities.ApplicationBundle;
 import io._29cu.usmserver.core.repositories.ApplicationBundleRepository;
 import io._29cu.usmserver.core.repositories.CategoryRepository;
-import io._29cu.usmserver.core.repositories.UserRepository;
 import io._29cu.usmserver.core.service.ApplicationBundleService;
 import io._29cu.usmserver.core.service.utilities.ApplicationBundleList;
-import io._29cu.usmserver.core.service.utilities.DummyData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,9 +29,6 @@ import java.util.List;
 
 @Component
 public class ApplicationBundleServiceImpl implements ApplicationBundleService{
-
-    @Autowired
-    UserRepository userRepository;
 
     @Autowired
     ApplicationBundleRepository applicationBundleRepository;
@@ -60,12 +55,12 @@ public class ApplicationBundleServiceImpl implements ApplicationBundleService{
     }
 
     @Override
-    public ApplicationBundle findApplicationBundleByDeveloperAndName(String developerId, String applicationBundleName) {
+    public ApplicationBundle findApplicationBundleByDeveloperAndName(Long developerId, String applicationBundleName) {
         return applicationBundleRepository.findApplicationBundleByDeveloperAndName(developerId, applicationBundleName);
     }
 
     @Override
-    public ApplicationBundle findApplicationBundleByDeveloperAndId(String developerId, String applicationBundleId) {
+    public ApplicationBundle findApplicationBundleByDeveloperAndId(Long developerId, String applicationBundleId) {
         return applicationBundleRepository.findApplicationBundleByDeveloperAndId(developerId, applicationBundleId);
     }
 
@@ -75,7 +70,7 @@ public class ApplicationBundleServiceImpl implements ApplicationBundleService{
     }
 
     @Override
-    public ApplicationBundleList findApplicationBundlesByDeveloper(String developerId) {
+    public ApplicationBundleList findApplicationBundlesByDeveloper(Long developerId) {
         List<ApplicationBundle> appBundleList = applicationBundleRepository.findApplicationBundlesByDeveloper(developerId);
         ApplicationBundleList applicationBundleList = new ApplicationBundleList();
         applicationBundleList.setApplicationBundles(appBundleList);
