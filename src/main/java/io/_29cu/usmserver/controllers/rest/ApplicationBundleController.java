@@ -19,17 +19,13 @@ package io._29cu.usmserver.controllers.rest;
 import io._29cu.usmserver.controllers.rest.resources.*;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationBundleListResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationBundleResourceAssembler;
-import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
-import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
 import io._29cu.usmserver.core.model.entities.*;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.*;
 import io._29cu.usmserver.core.service.utilities.ApplicationBundleList;
-import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +48,7 @@ public class ApplicationBundleController {
     @RequestMapping(path = "/applicationBundles", method = RequestMethod.GET)
     public ResponseEntity<ApplicationBundleListResource> getApplicationBundles(){
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleListResource>(HttpStatus.FORBIDDEN);
         try {
@@ -70,7 +66,7 @@ public class ApplicationBundleController {
             @PathVariable String appBundleId
     ){
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
         try {
@@ -87,7 +83,7 @@ public class ApplicationBundleController {
             @RequestBody ApplicationBundleResource applicationBundleResource
     ) {
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
         ApplicationBundle receivedApplicationBundle = applicationBundleResource.toEntity();
@@ -103,7 +99,7 @@ public class ApplicationBundleController {
             @RequestParam String name
     ) {
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
 
@@ -124,7 +120,7 @@ public class ApplicationBundleController {
             @RequestBody ApplicationBundleResource applicationBundleResource
     ) {
 	    // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
 
@@ -146,7 +142,7 @@ public class ApplicationBundleController {
             @PathVariable String appBundleId
     ) {
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
 
@@ -174,7 +170,7 @@ public class ApplicationBundleController {
             @PathVariable String appBundleId
     ) {
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
 

@@ -16,7 +16,7 @@
 
 package io._29cu.usmserver.configurations.security;
 
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.entities.Authority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,7 +29,7 @@ public final class JwtUserFactory {
     private JwtUserFactory() {
     }
 
-    public static JwtUser create(AuUser user) {
+    public static JwtUser create(User user) {
         return new JwtUser(
                 user.getId(),
                 user.getUsername(),

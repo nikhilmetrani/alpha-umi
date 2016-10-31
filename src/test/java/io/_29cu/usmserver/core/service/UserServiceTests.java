@@ -16,7 +16,7 @@
 
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,13 +38,13 @@ public class UserServiceTests {
     @Autowired
     private UserService service;
 
-    private AuUser account;
+    private User account;
 
     @Before
     @Transactional
     @Rollback(false)
     public void setup() {
-        account = new AuUser();
+        account = new User();
         account.setEmail("email");
         account.setUsername("username");
         account.setEnabled(true);
@@ -54,7 +54,7 @@ public class UserServiceTests {
     @Test
     @Transactional
     public void testFind() {
-        AuUser fromDb = service.findUser(account.getId());
+        User fromDb = service.findUser(account.getId());
         assertNotNull(fromDb);
         assertEquals("Account was retrieved", account.getEmail(), fromDb.getEmail());
     }

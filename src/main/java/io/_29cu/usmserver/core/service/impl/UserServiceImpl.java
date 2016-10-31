@@ -16,10 +16,10 @@
 
 package io._29cu.usmserver.core.service.impl;
 
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.entities.Authority;
 import io._29cu.usmserver.core.model.enumerations.AuthorityName;
-import io._29cu.usmserver.core.repositories.AuUserRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 import io._29cu.usmserver.core.repositories.AuthorityRepository;
 import io._29cu.usmserver.core.service.SecurityContextService;
 import io._29cu.usmserver.core.service.UserService;
@@ -32,7 +32,7 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private AuUserRepository auUserRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private AuthorityRepository authorityRepository;
@@ -41,8 +41,8 @@ public class UserServiceImpl implements UserService {
     private SecurityContextService securityContextService;
 
     @Override
-    public AuUser createUser(AuUser auUser) {
-        AuUser newUser = auUser;
+    public User createUser(User user) {
+        User newUser = user;
         // Grant User role by default.
         Authority authority = new Authority();
         authority.setName(AuthorityName.ROLE_USER);
@@ -57,17 +57,17 @@ public class UserServiceImpl implements UserService {
 
         newUser.setAuthorities(authorities);
 
-        return auUserRepository.save(newUser);
+        return userRepository.save(newUser);
     }
 
     @Override
-    public AuUser findUser() {
-        final AuUser currentUser = securityContextService.getLoggedInUser();
-        return auUserRepository.findOne(currentUser.getId());
+    public User findAuthenticatedUser() {
+        final User currentUser = securityContextService.getLoggedInUser();
+        return userRepository.findOne(currentUser.getId());
     }
 
     @Override
-    public  AuUser findUser(Long id) {
-        return auUserRepository.findOne(id);
+    public User findUser(Long id) {
+        return userRepository.findOne(id);
     }
 }

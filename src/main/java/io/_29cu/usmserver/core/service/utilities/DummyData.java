@@ -17,11 +17,11 @@
 package io._29cu.usmserver.core.service.utilities;
 
 import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
-import io._29cu.usmserver.core.repositories.AuUserRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 import io._29cu.usmserver.core.repositories.CategoryRepository;
 
 
@@ -29,7 +29,7 @@ public class DummyData {
 
     private static boolean DATA_CREATED = false;
 
-    public static void createDummyData(AuUserRepository userRepository,
+    public static void createDummyData(UserRepository userRepository,
                                        ApplicationRepository applicationRepository,
                                        CategoryRepository categoryRepository) {
         if (DATA_CREATED) return;
@@ -39,14 +39,14 @@ public class DummyData {
         DATA_CREATED = true;
     }
 
-    private static void createDevelopersAndApplications(AuUserRepository userRepository,
+    private static void createDevelopersAndApplications(UserRepository userRepository,
                                                         ApplicationRepository applicationRepository,
                                                         CategoryRepository categoryRepository) {
         Category catDev = categoryRepository.save(new Category("Development"));
         Category catProd = categoryRepository.save(new Category("Productivity"));
         Category catPhoto = categoryRepository.save(new Category("Photography"));
 
-        AuUser developer = createDeveloper("Microsoft", "support@microsoft.com");
+        User developer = createDeveloper("Microsoft", "support@microsoft.com");
         userRepository.save(developer);
         Application app = createApplication(1L, "Visual Studio Code", developer, catDev, "1.0", AppState.Active, "http:\\test.con", "IDE for scripts");
         applicationRepository.save(app);
@@ -86,8 +86,8 @@ public class DummyData {
 
     }
 
-    private static AuUser createDeveloper(String username, String email) {
-        AuUser developer = new AuUser();
+    private static User createDeveloper(String username, String email) {
+        User developer = new User();
 //        developer.setId(id);
         developer.setUsername(username);
         developer.setEnabled(true);
@@ -96,7 +96,7 @@ public class DummyData {
         return developer;
     }
 
-    private static Application createApplication(Long id, String name, AuUser developer, Category category, String version, AppState state, String downloadUrl, String description) {
+    private static Application createApplication(Long id, String name, User developer, Category category, String version, AppState state, String downloadUrl, String description) {
         Application app = new Application();
 //        app.setId(id);
         app.setDeveloper(developer);

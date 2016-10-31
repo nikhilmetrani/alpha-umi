@@ -18,7 +18,7 @@ package io._29cu.usmserver.core.service.impl;
 
 import java.util.List;
 
-import io._29cu.usmserver.core.repositories.AuUserRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +34,7 @@ import io._29cu.usmserver.core.service.utilities.DummyData;
 public class ApplicationServiceImpl implements ApplicationService{
 
     @Autowired
-    AuUserRepository userRepository;
+    UserRepository userRepository;
 
     @Autowired
     ApplicationRepository applicationRepository;

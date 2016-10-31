@@ -17,7 +17,6 @@
 package io._29cu.usmserver.core.model.entities;
 
 import io._29cu.usmserver.core.model.enumerations.AppState;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -27,7 +26,7 @@ public class Application extends ApplicationBase{
     @NotNull
     private AppState state;
     @ManyToOne
-    private AuUser developer;
+    private User developer;
     @ManyToOne
     private Category category;
 
@@ -43,11 +42,11 @@ public class Application extends ApplicationBase{
 
     public void setState(AppState state) { this.state = state; }
 
-    public AuUser getDeveloper() {
+    public User getDeveloper() {
         return developer;
     }
 
-    public void setDeveloper(AuUser developer) {
+    public void setDeveloper(User developer) {
         this.developer = developer;
     }
 

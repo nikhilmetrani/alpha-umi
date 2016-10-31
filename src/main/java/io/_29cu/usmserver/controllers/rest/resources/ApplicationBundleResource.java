@@ -23,7 +23,7 @@ public class ApplicationBundleResource extends EntityResourceBase<ApplicationBun
 
     private String rid;
     private String name;
-    private AuUser developer;
+    private User developer;
     private Category category;
     private AppState state;
     private String description;
@@ -60,11 +60,11 @@ public class ApplicationBundleResource extends EntityResourceBase<ApplicationBun
         this.name = name;
     }
 
-    public AuUser getDeveloper() {
+    public User getDeveloper() {
         return developer;
     }
 
-    public void setDeveloper(AuUser developer) {
+    public void setDeveloper(User developer) {
         this.developer = developer;
     }
 

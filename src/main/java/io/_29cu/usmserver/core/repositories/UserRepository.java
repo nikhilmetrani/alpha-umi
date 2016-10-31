@@ -16,13 +16,13 @@
 
 package io._29cu.usmserver.core.repositories;
 
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-public interface AuUserRepository extends CrudRepository<AuUser, Long> {
-    Optional<AuUser> findByUsername(String username);
+public interface UserRepository extends CrudRepository<User, Long> {
+    Optional<User> findByUsername(String username);
 }

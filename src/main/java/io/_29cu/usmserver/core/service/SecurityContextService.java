@@ -1,7 +1,7 @@
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 
 public interface SecurityContextService {
-    AuUser getLoggedInUser();
+    User getLoggedInUser();
 }

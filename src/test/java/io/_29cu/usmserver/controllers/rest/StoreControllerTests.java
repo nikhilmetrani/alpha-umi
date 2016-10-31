@@ -17,7 +17,7 @@
 package io._29cu.usmserver.controllers.rest;
 
 import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
@@ -55,7 +55,7 @@ public class StoreControllerTests {
 
     private MockMvc mockMvc;
 
-    private AuUser appOwner;
+    private User appOwner;
     private ApplicationList appList;
 
     private String uuid;
@@ -69,7 +69,7 @@ public class StoreControllerTests {
         uuid = UUID.randomUUID().toString();
         appUUID2 = UUID.randomUUID().toString();
 
-        appOwner = new AuUser();
+        appOwner = new User();
         appOwner.setId(1L);
         appOwner.setEmail("owner@test.com");
         appOwner.setUsername("Test Owner");

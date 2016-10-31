@@ -18,7 +18,7 @@ package io._29cu.usmserver.common.utilities;
 
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
-import io._29cu.usmserver.core.repositories.AuUserRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 import io._29cu.usmserver.core.repositories.CategoryRepository;
 import io._29cu.usmserver.core.service.utilities.DummyData;
 import org.junit.Test;
@@ -39,7 +39,7 @@ import static org.junit.Assert.assertTrue;
 public class AppHelperTests {
 
     @Autowired
-    private AuUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private ApplicationRepository applicationRepository;

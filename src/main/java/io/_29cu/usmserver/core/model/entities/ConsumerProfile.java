@@ -34,13 +34,13 @@ public class ConsumerProfile {
     private String website;
     @OneToOne
     @NaturalId
-    private AuUser consumer;
+    private User consumer;
 
-    public AuUser getConsumer() {
+    public User getConsumer() {
         return consumer;
     }
 
-    public void setConsumer(AuUser consumer) {
+    public void setConsumer(User consumer) {
         this.consumer = consumer;
     }
 

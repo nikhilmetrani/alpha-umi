@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.text.SimpleDateFormat;
 
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,7 +69,7 @@ public class DeveloperProfileControllerTests {
 
     private MockMvc mockMvc;
 
-    private AuUser developer;
+    private User developer;
     DeveloperProfile profile;
 
     @Before
@@ -77,7 +77,7 @@ public class DeveloperProfileControllerTests {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(developerProfileController).build();
 
-        developer = new AuUser();
+        developer = new User();
         developer.setId(1L);
         developer.setEmail("owner@test.com");
         developer.setUsername("Test Owner");
@@ -113,7 +113,7 @@ public class DeveloperProfileControllerTests {
 
     @Test
     public void  testGetNonExistentDeveloperProfile() throws Exception {
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(profileService.findProfileByUserId(1L)).thenReturn(null);
         mockMvc.perform(get("/api/0/developer/profile"))
                 .andExpect(jsonPath("$.email",
@@ -149,7 +149,7 @@ public class DeveloperProfileControllerTests {
 
     @Test
     public void  testGetExistingDeveloperProfile() throws Exception {
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(profileService.findProfileByUserId(1L)).thenReturn(profile);
         mockMvc.perform(get("/api/0/developer/profile"))
                 .andExpect(jsonPath("$.email",
@@ -185,7 +185,7 @@ public class DeveloperProfileControllerTests {
 
     @Test
     public void  testCreateDeveloperProfile() throws Exception {
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(profileService.createProfile(any(DeveloperProfile.class))).thenReturn(profile);
 
         mockMvc.perform(post("/api/0/developer/profile")
@@ -227,7 +227,7 @@ public class DeveloperProfileControllerTests {
 
     @Test
     public void  testDeveloperProfileErrorHandling() throws Exception {
-        when(userService.findUser()).thenReturn(null);
+        when(userService.findAuthenticatedUser()).thenReturn(null);
         mockMvc.perform(get("/api/0/developer/profile"))
                 .andExpect(status().isForbidden());
     }
@@ -235,7 +235,7 @@ public class DeveloperProfileControllerTests {
     
     @Test
     public void  testDeveloperProfileErrorHandlingDifferentUrl() throws Exception {
-        when(userService.findUser()).thenReturn(null);
+        when(userService.findAuthenticatedUser()).thenReturn(null);
         mockMvc.perform(get("/api/0/developer/profile"))
                 .andExpect(status().isForbidden());
     }

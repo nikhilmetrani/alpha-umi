@@ -18,8 +18,8 @@ package io._29cu.usmserver.controllers.rest;
 
 import io._29cu.usmserver.configurations.security.JwtUser;
 import io._29cu.usmserver.configurations.security.JwtUserFactory;
-import io._29cu.usmserver.controllers.rest.resources.AuUserResource;
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.controllers.rest.resources.UserResource;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,15 +51,15 @@ public class UserController {
 
     @RequestMapping(value = "/0/user", method = RequestMethod.GET)
     public JwtUser getUser() {
-        return JwtUserFactory.create(userService.findUser()); //.orElseThrow(UserNotFoundException::new);
+        return JwtUserFactory.create(userService.findAuthenticatedUser()); //.orElseThrow(UserNotFoundException::new);
     }
 
     @RequestMapping(value = "/1/signup", method = RequestMethod.POST)
     public JwtUser createUser(
-            @RequestBody AuUserResource auUserResource
+            @RequestBody UserResource userResource
             ) {
-        AuUser createdAuUser = userService.createUser(auUserResource.toEntity());
-        return JwtUserFactory.create(createdAuUser);
+        User createdUser = userService.createUser(userResource.toEntity());
+        return JwtUserFactory.create(createdUser);
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No user")

@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.Matchers.any;
 
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.entities.Authority;
 import io._29cu.usmserver.core.model.enumerations.AuthorityName;
 import org.junit.Before;
@@ -43,14 +43,14 @@ public class UserControllerTests {
 
     private MockMvc mockMvc;
 
-    private AuUser user;
+    private User user;
     
     @Before
     public void setup() throws Exception {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
-        user = new AuUser();
+        user = new User();
         user.setEmail("owner@test.com");
         user.setUsername("Test Owner");
         user.setEnabled(true);
@@ -63,7 +63,7 @@ public class UserControllerTests {
     
     @Test
     public void  testGetUser() throws Exception {
-    	when(userService.findUser()).thenReturn(user);
+    	when(userService.findAuthenticatedUser()).thenReturn(user);
         mockMvc.perform(get("/api/0/user"))
                 .andExpect(jsonPath("$.username",
                         equalTo(user.getUsername())))
@@ -72,11 +72,11 @@ public class UserControllerTests {
     
     @Test
     public void  testCreateUser() throws Exception {
-    	when(userService.createUser(any(AuUser.class))).thenReturn(null);
+    	when(userService.createUser(any(User.class))).thenReturn(null);
         mockMvc.perform(post("/api/1/signup"))
                 .andExpect(status().isBadRequest());
 
-        when(userService.createUser(any(AuUser.class))).thenReturn(user);
+        when(userService.createUser(any(User.class))).thenReturn(user);
         mockMvc.perform(post("/api/1/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{'username': 'Test Owner', 'email': 'owner@test.com', 'password': 'password'}".replace("'", "\"")))

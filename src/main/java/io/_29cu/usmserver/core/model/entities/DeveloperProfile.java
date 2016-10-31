@@ -31,7 +31,7 @@ public class DeveloperProfile {
     @NotNull
     @OneToOne
     @NaturalId
-    private AuUser owner;
+    private User owner;
     @NotNull
     @Column(unique = true)
     private String email;
@@ -170,11 +170,11 @@ public class DeveloperProfile {
         this.id = id;
     }
 
-    public AuUser getOwner() {
+    public User getOwner() {
         return owner;
     }
 
-    public void setOwner(AuUser owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 

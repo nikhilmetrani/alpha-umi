@@ -47,7 +47,7 @@ public class ApplicationUpdateServiceTests {
     @Autowired
     private UserService userService;
 
-    private AuUser developer;
+    private User developer;
     private Application application;
     private Application application1;
     private Application application2;
@@ -59,7 +59,7 @@ public class ApplicationUpdateServiceTests {
     @Transactional
     @Rollback(false)
     public void setup() {
-        developer = new AuUser();
+        developer = new User();
         developer.setUsername("developer");
         developer.setEmail("developer@email.com");
         Authority authority = new Authority();

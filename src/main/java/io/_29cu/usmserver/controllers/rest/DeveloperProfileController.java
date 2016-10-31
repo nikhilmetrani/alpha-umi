@@ -18,7 +18,7 @@ package io._29cu.usmserver.controllers.rest;
 
 import io._29cu.usmserver.controllers.rest.resources.DeveloperProfileResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.DeveloperProfileResourceAssembler;
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.entities.DeveloperProfile;
 import io._29cu.usmserver.core.service.DeveloperProfileService;
 import io._29cu.usmserver.core.service.UserService;
@@ -45,7 +45,7 @@ public class DeveloperProfileController {
     @RequestMapping(path = "/profile", method = RequestMethod.GET)
     public ResponseEntity<DeveloperProfileResource> developerProfile() {
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
         try {
@@ -68,7 +68,7 @@ public class DeveloperProfileController {
             @RequestBody DeveloperProfileResource developerProfileResource
     ) {
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
         try {

@@ -16,12 +16,12 @@
 
 package io._29cu.usmserver.controllers.rest.resources;
 
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Date;
 
-public class AuUserResource extends EntityResourceBase<AuUser>{
+public class UserResource extends EntityResourceBase<User>{
     private String username;
     private String password;
     private String firstname;
@@ -69,15 +69,15 @@ public class AuUserResource extends EntityResourceBase<AuUser>{
     }
 
     @Override
-    public AuUser toEntity() {
-        AuUser auUser = new AuUser();
-        auUser.setUsername(username);
-        auUser.setPassword(new BCryptPasswordEncoder().encode(password));
-        auUser.setFirstname(firstname);
-        auUser.setLastname(lastname);
-        auUser.setEmail(email);
-        auUser.setEnabled(true);
-        auUser.setLastPasswordResetDate(new Date());
-        return auUser;
+    public User toEntity() {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(new BCryptPasswordEncoder().encode(password));
+        user.setFirstname(firstname);
+        user.setLastname(lastname);
+        user.setEmail(email);
+        user.setEnabled(true);
+        user.setLastPasswordResetDate(new Date());
+        return user;
     }
 }

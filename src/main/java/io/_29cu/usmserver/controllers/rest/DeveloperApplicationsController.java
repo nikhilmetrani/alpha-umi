@@ -16,7 +16,7 @@
 
 package io._29cu.usmserver.controllers.rest;
 
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,7 +61,7 @@ public class DeveloperApplicationsController {
     @RequestMapping(path = "/applications", method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> getApplications(){
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationListResource>(HttpStatus.FORBIDDEN);
         try {
@@ -79,7 +79,7 @@ public class DeveloperApplicationsController {
             @PathVariable String appId
     ){
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
         try {
@@ -97,7 +97,7 @@ public class DeveloperApplicationsController {
             @RequestBody ApplicationResource applicationResource
     ) {
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
         Application receivedApplication = applicationResource.toEntity();
@@ -114,7 +114,7 @@ public class DeveloperApplicationsController {
             @RequestParam String name
     ) {
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
 
@@ -135,7 +135,7 @@ public class DeveloperApplicationsController {
             @RequestBody ApplicationResource applicationResource
     ) {
 	    // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
 	    Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
@@ -157,7 +157,7 @@ public class DeveloperApplicationsController {
             @RequestBody ApplicationUpdateResource applicationUpdateResource
     ) {
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
 
@@ -195,7 +195,7 @@ public class DeveloperApplicationsController {
             @PathVariable String appId
     ) {
         // Let's get the user from principal and validate the userId against it.
-        AuUser user = userService.findUser();
+        User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
         try{

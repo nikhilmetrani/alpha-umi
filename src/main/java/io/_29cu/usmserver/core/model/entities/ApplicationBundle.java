@@ -37,7 +37,7 @@ public class ApplicationBundle {
 	@NotNull
 	private AppState state;
 	@ManyToOne
-	private AuUser developer;
+	private User developer;
 	@ManyToOne
 	private Category category;
 	@OneToMany
@@ -75,11 +75,11 @@ public class ApplicationBundle {
 		this.state = state;
 	}
 
-	public AuUser getDeveloper() {
+	public User getDeveloper() {
 		return developer;
 	}
 
-	public void setDeveloper(AuUser developer) {
+	public void setDeveloper(User developer) {
 		this.developer = developer;
 	}
 

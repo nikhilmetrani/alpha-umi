@@ -1,7 +1,7 @@
 package io._29cu.usmserver.core.service.impl;
 
-import io._29cu.usmserver.core.model.entities.AuUser;
-import io._29cu.usmserver.core.repositories.AuUserRepository;
+import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.repositories.UserRepository;
 import io._29cu.usmserver.core.service.SecurityContextService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,12 +13,12 @@ import java.util.Optional;
 @Component
 public class SecurityContextServiceImpl implements SecurityContextService {
     @Autowired
-    private AuUserRepository auUserRepository;
+    private UserRepository userRepository;
 
     @Override
-    public AuUser getLoggedInUser() {
+    public User getLoggedInUser() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        final Optional<AuUser> currentUser = auUserRepository.findByUsername(authentication.getName());
+        final Optional<User> currentUser = userRepository.findByUsername(authentication.getName());
         // TODO It may be better to return optional.
         return currentUser.orElse(null);
     }

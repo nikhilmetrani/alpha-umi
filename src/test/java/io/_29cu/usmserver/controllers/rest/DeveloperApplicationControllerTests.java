@@ -29,7 +29,7 @@ import java.util.UUID;
 
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.service.*;
 import org.junit.Before;
@@ -74,7 +74,7 @@ public class DeveloperApplicationControllerTests {
 
     private MockMvc mockMvc;
 
-    private AuUser developer;
+    private User developer;
     private ApplicationList applicationList;
     private Application application;
     private ApplicationUpdate applicationUpdate;
@@ -91,7 +91,7 @@ public class DeveloperApplicationControllerTests {
 
         uuid = UUID.randomUUID().toString();
 
-        developer = new AuUser();
+        developer = new User();
         developer.setId(1L);
         developer.setEmail("owner@test.com");
         developer.setUsername("Test Owner");
@@ -164,7 +164,7 @@ public class DeveloperApplicationControllerTests {
 
     @Test
     public void  testGetApplicationsIsForbidden() throws Exception {
-    	when(userService.findUser()).thenReturn(null);
+    	when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(get("/api/0/developer/applications"))
                 .andExpect(status().isForbidden());
@@ -172,7 +172,7 @@ public class DeveloperApplicationControllerTests {
 
     @Test
     public void testGetApplicationsIsBadRequest() throws Exception {
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationsByDeveloper(developer.getUsername())).thenReturn(null);
 
         mockMvc.perform(get("/api/0/developer/applications"))
@@ -181,7 +181,7 @@ public class DeveloperApplicationControllerTests {
 
     @Test
     public void testGetApplicationsIsOk() throws Exception {
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationsByDeveloper(developer.getUsername())).thenReturn(applicationList);
 
         mockMvc.perform(get("/api/0/developer/applications"))
@@ -190,19 +190,19 @@ public class DeveloperApplicationControllerTests {
 
     @Test
     public void  testGetApplication() throws Exception {
-        when(userService.findUser()).thenReturn(null);
+        when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(get("/api/0/developer/applications/" + uuid))
                 .andExpect(status().isForbidden());
 
-        when(userService.findUser()).thenReturn(developer);
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
 
         mockMvc.perform(get("/api/0/developer/applications/" + uuid))
 		        .andExpect(status().isOk());
 
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(null);
 
         mockMvc.perform(get("/api/0/developer/applications/22"))
@@ -211,14 +211,14 @@ public class DeveloperApplicationControllerTests {
 
     @Test
     public void  testCreateDeveloperApplication() throws Exception {
-        when(userService.findUser()).thenReturn(null);
+        when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(post("/api/0/developer/applications/create")
                 .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(categoryService.findCategoryByName("Productivity")).thenReturn(new Category("Productivity"));
         when(applicationService.createApplication(any(Application.class))).thenReturn(application);
 
@@ -242,13 +242,13 @@ public class DeveloperApplicationControllerTests {
 
     @Test
     public void  testCheckApplicationNameExistsForDeveloper() throws Exception {
-        when(userService.findUser()).thenReturn(null);
+        when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(get("/api/0/developer/applications/create")
                 .param("name", "Dreamweaver"))
                 .andExpect(status().isForbidden());
 
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppName(developer.getId(), "Dreamweaver")).thenReturn(application);
 
         mockMvc.perform(get("/api/0/developer/applications/create")
@@ -258,7 +258,7 @@ public class DeveloperApplicationControllerTests {
 
     @Test
     public void  testCheckApplicationNameNotExistsForDeveloper() throws Exception {
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppName(developer.getId(), "Dreams")).thenReturn(null);
 
         mockMvc.perform(get("/api/0/developer/applications/create")
@@ -268,14 +268,14 @@ public class DeveloperApplicationControllerTests {
 
     @Test
     public void testUpdateDeveloperApplication() throws Exception {
-    	when(userService.findUser()).thenReturn(null);
+    	when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(post("/api/0/developer/applications/"+ uuid +"/update")
                 .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
     	when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(null);
     	
         mockMvc.perform(post("/api/0/developer" +"/applications/22/update")
@@ -283,7 +283,7 @@ public class DeveloperApplicationControllerTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isPreconditionFailed());
 
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
 	    when(applicationService.updateApplication(any(Application.class))).thenReturn(updatedApplication);
 
@@ -308,14 +308,14 @@ public class DeveloperApplicationControllerTests {
 
     @Test
     public void  testPublishDeveloperApplication() throws Exception {
-    	when(userService.findUser()).thenReturn(null);
+    	when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/publish")
                 .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), "22")).thenReturn(null);
         mockMvc.perform(post("/api/0/developer/applications/22/publish")
@@ -351,21 +351,21 @@ public class DeveloperApplicationControllerTests {
 
     @Test
     public void testRecallDeveloperApplication() throws Exception {
-        when(userService.findUser()).thenReturn(null);
+        when(userService.findAuthenticatedUser()).thenReturn(null);
 
         mockMvc.perform(post("/api/0/developer/applications/"+ uuid +"/recall")
                 .content("")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(null);
 
         mockMvc.perform(post("/api/0/developer/applications/22/recall")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isPreconditionFailed());
 
-        when(userService.findUser()).thenReturn(developer);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
         mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/recall")
                 .contentType(MediaType.APPLICATION_JSON))

@@ -17,7 +17,7 @@
 package io._29cu.usmserver.core.service;
 
 import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.AuUser;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.entities.Authority;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 
@@ -47,14 +47,14 @@ public class ApplicationServiceTests {
     @Autowired
     private UserService userService;
 
-    private AuUser developer;
+    private User developer;
     private Application application;
 
     @Before
     @Transactional
     @Rollback(false)
     public void setup() {
-        developer = new AuUser();
+        developer = new User();
         developer.setUsername("developer");
         developer.setEmail("developer@email.com");
         Authority authority = new Authority();
