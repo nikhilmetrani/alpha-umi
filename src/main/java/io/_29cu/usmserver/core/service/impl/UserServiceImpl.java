@@ -43,21 +43,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(User user) {
         User newUser = user;
-        // Grant User role by default.
-        Authority authority = new Authority();
-        authority.setName(AuthorityName.ROLE_USER);
-        authorityRepository.save(authority);
-        List<Authority> authorities = new ArrayList<>();
-        authorities.add(authority);
+        try {
+            // Grant User role by default.
+            List<Authority> authorities = new ArrayList<>();
+            authorities.add(authorityRepository.findByName(AuthorityName.ROLE_CONSUMER));
+            authorities.add(authorityRepository.findByName(AuthorityName.ROLE_DEVELOPER));
+            newUser.setAuthorities(authorities);
 
-        authority = new Authority();
-        authority.setName(AuthorityName.ROLE_DEVELOPER);
-        authorityRepository.save(authority);
-        authorities.add(authority);
-
-        newUser.setAuthorities(authorities);
-
-        return userRepository.save(newUser);
+            return userRepository.save(newUser);
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     @Override

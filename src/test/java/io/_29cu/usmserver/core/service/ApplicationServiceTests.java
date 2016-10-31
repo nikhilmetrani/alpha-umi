@@ -58,7 +58,7 @@ public class ApplicationServiceTests {
         developer.setUsername("developer");
         developer.setEmail("developer@email.com");
         Authority authority = new Authority();
-        authority.setName(AuthorityName.ROLE_USER);
+        authority.setName(AuthorityName.ROLE_CONSUMER);
         List<Authority> authList = new ArrayList<>();
         authList.add(authority);
         authority = new Authority();

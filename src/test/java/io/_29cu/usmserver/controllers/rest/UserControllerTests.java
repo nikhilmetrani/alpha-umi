@@ -55,7 +55,7 @@ public class UserControllerTests {
         user.setUsername("Test Owner");
         user.setEnabled(true);
         Authority auth = new Authority();
-        auth.setName(AuthorityName.ROLE_USER);
+        auth.setName(AuthorityName.ROLE_CONSUMER);
         List<Authority> authList = new ArrayList<>();
         authList.add(auth);
         user.setAuthorities(authList);

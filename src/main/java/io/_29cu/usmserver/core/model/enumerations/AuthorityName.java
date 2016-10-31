@@ -17,7 +17,7 @@
 package io._29cu.usmserver.core.model.enumerations;
 
 public enum AuthorityName {
-    ROLE_USER,
+    ROLE_CONSUMER,
     ROLE_DEVELOPER,
     ROLE_ADMIN,
     ROLE_MANAGER,

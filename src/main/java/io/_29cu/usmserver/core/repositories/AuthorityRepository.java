@@ -17,9 +17,14 @@
 package io._29cu.usmserver.core.repositories;
 
 import io._29cu.usmserver.core.model.entities.Authority;
+import io._29cu.usmserver.core.model.enumerations.AuthorityName;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
 @Component
 public interface AuthorityRepository extends CrudRepository<Authority, Long> {
+    @Query("select a from Authority a where a.name = :name")
+    Authority findByName(@Param("name") AuthorityName name);
 }
