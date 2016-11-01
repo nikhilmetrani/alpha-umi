@@ -226,4 +226,45 @@ public class DeveloperApplicationsController {
             return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    // Create Update Application
+    @RequestMapping(path = "/{userId}/applications/{appId}/createUpdate", method = RequestMethod.POST)
+    public ResponseEntity<ApplicationResource> CreateUpdateDeveloperApplication(
+            @PathVariable String userId,
+            @PathVariable String appId,
+            @RequestBody ApplicationUpdateResource applicationUpdateResource
+    ) {
+        // Let's get the user from principal and validate the userId against it.
+        User user = userService.findAuthenticatedUser();
+        if (user == null)
+            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+
+        try{
+            ApplicationUpdate applicationUpdate = applicationUpdateResource.toEntity();
+            Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
+            // If the application state is not 'blocked'
+            if(!application.getState().equals(AppState.Blocked)) {
+                ApplicationUpdate dbApplicationUpdate = applicationUpdateService.findByApplication(appId);
+
+                //if(dbApplicationUpdate != null){
+                //    applicationUpdate.setId(dbApplicationUpdate.getId());
+                //}
+                applicationUpdate.setId(application.getId());
+                application.setState(AppState.Staging);
+                application.setVersion(applicationUpdate.getVersion());
+                application.setDescription(applicationUpdate.getDescription());
+                application.setName(applicationUpdate.getName());
+                application.setWhatsNew(applicationUpdate.getWhatsNew());
+                applicationUpdate.setTarget(application);
+                ApplicationUpdate newApplicationUpdate = applicationUpdateService.createApplicationUpdateByDeveloper(user.getUsername(),applicationUpdate);
+                ApplicationResource newApplicationResource = new ApplicationResourceAssembler().toResource(application);
+                return new ResponseEntity<ApplicationResource>(newApplicationResource, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
+            }
+        }catch(Exception ex){
+            //ex.printStackTrace();
+            return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

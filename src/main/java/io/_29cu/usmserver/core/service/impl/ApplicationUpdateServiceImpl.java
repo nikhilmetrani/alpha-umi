@@ -57,7 +57,7 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
             List<Application> existingAppList = applicationRepository.findApplicationsByDeveloper(developerId);
             if(existingAppList != null && !existingAppList.isEmpty()){
                 for(Application updatedApp : existingAppList){
-                    if((AppState.Active.equals(updatedApp.getState())) && updatedApp.getName().equals(appToBePublished.getName()) && updatedApp.getDeveloper().getUsername().equals(appToBePublished.getTarget().getDeveloper().getUsername())){
+                    if(updatedApp.getName().equals(appToBePublished.getName()) && updatedApp.getDeveloper().getUsername().equals(appToBePublished.getTarget().getDeveloper().getUsername())){
                         appToBePublished = createApplicationUpdate(appToBePublished);
                         return appToBePublished;
                     }
