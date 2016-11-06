@@ -71,7 +71,8 @@ public class UserResource extends EntityResourceBase<User>{
     @Override
     public User toEntity() {
         User user = new User();
-        user.setUsername(username);
+        // Force email to be the username 
+        user.setUsername(email);
         user.setPassword(new BCryptPasswordEncoder().encode(password));
         user.setFirstname(firstname);
         user.setLastname(lastname);

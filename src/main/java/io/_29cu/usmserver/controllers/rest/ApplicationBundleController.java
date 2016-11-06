@@ -29,6 +29,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/api/0/developer")
 //@EnableResourceServer
@@ -77,7 +79,7 @@ public class ApplicationBundleController {
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.BAD_REQUEST);
         }
     }
-    // Create Application
+    // Create Application Bundle
     @RequestMapping(path = "/applicationBundles/create", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> createDeveloperApplicationBundle(
             @RequestBody ApplicationBundleResource applicationBundleResource
@@ -86,6 +88,7 @@ public class ApplicationBundleController {
         User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
+
         ApplicationBundle receivedApplicationBundle = applicationBundleResource.toEntity();
         receivedApplicationBundle.setDeveloper(user);
         ApplicationBundle applicationBundle = applicationBundleService.createApplicationBundle(receivedApplicationBundle);
@@ -93,7 +96,7 @@ public class ApplicationBundleController {
         return new ResponseEntity<ApplicationBundleResource>(createdApplicationBundleResource, HttpStatus.OK);
     }
 
-    // Create Application
+    // Check if another application bundle with the same name already exists - to be check from the front end
     @RequestMapping(path = "/applicationBundles/create", method = RequestMethod.GET)
     public ResponseEntity<ApplicationBundleResource> checkApplicationBundleNameExistsForDeveloper(
             @RequestParam String name
@@ -103,12 +106,10 @@ public class ApplicationBundleController {
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
 
-        //Let's check whether the applicationBundle is already registered.
-        ApplicationBundle existingApp = applicationBundleService.findApplicationBundleByDeveloperAndName(user.getId(), name);
-        if (null == existingApp) { //We can't find the applicationBundle in our database for the developer.
+        ApplicationBundle existingAppBdl = applicationBundleService.findApplicationBundleByDeveloperAndName(user.getId(), name);
+        if (existingAppBdl == null) {           //non-existing
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.NO_CONTENT);
-        } else {
-            // ApplicationBundle with same name already exists 
+        } else {                                //existing
         	return new ResponseEntity<ApplicationBundleResource>(HttpStatus.OK);
         }
     }
@@ -147,17 +148,26 @@ public class ApplicationBundleController {
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
 
         try{
-	        ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(user.getId(), appBundleId);
-	        // If the applicationBundle state is not 'blocked' AND there is no existing ApplicationBundle Update, then proceed for Publish
-	        if(!applicationBundle.getState().equals(AppState.Blocked)) {
-	        	applicationBundle.setState(AppState.Active);
-                applicationBundle.setDescription(applicationBundle.getDescription());
-                applicationBundle.setName(applicationBundle.getName());
-		        ApplicationBundleResource newApplicationBundleResource = new ApplicationBundleResourceAssembler().toResource(applicationBundle);
-		        return new ResponseEntity<ApplicationBundleResource>(newApplicationBundleResource, HttpStatus.OK);
-	        }else{
-	        	return new ResponseEntity<ApplicationBundleResource>(HttpStatus.PRECONDITION_FAILED);
-	        }
+	        ApplicationBundle appBdl = applicationBundleService.findApplicationBundleByDeveloperAndId(user.getId(), appBundleId);
+
+            // To traverse the list of applications and check if all are in 'active' status
+            List<Application> appsInBundle = appBdl.getApplications();
+            boolean allActive = true;
+            for (Application app : appsInBundle) {
+                if (app.getState() != AppState.Active) {
+                    allActive = false;
+                }
+            }
+            // Publish bundle only if all applications within the bundle are 'active'
+            if(allActive) {
+                appBdl.setState(AppState.Active);                 //to set the bundle's status to 'Active'
+                appBdl.setName(appBdl.getName());                 //to set the name of the bundle
+                appBdl.setDescription(appBdl.getDescription());   //to add a description for the bundle
+                ApplicationBundleResource newApplicationBundleResource = new ApplicationBundleResourceAssembler().toResource(appBdl);
+                return new ResponseEntity<ApplicationBundleResource>(newApplicationBundleResource, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<ApplicationBundleResource>(HttpStatus.PRECONDITION_FAILED);
+            }
         }catch(Exception ex){
         	ex.printStackTrace();
         	return new ResponseEntity<ApplicationBundleResource>(HttpStatus.BAD_REQUEST);
