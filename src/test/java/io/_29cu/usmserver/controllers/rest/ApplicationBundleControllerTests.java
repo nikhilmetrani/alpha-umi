@@ -17,6 +17,7 @@
 package io._29cu.usmserver.controllers.rest;
 
 import io._29cu.usmserver.core.model.entities.ApplicationBundle;
+import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.model.enumerations.AppState;
@@ -24,6 +25,7 @@ import io._29cu.usmserver.core.service.ApplicationBundleService;
 import io._29cu.usmserver.core.service.ApplicationUpdateService;
 import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.utilities.ApplicationBundleList;
+import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -43,6 +45,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -96,18 +99,24 @@ public class ApplicationBundleControllerTests {
         applicationBundle = new ApplicationBundle();
         applicationBundle.setId(uuid);
         applicationBundle.setCategory(new Category("Productivity"));
-        applicationBundle.setName("Dreamweaver");
+        applicationBundle.setName("Bundle1");
         applicationBundle.setState(AppState.Staging);
         applicationBundle.setDeveloper(developer);
         applicationBundle.setDescription("test description");
+        List<Application> appList = new ArrayList<Application>();
+        appList.add(new Application());
+        applicationBundle.setApplications(appList);
 
         existingApplicationBundle = new ApplicationBundle();
         existingApplicationBundle.setId(uuid);
         existingApplicationBundle.setCategory(new Category("Productivity"));
-        existingApplicationBundle.setName("Dreamweaver");
+        existingApplicationBundle.setName("Bundle1");
         existingApplicationBundle.setState(AppState.Staging);
         existingApplicationBundle.setDeveloper(developer);
         existingApplicationBundle.setDescription("test description");
+        List<Application> extAppList = new ArrayList<Application>();
+        extAppList.add(new Application());
+        existingApplicationBundle.setApplications(extAppList);
 
 	    updatedApplicationBundle = new ApplicationBundle();
 	    updatedApplicationBundle.setId(uuid);
@@ -116,12 +125,16 @@ public class ApplicationBundleControllerTests {
 	    updatedApplicationBundle.setState(AppState.Staging);
 	    updatedApplicationBundle.setDeveloper(developer);
 	    updatedApplicationBundle.setDescription("PhotoShop Description");
-	    
+        List<Application> updList = new ArrayList<Application>();
+        updList.add(new Application());
+        updatedApplicationBundle.setApplications(updList);
+
+        //A list of existing application bundles
         applicationBundleList = new ApplicationBundleList();
-        ArrayList<ApplicationBundle> appList = new ArrayList<ApplicationBundle>();
-        appList.add(existingApplicationBundle);
-        applicationBundleList.setApplicationBundles(appList);
-	    
+        ArrayList<ApplicationBundle> appBdlList = new ArrayList<ApplicationBundle>();
+        appBdlList.add(existingApplicationBundle);
+        applicationBundleList.setApplicationBundles(appBdlList);
+
         // Let's mock the security context
         authenticationMocked = Mockito.mock(Authentication.class);
         securityContextMocked = Mockito.mock(SecurityContext.class);
@@ -130,9 +143,9 @@ public class ApplicationBundleControllerTests {
     }
 
     @Test
-    public void  testGetApplicationBundles() throws Exception {
+    public void testGetApplicationBundleList() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
-    	
+
         mockMvc.perform(get("/api/0/developer/applicationBundles"))
                 .andExpect(status().isForbidden());
 
@@ -149,7 +162,7 @@ public class ApplicationBundleControllerTests {
     }
 
     @Test
-    public void  testGetApplicationBundle() throws Exception {
+    public void testGetApplicationBundle() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(get("/api/0/developer/applicationBundles/" + uuid))
