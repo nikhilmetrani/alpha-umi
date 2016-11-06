@@ -29,6 +29,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/api/0/developer")
 //@EnableResourceServer
@@ -147,17 +149,26 @@ public class ApplicationBundleController {
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
 
         try{
-	        ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(user.getId(), appBundleId);
-	        // If the applicationBundle state is not 'blocked' AND there is no existing ApplicationBundle Update, then proceed for Publish
-	        if(!applicationBundle.getState().equals(AppState.Blocked)) {
-	        	applicationBundle.setState(AppState.Active);
-                applicationBundle.setDescription(applicationBundle.getDescription());
-                applicationBundle.setName(applicationBundle.getName());
-		        ApplicationBundleResource newApplicationBundleResource = new ApplicationBundleResourceAssembler().toResource(applicationBundle);
-		        return new ResponseEntity<ApplicationBundleResource>(newApplicationBundleResource, HttpStatus.OK);
-	        }else{
-	        	return new ResponseEntity<ApplicationBundleResource>(HttpStatus.PRECONDITION_FAILED);
-	        }
+	        ApplicationBundle appBdl = applicationBundleService.findApplicationBundleByDeveloperAndId(user.getId(), appBundleId);
+
+            // To traverse the list of applications and check if all are in 'active' status
+            List<Application> appsInBundle = appBdl.getApplications();
+            boolean allActive = true;
+            for (Application app : appsInBundle) {
+                if (app.getState() != AppState.Active) {
+                    allActive = false;
+                }
+            }
+            // Publish bundle only if all applications within the bundle are 'active'
+            if(allActive) {
+                appBdl.setState(AppState.Active);                 //to set the bundle's status to 'Active'
+                appBdl.setName(appBdl.getName());                 //to set the name of the bundle
+                appBdl.setDescription(appBdl.getDescription());   //to add a description for the bundle
+                ApplicationBundleResource newApplicationBundleResource = new ApplicationBundleResourceAssembler().toResource(appBdl);
+                return new ResponseEntity<ApplicationBundleResource>(newApplicationBundleResource, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<ApplicationBundleResource>(HttpStatus.PRECONDITION_FAILED);
+            }
         }catch(Exception ex){
         	ex.printStackTrace();
         	return new ResponseEntity<ApplicationBundleResource>(HttpStatus.BAD_REQUEST);
