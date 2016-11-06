@@ -1,53 +1,37 @@
 package io._29cu.usmserver.core.model.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import io._29cu.usmserver.core.model.enumerations.AppState;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class ApplicationHistory extends BaseValueObject{
-	
 	@NotNull
-	private String applicationId;
-	@NotNull
-	private AppState state;
+	@ManyToOne
+	private Application application;
 	@NotNull
 	private String name;
-	@NotNull
-	private String description;
 	@NotNull
 	private String version;
 	@NotNull
 	private String whatsNew;
-	@NotNull
-	private String developerId;
-	@NotNull
-	private Long categoryId;
-	
-	public String getApplicationId() {
-		return applicationId;
+
+    public Application getApplication() {
+		return application;
 	}
-	public void setApplicationId(String applicationId) {
-		this.applicationId = applicationId;
-	}
-	public AppState getState() {
-		return state;
-	}
-	public void setState(AppState state) {
-		this.state = state;
+	public void setApplication(Application application) {
+		this.application = application;
 	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
 	}
 	public String getVersion() {
 		return version;
@@ -61,19 +45,4 @@ public class ApplicationHistory extends BaseValueObject{
 	public void setWhatsNew(String whatsNew) {
 		this.whatsNew = whatsNew;
 	}
-	public String getDeveloperId() {
-		return developerId;
-	}
-	public void setDeveloperId(String developerId) {
-		this.developerId = developerId;
-	}
-	public Long getCategoryId() {
-		return categoryId;
-	}
-	public void setCategoryId(Long categoryId) {
-		this.categoryId = categoryId;
-	}
-	
-	
-
 }

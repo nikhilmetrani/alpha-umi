@@ -27,10 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.UUID;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
-import io._29cu.usmserver.core.model.entities.User;
-import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.model.entities.*;
 import io._29cu.usmserver.core.service.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,6 +63,8 @@ public class DeveloperApplicationControllerTests {
     private UserService userService;
     @Mock
     private CategoryService categoryService;
+    @Mock
+    private ApplicationHistoryService applicationHistoryService;
 
     // @Mock not used here since they are mocked in setup()
     // Spring boot does not allow mocking with annotation.
@@ -82,6 +81,7 @@ public class DeveloperApplicationControllerTests {
 	private Application updatedApplication;
     private Application recalledApplication;
     private Application activeApplication;
+    private ApplicationHistory applicationHistory;
     private String uuid;
 
     @Before
@@ -149,6 +149,12 @@ public class DeveloperApplicationControllerTests {
         activeApplication.setDeveloper(developer);
         activeApplication.setDescription("PhotoShop Description");
 
+        ApplicationHistory applicationHistory = new ApplicationHistory();
+        applicationHistory.setId(1L);
+        applicationHistory.setApplication(application);
+        applicationHistory.setName(application.getName());
+        applicationHistory.setVersion(application.getVersion());
+        applicationHistory.setWhatsNew(application.getWhatsNew());
 
         applicationList = new ApplicationList();
         ArrayList<Application> appList = new ArrayList<Application>();
@@ -310,42 +316,28 @@ public class DeveloperApplicationControllerTests {
     public void  testPublishDeveloperApplication() throws Exception {
     	when(userService.findAuthenticatedUser()).thenReturn(null);
     	
-        mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/publish")
-                .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'",  "\""))
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/publish"))
                 .andExpect(status().isForbidden());
 
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), "22")).thenReturn(null);
-        mockMvc.perform(post("/api/0/developer/applications/22/publish")
-                .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'",  "\""))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+        mockMvc.perform(post("/api/0/developer/applications/22/publish"))
+                .andExpect(status().isPreconditionFailed());
         
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
-        applicationUpdate.setTarget(application);
-        when(applicationUpdateService.createApplicationUpdate(any(ApplicationUpdate.class))).thenReturn(applicationUpdate);
 
-        mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/publish")
-                .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'",  "\""))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.whatsNew",
-                        equalTo(applicationUpdate.getWhatsNew())))
-                .andExpect(jsonPath("$.rid",
-                        equalTo(uuid)))
-                .andExpect(jsonPath("$.version",
-                        equalTo(applicationUpdate.getVersion())))
-                .andExpect(jsonPath("$.name",
-                        equalTo(applicationUpdate.getName())))
+        when(applicationHistoryService.createApplicationHistory(any(ApplicationHistory.class))).thenReturn(applicationHistory);
+
+        when(applicationService.updateApplication(any(Application.class))).thenReturn(activeApplication);
+
+        mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/publish"))
                 .andExpect(jsonPath("$.state",
                         equalTo(AppState.Active.getState())))
                 .andExpect(status().isOk());
         
         application.setState(AppState.Blocked);
-        mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/publish")
-                .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'",  "\""))
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/publish"))
                 .andExpect(status().isPreconditionFailed());
     }
 

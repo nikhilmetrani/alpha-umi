@@ -16,7 +16,7 @@
 
 package io._29cu.usmserver.controllers.rest;
 
-import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.entities.*;
 import io._29cu.usmserver.core.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,8 +33,6 @@ import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationUpdateResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 
@@ -48,6 +46,8 @@ public class DeveloperApplicationsController {
     private DeveloperProfileService developerProfileService;
     @Autowired
     private ApplicationService applicationService;
+    @Autowired
+    private ApplicationHistoryService applicationHistoryService;
     @Autowired
     private ApplicationUpdateService applicationUpdateService;
     @Autowired
@@ -153,33 +153,27 @@ public class DeveloperApplicationsController {
     // Publish Application
     @RequestMapping(path = "/applications/{appId}/publish", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> publishDeveloperApplication(
-            @PathVariable String appId,
-            @RequestBody ApplicationUpdateResource applicationUpdateResource
+            @PathVariable String appId
     ) {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
-
         try{
-	        ApplicationUpdate applicationUpdate = applicationUpdateResource.toEntity();
 	        Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
 	        // If the application state is not 'blocked' 
-	        if(!application.getState().equals(AppState.Blocked)) {
-	        	ApplicationUpdate dbApplicationUpdate = applicationUpdateService.findByApplication(appId);
-	        	// If there is existing ApplicationUpdate, then Update the ApplicationUpdate and Publish
-	        	if(dbApplicationUpdate != null){
-	        		applicationUpdate.setId(dbApplicationUpdate.getId());
-	        	}
-	        	application.setState(AppState.Active);
-	        	application.setVersion(applicationUpdate.getVersion());
-                application.setDescription(applicationUpdate.getDescription());
-                application.setName(applicationUpdate.getName());
-                application.setWhatsNew(applicationUpdate.getWhatsNew());
-                applicationUpdate.setTarget(application);
-		        ApplicationUpdate newApplicationUpdate = applicationUpdateService.createApplicationUpdate(applicationUpdate);
-		        ApplicationResource newApplicationResource = new ApplicationResourceAssembler().toResource(application);
-		        return new ResponseEntity<ApplicationResource>(newApplicationResource, HttpStatus.OK);
+	        if(application!=null && !application.getState().equals(AppState.Blocked)) {
+                application.setState(AppState.Active);
+                //push the app to history
+                ApplicationHistory applicationHistory = new ApplicationHistory();
+                applicationHistory.setApplication(application);
+                applicationHistory.setName(application.getName());
+                applicationHistory.setVersion(application.getVersion());
+                applicationHistory.setWhatsNew(application.getWhatsNew());
+                applicationHistoryService.createApplicationHistory(applicationHistory);
+                application = applicationService.updateApplication(application);
+                ApplicationResource newApplicationResource = new ApplicationResourceAssembler().toResource(application);
+                return new ResponseEntity<ApplicationResource>(newApplicationResource, HttpStatus.OK);
 	        }else{
 	        	return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
 	        }
