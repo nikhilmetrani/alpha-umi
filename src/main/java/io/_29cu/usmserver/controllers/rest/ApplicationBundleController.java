@@ -79,7 +79,7 @@ public class ApplicationBundleController {
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.BAD_REQUEST);
         }
     }
-    // Create Application
+    // Create Application Bundle
     @RequestMapping(path = "/applicationBundles/create", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> createDeveloperApplicationBundle(
             @RequestBody ApplicationBundleResource applicationBundleResource
@@ -88,6 +88,7 @@ public class ApplicationBundleController {
         User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
+
         ApplicationBundle receivedApplicationBundle = applicationBundleResource.toEntity();
         receivedApplicationBundle.setDeveloper(user);
         ApplicationBundle applicationBundle = applicationBundleService.createApplicationBundle(receivedApplicationBundle);
@@ -95,7 +96,7 @@ public class ApplicationBundleController {
         return new ResponseEntity<ApplicationBundleResource>(createdApplicationBundleResource, HttpStatus.OK);
     }
 
-    // Create Application
+    // Check if another application bundle with the same name already exists - to be check from the front end
     @RequestMapping(path = "/applicationBundles/create", method = RequestMethod.GET)
     public ResponseEntity<ApplicationBundleResource> checkApplicationBundleNameExistsForDeveloper(
             @RequestParam String name
@@ -105,12 +106,10 @@ public class ApplicationBundleController {
         if (user == null)
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
 
-        //Let's check whether the applicationBundle is already registered.
-        ApplicationBundle existingApp = applicationBundleService.findApplicationBundleByDeveloperAndName(user.getId(), name);
-        if (null == existingApp) { //We can't find the applicationBundle in our database for the developer.
+        ApplicationBundle existingAppBdl = applicationBundleService.findApplicationBundleByDeveloperAndName(user.getId(), name);
+        if (existingAppBdl == null) {           //non-existing
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.NO_CONTENT);
-        } else {
-            // ApplicationBundle with same name already exists 
+        } else {                                //existing
         	return new ResponseEntity<ApplicationBundleResource>(HttpStatus.OK);
         }
     }
