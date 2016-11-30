@@ -153,11 +153,16 @@ public class ApplicationBundleController {
             // To traverse the list of applications and check if all are in 'active' status
             List<Application> appsInBundle = appBdl.getApplications();
             boolean allActive = true;
-            for (Application app : appsInBundle) {
-                if (app.getState() != AppState.Active) {
-                    allActive = false;
+            if(!appBdl.getState().equals(AppState.Active)){
+            	allActive = false;
+            }else {
+                for (Application app : appsInBundle) {
+                    if (app.getState() != AppState.Active) {
+                        allActive = false;
+                    }
                 }
             }
+
             // Publish bundle only if all applications within the bundle are 'active'
             if(allActive) {
                 appBdl.setState(AppState.Active);                 //to set the bundle's status to 'Active'
