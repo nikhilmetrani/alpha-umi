@@ -180,7 +180,7 @@ public class ApplicationBundleController {
     }
 
     // Recall ApplicationBundle
-    @RequestMapping(path = "/applicationBundle/{appBundleId}/recall", method = RequestMethod.POST)
+    @RequestMapping(path = "/applicationBundles/{appBundleId}/recall", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> recallDeveloperApplicationBundle(
             @PathVariable String appBundleId
     ) {

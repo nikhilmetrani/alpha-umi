@@ -49,7 +49,9 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -295,9 +297,14 @@ public class ApplicationBundleControllerTests {
     }
 
     @Test
-    public void  testPublishApplicationBundleWhenAppIsNotActive() throws Exception {
+    public void  testPublishApplicationBundleWhenAppIsBlocked() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
+        applicationBundle.getApplications().get(0).setState(AppState.Blocked);
         when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), uuid)).thenReturn(applicationBundle);
+        
+        for (Application app : applicationBundle.getApplications()) {
+            assertTrue("Application is active. Expected blocked state.", app.getState() != AppState.Active);
+        }
 
         mockMvc.perform(post("/api/0/developer/applicationBundles/" + uuid + "/publish")
                 .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'", "\""))
@@ -333,5 +340,36 @@ public class ApplicationBundleControllerTests {
                 .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'", "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isPreconditionFailed());
+    }
+
+    @Test
+    public void  testRecallDeveloperApplicationBundleWhenBundleIsBlocked() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        assertNotNull("User object is null", developer);
+        applicationBundle.setState(AppState.Blocked);
+        when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), uuid)).thenReturn(applicationBundle);
+        mockMvc.perform(post("/api/0/developer/applicationBundles/" + uuid + "/recall")
+                .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isPreconditionFailed());
+    }
+
+    @Test
+    public void  testRecallDeveloperApplicationBundleWhenBundleIsActive() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        assertNotNull("User object is null", developer);
+        applicationBundle.setState(AppState.Active);
+        when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), uuid)).thenReturn(applicationBundle);
+        
+        mockMvc.perform(post("/api/0/developer/applicationBundles/" + uuid + "/recall")
+                .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.rid",
+                        equalTo(uuid)))
+                .andExpect(jsonPath("$.name",
+                        equalTo(applicationBundle.getName())))
+                .andExpect(jsonPath("$.state",
+                        equalTo(AppState.Recalled.getState())))
+                .andExpect(status().isOk());
     }
 }
