@@ -239,4 +239,24 @@ public class DeveloperProfileControllerTests {
         mockMvc.perform(get("/api/0/developer/profile"))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    public void  testCreateDeveloperProfileErrorHandling() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(null);
+        mockMvc.perform(post("/api/0/developer/profile")
+                .content("{\"email\":\"test@test.com\",\"website\":\"https://test.com\",\"jobTitle\":\"jobTitle\",\"address\":\"address\",\"city\":\"city\",\"state\":\"state\",\"zipCode\":12345,\"country\":\"country\",\"workPhone\":567890,\"homePhone\":123456,\"dateOfBirth\":978278400000,\"gender\":\"gender\",\"joinDate\":1478707200000,\"logo\":\"logo_path_detail\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void  testCreateDeveloperProfileWhenCreateProfileFailed() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        when(profileService.createProfile(any(DeveloperProfile.class))).thenReturn(null);
+
+        mockMvc.perform(post("/api/0/developer/profile")
+                .content("{\"email\":\"test@test.com\",\"website\":\"https://test.com\",\"jobTitle\":\"jobTitle\",\"address\":\"address\",\"city\":\"city\",\"state\":\"state\",\"zipCode\":12345,\"country\":\"country\",\"workPhone\":567890,\"homePhone\":123456,\"dateOfBirth\":978278400000,\"gender\":\"gender\",\"joinDate\":1478707200000,\"logo\":\"logo_path_detail\"}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 }

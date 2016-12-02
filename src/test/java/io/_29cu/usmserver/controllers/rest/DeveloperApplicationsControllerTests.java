@@ -411,6 +411,7 @@ public class DeveloperApplicationsControllerTests {
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(null);
 
         mockMvc.perform(post("/api/0/developer/"+ developer.getId() +"/applications/22/createUpdate")
+        		.content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.1', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description for Application Update'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
