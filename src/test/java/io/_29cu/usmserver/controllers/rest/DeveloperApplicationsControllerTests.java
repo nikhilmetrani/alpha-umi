@@ -52,7 +52,7 @@ import io._29cu.usmserver.core.service.utilities.ApplicationList;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class DeveloperApplicationControllerTests {
+public class DeveloperApplicationsControllerTests {
     @InjectMocks
     private DeveloperApplicationsController developerApplicationController;
     @Mock
@@ -342,6 +342,16 @@ public class DeveloperApplicationControllerTests {
     }
 
     @Test
+    public void  testPublishDeveloperApplicationWhenAppStateIsInvalid() throws Exception {
+    	when(userService.findAuthenticatedUser()).thenReturn(null);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        application.setState(null);
+        when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
+        mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/publish"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void testRecallDeveloperApplication() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
 
@@ -374,4 +384,71 @@ public class DeveloperApplicationControllerTests {
                         equalTo(uuid)))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void  testRecallDeveloperApplicationWhenAppStateIsInvalid() throws Exception {
+    	when(userService.findAuthenticatedUser()).thenReturn(null);
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        application.setState(null);
+        when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
+        mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/recall"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void  testCreateUpdateDeveloperApplicationWhenUserIsInvalid() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(null);
+
+        mockMvc.perform(post("/api/0/developer/22/applications/"+ uuid +"/createUpdate")
+        		.content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.1', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description for Application Update'}".replaceAll("'",  "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void testCreateUpdateDeveloperApplicationWhenAppIdIsInvalid() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(null);
+
+        mockMvc.perform(post("/api/0/developer/"+ developer.getId() +"/applications/22/createUpdate")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testCreateUpdateDeveloperApplicationWhenAppStateIsBlocked() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        application.setState(AppState.Blocked);
+        when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
+        mockMvc.perform(post("/api/0/developer/"+ developer.getId() +"/applications/" + uuid +"/createUpdate")
+        		.content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.1', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description for Application Update'}".replaceAll("'",  "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isPreconditionFailed());
+    }
+
+    @Test
+    public void testCreateUpdateDeveloperApplication() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        application.setState(AppState.Active);
+        when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
+        when(applicationUpdateService.findByApplication(uuid)).thenReturn(null);
+
+        mockMvc.perform(post("/api/0/developer/"+ developer.getId() +"/applications/" + uuid +"/createUpdate")
+                .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.1', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description for Application Update'}".replaceAll("'",  "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name",
+                        equalTo(application.getName())))
+                .andExpect(jsonPath("$.rid",
+                        equalTo(uuid)))
+                .andExpect(jsonPath("$.version",
+                        equalTo("1.1")))
+                .andExpect(jsonPath("$.state",
+                        equalTo(application.getState().name())))
+                .andExpect(jsonPath("$.category.name",
+                        equalTo(application.getCategory().getName())))
+                .andExpect(jsonPath("$.description",
+                        equalTo("test description for Application Update")))
+                .andExpect(status().isOk());
+    }
+
 }

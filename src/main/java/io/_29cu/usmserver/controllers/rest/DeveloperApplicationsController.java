@@ -223,7 +223,7 @@ public class DeveloperApplicationsController {
 
     // Create Update Application
     @RequestMapping(path = "/{userId}/applications/{appId}/createUpdate", method = RequestMethod.POST)
-    public ResponseEntity<ApplicationResource> CreateUpdateDeveloperApplication(
+    public ResponseEntity<ApplicationResource> createUpdateDeveloperApplication(
             @PathVariable String userId,
             @PathVariable String appId,
             @RequestBody ApplicationUpdateResource applicationUpdateResource
