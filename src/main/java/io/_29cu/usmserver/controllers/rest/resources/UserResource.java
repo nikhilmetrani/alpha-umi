@@ -72,11 +72,11 @@ public class UserResource extends EntityResourceBase<User>{
     public User toEntity() {
         User user = new User();
         // Force email to be the username 
-        user.setUsername(email);
-        user.setPassword(new BCryptPasswordEncoder().encode(password));
-        user.setFirstname(firstname);
-        user.setLastname(lastname);
-        user.setEmail(email);
+        user.setUsername(this.getEmail());
+        user.setPassword(new BCryptPasswordEncoder().encode(this.getPassword()));
+        user.setFirstname(this.getFirstname());
+        user.setLastname(this.getLastname());
+        user.setEmail(this.getEmail());
         user.setEnabled(true);
         user.setLastPasswordResetDate(new Date());
         return user;

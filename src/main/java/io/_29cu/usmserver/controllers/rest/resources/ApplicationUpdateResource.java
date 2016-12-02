@@ -76,11 +76,11 @@ public class ApplicationUpdateResource extends EntityResourceBase<ApplicationUpd
     @Override
     public ApplicationUpdate toEntity() {
         ApplicationUpdate applicationUpdate = new ApplicationUpdate();
-        applicationUpdate.setId(rid);
-        applicationUpdate.setName(name);
-        applicationUpdate.setVersion(version);
-        applicationUpdate.setDescription(description);
-        applicationUpdate.setWhatsNew(whatsNew);
+        applicationUpdate.setId(this.getRid());
+        applicationUpdate.setName(this.getName());
+        applicationUpdate.setVersion(this.getVersion());
+        applicationUpdate.setDescription(this.getDescription());
+        applicationUpdate.setWhatsNew(this.getWhatsNew());
         return applicationUpdate;
     }
 }
