@@ -16,6 +16,7 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationUpdateResourceAssembler;
 import io._29cu.usmserver.core.model.entities.*;
 import io._29cu.usmserver.core.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -259,6 +260,29 @@ public class DeveloperApplicationsController {
         }catch(Exception ex){
             //ex.printStackTrace();
             return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // Publish Application Update
+    @RequestMapping(path = "/{userId}/applications/{appId}/publishUpdate", method = RequestMethod.POST)
+    public ResponseEntity<ApplicationUpdateResource> PublishDeveloperApplicationUpdate(
+            @PathVariable String userId,
+            @PathVariable ApplicationUpdate appUpdate,
+            @RequestBody ApplicationUpdateResource applicationUpdateResource) {
+        User user = userService.findAuthenticatedUser();
+        if (user == null)
+            return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.FORBIDDEN);
+
+        try{
+            //ApplicationUpdate dbApplicationUpdate = applicationUpdateService.findByApplication(appId);
+            //ApplicationUpdate dbApplicationUpdate = applicationUpdateService.findByApplication(appId);
+            //Application app = appUpdate.getTarget();    //The application whose update is for publishing
+            //ApplicationUpdate newAppUpdate = new ApplicationUpdateResourceAssembler().toResource(appUpdate);
+
+            ApplicationUpdateResource newAppUpdateResource = new ApplicationUpdateResourceAssembler().toResource(appUpdate);
+            return new ResponseEntity<ApplicationUpdateResource>(newAppUpdateResource, HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.BAD_REQUEST);
         }
     }
 }
