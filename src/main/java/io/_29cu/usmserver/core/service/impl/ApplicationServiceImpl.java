@@ -51,6 +51,13 @@ public class ApplicationServiceImpl implements ApplicationService{
     }
 
     @Override
+    public ApplicationList getAllActiveApplications() {
+        ApplicationList appList = new ApplicationList();
+        appList.setApplications(AppHelper.getInstance().convertIterableToList(applicationRepository.findAllActive()));
+        return appList;
+    }
+
+    @Override
     public Application createApplication(Application application) {
         return applicationRepository.save(application);
     }
@@ -96,6 +103,14 @@ public class ApplicationServiceImpl implements ApplicationService{
     @Override
     public ApplicationList findApplicationsByCategory(String category) {
         List<Application> appList = applicationRepository.findApplicationsByCategory(category);
+        ApplicationList applicationList = new ApplicationList();
+        applicationList.setApplications(appList);
+        return  applicationList;
+    }
+
+    @Override
+    public ApplicationList findApplicationsByCategoryAndState(String category, int state) {
+        List<Application> appList = applicationRepository.findApplicationsByCategoryAndState(category, state);
         ApplicationList applicationList = new ApplicationList();
         applicationList.setApplications(appList);
         return  applicationList;

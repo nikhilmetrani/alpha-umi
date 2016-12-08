@@ -26,11 +26,17 @@ import java.util.List;
 
 @Component
 public interface ApplicationRepository extends CrudRepository<Application, String> {
-    @Query("select u from Application u where LOWER(u.developer.username) = lower(:username)")
+    @Query("select u from Application u where u.state = 1")
+    List<Application> findAllActive();
+
+	@Query("select u from Application u where LOWER(u.developer.username) = lower(:username)")
     List<Application> findApplicationsByDeveloper(@Param("username") String username);
 
     @Query("select u from Application u where u.category.name = :category")
     List<Application> findApplicationsByCategory(@Param("category") String category);
+
+    @Query("select u from Application u where u.category.name = :category and u.state = :state")
+    List<Application> findApplicationsByCategoryAndState(@Param("category") String category, @Param("state") int state);
 
     @Query("select a from Application a where LOWER(a.developer.username) = LOWER(:username) and a.name = :applicationName")
     Application findApplicationByUsernameAndAppName(@Param("username") String username, @Param("applicationName") String applicationName);

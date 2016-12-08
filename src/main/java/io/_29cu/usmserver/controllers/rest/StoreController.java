@@ -16,6 +16,7 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
@@ -40,7 +41,7 @@ public class StoreController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> store() {
         try {
-            ApplicationList appList = applicationService.getAllApplications();
+            ApplicationList appList = applicationService.getAllActiveApplications();
             ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(resource.getLink("self").getHref()));
@@ -55,7 +56,7 @@ public class StoreController {
             @PathVariable String category
     ) {
         try {
-            ApplicationList appList = applicationService.findApplicationsByCategory(category);
+            ApplicationList appList = applicationService.findApplicationsByCategoryAndState(category, AppState.Active.ordinal());
             ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(resource.getLink("self").getHref()));

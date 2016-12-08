@@ -32,4 +32,6 @@ public interface ApplicationService {
     public Application findApplication(String id);
     public ApplicationList findApplicationsByDeveloper(String developerId);
     public ApplicationList findApplicationsByCategory(String category);
+    public ApplicationList findApplicationsByCategoryAndState(String category, int state);
+    public ApplicationList getAllActiveApplications();
 }
