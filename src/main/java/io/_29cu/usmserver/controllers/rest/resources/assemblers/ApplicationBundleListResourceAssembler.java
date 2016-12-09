@@ -16,19 +16,17 @@
 
 package io._29cu.usmserver.controllers.rest.resources.assemblers;
 
-import io._29cu.usmserver.controllers.rest.StoreController;
-import io._29cu.usmserver.controllers.rest.resources.ApplicationBundleListResource;
-import io._29cu.usmserver.controllers.rest.resources.ApplicationBundleResource;
-import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
-import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
-import io._29cu.usmserver.core.service.utilities.ApplicationBundleList;
-import io._29cu.usmserver.core.service.utilities.ApplicationList;
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.util.List;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+
+import io._29cu.usmserver.controllers.rest.StoreController;
+import io._29cu.usmserver.controllers.rest.resources.ApplicationBundleListResource;
+import io._29cu.usmserver.controllers.rest.resources.ApplicationBundleResource;
+import io._29cu.usmserver.core.service.utilities.ApplicationBundleList;
 
 public class ApplicationBundleListResourceAssembler extends ResourceAssemblerSupport<ApplicationBundleList, ApplicationBundleListResource> {
 

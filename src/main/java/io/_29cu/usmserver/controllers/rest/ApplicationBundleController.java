@@ -39,8 +39,6 @@ public class ApplicationBundleController {
     private UserService userService;
     @Autowired
     private ApplicationBundleService applicationBundleService;
-    @Autowired
-    private ApplicationUpdateService applicationUpdateService;
 
     // Skeleton methods
     // Add similar methods for create, update and publish updates

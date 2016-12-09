@@ -16,12 +16,8 @@
 
 package io._29cu.usmserver.controllers.rest.resources.assemblers;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
-import io._29cu.usmserver.controllers.rest.ApplicationController;
 import io._29cu.usmserver.controllers.rest.DeveloperApplicationsController;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationUpdateResource;
 import io._29cu.usmserver.core.model.entities.ApplicationUpdate;

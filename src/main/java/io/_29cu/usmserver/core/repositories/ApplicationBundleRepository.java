@@ -16,14 +16,14 @@
 
 package io._29cu.usmserver.core.repositories;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.ApplicationBundle;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import io._29cu.usmserver.core.model.entities.ApplicationBundle;
 
 @Component
 public interface ApplicationBundleRepository extends CrudRepository<ApplicationBundle, String> {

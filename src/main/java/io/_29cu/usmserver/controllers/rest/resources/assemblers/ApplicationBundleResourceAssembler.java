@@ -16,16 +16,14 @@
 
 package io._29cu.usmserver.controllers.rest.resources.assemblers;
 
-import io._29cu.usmserver.controllers.rest.ApplicationBundleController;
-import io._29cu.usmserver.controllers.rest.ApplicationController;
-import io._29cu.usmserver.controllers.rest.resources.ApplicationBundleResource;
-import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.ApplicationBundle;
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
-
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
+import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+
+import io._29cu.usmserver.controllers.rest.ApplicationBundleController;
+import io._29cu.usmserver.controllers.rest.resources.ApplicationBundleResource;
+import io._29cu.usmserver.core.model.entities.ApplicationBundle;
 
 public class ApplicationBundleResourceAssembler extends ResourceAssemblerSupport<ApplicationBundle, ApplicationBundleResource> {
     public ApplicationBundleResourceAssembler() {

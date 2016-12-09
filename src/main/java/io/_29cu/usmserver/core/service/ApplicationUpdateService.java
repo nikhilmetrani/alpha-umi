@@ -20,8 +20,6 @@ import org.springframework.stereotype.Component;
 
 import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
 
-import java.util.List;
-
 @Component
 public interface ApplicationUpdateService {
 	public ApplicationUpdate findByApplication(String applicationId);

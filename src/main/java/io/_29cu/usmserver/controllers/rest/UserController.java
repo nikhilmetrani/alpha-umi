@@ -64,5 +64,10 @@ public class UserController {
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No user")
     private class UserNotFoundException extends RuntimeException {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6137974317485247126L;
     }
 }

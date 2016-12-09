@@ -16,11 +16,10 @@
 
 package io._29cu.usmserver.controllers.rest.resources;
 
-import io._29cu.usmserver.core.service.utilities.ApplicationBundleList;
-import io._29cu.usmserver.core.service.utilities.ApplicationList;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import io._29cu.usmserver.core.service.utilities.ApplicationBundleList;
 
 public class ApplicationBundleListResource extends EntityResourceBase<ApplicationBundleList> {
 

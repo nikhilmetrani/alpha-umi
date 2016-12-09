@@ -16,18 +16,21 @@
 
 package io._29cu.usmserver.controllers.rest;
 
-import io._29cu.usmserver.core.model.entities.ApplicationBundle;
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.User;
-import io._29cu.usmserver.core.model.entities.Category;
-import io._29cu.usmserver.core.model.enumerations.AppState;
-import io._29cu.usmserver.core.service.ApplicationBundleService;
-import io._29cu.usmserver.core.service.ApplicationUpdateService;
-import io._29cu.usmserver.core.service.UserService;
-import io._29cu.usmserver.core.service.utilities.ApplicationBundleList;
-import io._29cu.usmserver.core.service.utilities.ApplicationList;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -44,20 +47,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.ApplicationBundle;
+import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.enumerations.AppState;
+import io._29cu.usmserver.core.service.ApplicationBundleService;
+import io._29cu.usmserver.core.service.ApplicationUpdateService;
+import io._29cu.usmserver.core.service.UserService;
+import io._29cu.usmserver.core.service.utilities.ApplicationBundleList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest

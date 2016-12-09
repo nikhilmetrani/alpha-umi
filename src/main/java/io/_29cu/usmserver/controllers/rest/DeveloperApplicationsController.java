@@ -44,8 +44,6 @@ public class DeveloperApplicationsController {
     @Autowired
     private UserService userService;
     @Autowired
-    private DeveloperProfileService developerProfileService;
-    @Autowired
     private ApplicationService applicationService;
     @Autowired
     private ApplicationHistoryService applicationHistoryService;

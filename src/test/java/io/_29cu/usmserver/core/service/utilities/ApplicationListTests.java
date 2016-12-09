@@ -16,11 +16,10 @@
 
 package io._29cu.usmserver.core.service.utilities;
 
-import io._29cu.usmserver.common.utilities.AppHelper;
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.repositories.ApplicationRepository;
-import io._29cu.usmserver.core.repositories.UserRepository;
-import io._29cu.usmserver.core.repositories.CategoryRepository;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +28,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import io._29cu.usmserver.common.utilities.AppHelper;
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.repositories.ApplicationRepository;
+import io._29cu.usmserver.core.repositories.CategoryRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest

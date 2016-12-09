@@ -21,9 +21,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import io._29cu.usmserver.configurations.security.ClientResources;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
