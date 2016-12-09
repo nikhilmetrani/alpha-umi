@@ -95,7 +95,7 @@ public class ApplicationBundle {
 		return applications;
 	}
 
-	public void setApplications(List applications) {
+	public void setApplications(List<Application>  applications) {
 		this.applications = applications;
 	}
 

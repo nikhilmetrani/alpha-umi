@@ -1,13 +1,8 @@
 package io._29cu.usmserver.core.model.entities;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
-
-import io._29cu.usmserver.core.model.enumerations.AppState;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class ApplicationHistory extends BaseValueObject{

@@ -17,10 +17,7 @@
 package io._29cu.usmserver.core.model.entities;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
 
 @Entity
 public class ApplicationUpdate extends ApplicationBase {
