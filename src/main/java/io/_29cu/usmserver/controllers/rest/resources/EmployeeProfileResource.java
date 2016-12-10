@@ -1,66 +1,36 @@
-package io._29cu.usmserver.core.model.entities;
+package io._29cu.usmserver.controllers.rest.resources;
 
-import org.hibernate.annotations.NaturalId;
+import io._29cu.usmserver.core.model.entities.EmployeeProfile;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
  * Created by yniu on 10/12/2016.
  */
 
-@Entity
-public class EmployeeProfile {
-    @Id
-    @GeneratedValue
-    private Long id;
-    @NotNull
-    @OneToOne
-    @NaturalId
-    private User employee;
-    @NotNull
-    @Column(unique = true)
+public class EmployeeProfileResource extends EntityResourceBase<EmployeeProfile>  {
+
+    private Long rid;
     private String email;
-    @Column
     private String company;
-    @Column
-    private String jobTitle;        //Value = Site Manager, Site Maintainer
-    @Column
+    private String jobTitle;    //Site Manager or Site Maintainer
     private Date joinDate;
-    @Column
     private String address;
-    @Column
     private String city;
-    @Column
     private String state;
-    @Column
     private String country;
-    @Column
     private Integer zipCode;
-    @Column
     private Integer workPhone;
-    @Column
     private Integer homePhone;
-    @Column
     private Date dateOfBirth;
-    @Column
     private String gender;
 
-    public Long getId() {
-        return id;
+    public Long getRid() {
+        return rid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(User employee) {
-        this.employee = employee;
+    public void setRid(Long rid) {
+        this.rid = rid;
     }
 
     public String getEmail() {
@@ -166,4 +136,25 @@ public class EmployeeProfile {
     public void setGender(String gender) {
         this.gender = gender;
     }
+
+    @Override
+    public EmployeeProfile toEntity() {
+        EmployeeProfile employeeProfile = new EmployeeProfile();
+        employeeProfile.setId(getRid());
+        employeeProfile.setEmail(getEmail());
+        employeeProfile.setCompany(getCompany());
+        employeeProfile.setJobTitle(getJobTitle());
+        employeeProfile.setJoinDate(getJoinDate());
+        employeeProfile.setAddress(getAddress());
+        employeeProfile.setCity(getCity());
+        employeeProfile.setState(getState());
+        employeeProfile.setCountry(getCountry());
+        employeeProfile.setZipCode(getZipCode());
+        employeeProfile.setWorkPhone(getWorkPhone());
+        employeeProfile.setHomePhone(getHomePhone());
+        employeeProfile.setDateOfBirth(getDateOfBirth());
+        employeeProfile.setGender(getGender());
+        return employeeProfile;
+    }
+
 }
