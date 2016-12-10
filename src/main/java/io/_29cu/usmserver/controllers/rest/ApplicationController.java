@@ -73,9 +73,14 @@ public class ApplicationController {
 		User user = userService.findAuthenticatedUser();
 		if (user == null)
 			return new ResponseEntity<Boolean>(HttpStatus.FORBIDDEN);
-		Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
+
+		// TODO check and ensure user is Moderator role
+
+		Application application = applicationService.findApplication(appId);
 		if (application == null)
 			return new ResponseEntity<Boolean>(HttpStatus.PRECONDITION_FAILED);
+
+		// TODO what if Application was already blocked?
 
 		Boolean result = applicationService.blockApplication(application);
 		return new ResponseEntity<Boolean>(result, HttpStatus.OK);

@@ -16,6 +16,7 @@
 
 package io._29cu.usmserver.core.service.impl;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io._29cu.usmserver.common.utilities.AppHelper;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.enumerations.AppState;
@@ -117,17 +118,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 	}
 
 	@Override
-	public boolean blockApplication(Application application) {
-		// return false if the application instance passed in is null
-		if (application == null) return false;
-
-		// return false if the application cannot be found in db based on appid
-		application = findApplication(application.getId());
-		if (application == null) return false;
-
-		// TODO what if the appstate is already blocked?
+	public Boolean blockApplication(Application application) {
 		application.setState(AppState.Blocked);
 		application = applicationRepository.save(application);
-		return (application != null && application.getState().equals(AppState.Blocked));
+		return application != null && application.getState().equals(AppState.Blocked);
 	}
 }
