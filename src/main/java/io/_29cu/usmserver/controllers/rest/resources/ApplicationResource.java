@@ -127,7 +127,6 @@ public class ApplicationResource extends EntityResourceBase<Application> {
         application.setCategory(category);
         application.setDescription(description);
         application.setWhatsNew(whatsNew);
-        application.setFeatured(featured);
         return application;
     }
 }
