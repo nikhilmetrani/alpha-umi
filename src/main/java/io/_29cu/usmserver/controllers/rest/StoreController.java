@@ -16,6 +16,7 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.core.model.enumerations.AppListType;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
@@ -65,6 +66,23 @@ public class StoreController {
             return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
         }
     }
+    
+    
+    @RequestMapping(value = "/{browseType}", method = RequestMethod.GET)
+    public ResponseEntity<ApplicationListResource> getApplicationsByBrowseType(
+            @PathVariable AppListType browseType
+    ) {
+        try {
+            ApplicationList appList = applicationService.findApplications(browseType);
+            ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create(resource.getLink("self").getHref()));
+            return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 
 }

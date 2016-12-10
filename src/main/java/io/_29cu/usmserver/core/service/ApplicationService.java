@@ -17,6 +17,7 @@
 package io._29cu.usmserver.core.service;
 
 import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.enumerations.AppListType;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import org.springframework.stereotype.Component;
 
@@ -35,4 +36,5 @@ public interface ApplicationService {
     public ApplicationList findApplicationsByCategoryAndState(String category, int state);
     public ApplicationList getAllActiveApplications();
     public Boolean blockApplication(Application application);
+	public ApplicationList findApplications(AppListType browseType);
 }

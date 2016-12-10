@@ -19,6 +19,7 @@ package io._29cu.usmserver.core.service.impl;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import io._29cu.usmserver.common.utilities.AppHelper;
 import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.enumerations.AppListType;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
 import io._29cu.usmserver.core.repositories.CategoryRepository;
@@ -122,5 +123,11 @@ public class ApplicationServiceImpl implements ApplicationService {
 		application.setState(AppState.Blocked);
 		application = applicationRepository.save(application);
 		return application != null && application.getState().equals(AppState.Blocked);
+	}
+
+	@Override
+	public ApplicationList findApplications(AppListType browseType) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
