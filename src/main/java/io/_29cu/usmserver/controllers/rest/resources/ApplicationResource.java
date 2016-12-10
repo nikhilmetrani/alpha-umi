@@ -32,18 +32,7 @@ public class ApplicationResource extends EntityResourceBase<Application> {
     private String version;
     private String description;
     private String whatsNew;
-    private Boolean featured;
-    
-    
-
-    public Boolean getFeatured() {
-		return featured;
-	}
-
-	public void setFeatured(Boolean featured) {
-		this.featured = featured;
-	}
-
+   
 	public AppState getState() {
         return state;
     }
@@ -127,7 +116,6 @@ public class ApplicationResource extends EntityResourceBase<Application> {
         application.setCategory(category);
         application.setDescription(description);
         application.setWhatsNew(whatsNew);
-        application.setFeatured(featured);
         return application;
     }
 }
