@@ -12,6 +12,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface ConsumerProfileRepository extends CrudRepository<ConsumerProfile, Long> {
-    @Query("select p from ConsumerProfile p where p.owner.id = :id")
-    ConsumerProfile findConsumerProfileByUserId(@Param("id") Long id);
+    @Query("select p from ConsumerProfile p where p.consumer.id = :id")
+    ConsumerProfile findProfileByUserId(@Param("id") Long id);
 }

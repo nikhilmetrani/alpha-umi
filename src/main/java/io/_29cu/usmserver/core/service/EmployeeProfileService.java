@@ -1,6 +1,6 @@
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entities.DeveloperProfile;
+import io._29cu.usmserver.core.model.entities.EmployeeProfile;
 
 /**
  * Created by yniu on 10/12/2016.
