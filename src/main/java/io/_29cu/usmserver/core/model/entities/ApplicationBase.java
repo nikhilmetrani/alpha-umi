@@ -37,8 +37,18 @@ public class ApplicationBase {
     private String version;
     @NotNull
     private String whatsNew;
+    
+    private Boolean featured; 
+    
+    public Boolean getFeatured() {
+		return featured;
+	}
 
-    public String getId() {
+	public void setFeatured(Boolean featured) {
+		this.featured = featured;
+	}
+
+	public String getId() {
         return id;
     }
 
