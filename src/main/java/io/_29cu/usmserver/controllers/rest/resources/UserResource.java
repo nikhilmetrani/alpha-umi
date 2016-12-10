@@ -27,6 +27,7 @@ public class UserResource extends EntityResourceBase<User>{
     private String firstname;
     private String lastname;
     private String email;
+    private boolean enabled;
 
     public String getUsername() {
         return username;
@@ -68,6 +69,14 @@ public class UserResource extends EntityResourceBase<User>{
         this.email = email;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public User toEntity() {
         User user = new User();
@@ -77,7 +86,7 @@ public class UserResource extends EntityResourceBase<User>{
         user.setFirstname(this.getFirstname());
         user.setLastname(this.getLastname());
         user.setEmail(this.getEmail());
-        user.setEnabled(true);
+        user.setEnabled(enabled);
         user.setLastPasswordResetDate(new Date());
         return user;
     }
