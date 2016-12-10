@@ -34,4 +34,5 @@ public interface ApplicationService {
     public ApplicationList findApplicationsByCategory(String category);
     public ApplicationList findApplicationsByCategoryAndState(String category, int state);
     public ApplicationList getAllActiveApplications();
+    public boolean blockApplication(Application application);
 }
