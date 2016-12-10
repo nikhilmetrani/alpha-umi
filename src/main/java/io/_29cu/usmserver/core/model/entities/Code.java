@@ -14,16 +14,37 @@
  * limitations under the License.
  **/
 
-package io._29cu.usmserver.core.service;
+package io._29cu.usmserver.core.model.entities;
 
-import java.util.List;
+public class Code {
+    private String name;
 
-import io._29cu.usmserver.core.model.entities.Category;
+    private String value;
 
-public interface CategoryService {
-    public Category createCategory(Category category);
-    public Category createCategory(String categoryName);
-    public Category findCategory(Long id);
-    public Category findCategoryByName(String name);
-    public List<Category> getCategories();
+    public Code() {
+    	
+    }
+    
+    public Code(String name, String value) {
+    	this.name = name; 
+    	this.value = value;
+    }
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+
 }

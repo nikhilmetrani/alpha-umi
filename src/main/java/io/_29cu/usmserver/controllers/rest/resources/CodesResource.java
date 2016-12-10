@@ -14,16 +14,27 @@
  * limitations under the License.
  **/
 
-package io._29cu.usmserver.core.service;
+package io._29cu.usmserver.controllers.rest.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.service.utilities.Codes;
 
-public interface CategoryService {
-    public Category createCategory(Category category);
-    public Category createCategory(String categoryName);
-    public Category findCategory(Long id);
-    public Category findCategoryByName(String name);
-    public List<Category> getCategories();
+public class CodesResource extends EntityResourceBase<Codes> {
+
+    private List<CodeResource> codes = new ArrayList<>();
+
+    public List<CodeResource> getCodes() {
+        return codes;
+    }
+
+    public void setCodes(List<CodeResource> codes) {
+        this.codes = codes;
+    }
+
+    @Override
+    public Codes toEntity() {
+        return null;
+    }
 }

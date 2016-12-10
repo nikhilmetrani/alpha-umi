@@ -101,7 +101,7 @@ public class DeveloperApplicationsController {
             return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
         Application receivedApplication = applicationResource.toEntity();
         receivedApplication.setDeveloper(user);
-        receivedApplication.setCategory(categoryService.findCategoryByName(receivedApplication.getCategory().getName()));
+        receivedApplication.setCategory(categoryService.findCategory(Long.valueOf(receivedApplication.getCategory().getName())));
         Application application = applicationService.createApplication(receivedApplication);
         ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application); 
         return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
