@@ -16,8 +16,10 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.configurations.security.ChangePasswordRequest;
 import io._29cu.usmserver.configurations.security.JwtUser;
 import io._29cu.usmserver.configurations.security.JwtUserFactory;
+import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
 import io._29cu.usmserver.controllers.rest.resources.UserResource;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.UserService;
@@ -63,6 +65,27 @@ public class UserController {
 		userResource.setEnabled(true);
 		User createdUser = userService.createUser(userResource.toEntity());
 		return JwtUserFactory.create(createdUser);
+	}
+
+	@RequestMapping(value = "/0/users/changepwd", method = RequestMethod.POST)
+	public ResponseEntity<Boolean> changePassword(
+			@RequestBody ChangePasswordRequest changePasswordRequest
+	) {
+		// Let's get the user from principal and validate the userId against it.
+		User user = userService.findAuthenticatedUser();
+		if (user == null)
+			return new ResponseEntity<Boolean>(HttpStatus.FORBIDDEN);
+
+		// Existing pwd not match
+		if (!user.getPassword().equals(changePasswordRequest.getCurrentPwd())) {
+			return new ResponseEntity<Boolean>(HttpStatus.FORBIDDEN);
+		}
+
+		// TODO check and ensure new pwd follow password policy
+
+		user.setPassword(changePasswordRequest.getNewPwd());
+		Boolean result = userService.updateUser(user);
+		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/0/admin/users/{userId}/block", method = RequestMethod.POST)

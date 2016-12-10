@@ -74,4 +74,10 @@ public class UserServiceImpl implements UserService {
 		user = userRepository.save(user);
 		return user != null && !user.getEnabled();
 	}
+
+	@Override
+	public Boolean updateUser(User user) {
+		user = userRepository.save(user);
+		return user != null;
+	}
 }

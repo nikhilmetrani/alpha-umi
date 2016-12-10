@@ -23,4 +23,5 @@ public interface UserService {
     User findAuthenticatedUser();
     User findUser(Long id);
     Boolean blockUser(User user);
+    Boolean updateUser(User user);
 }
