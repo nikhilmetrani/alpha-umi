@@ -13,6 +13,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface EmployeeProfileRepository extends CrudRepository<EmployeeProfile, Long>{
-    @Query("select p from EmployeeProfile p where p.owner.id = :id")
-    EmployeeProfile findEmployeeProfileByUserId(@Param("id") Long id);
+    @Query("select p from EmployeeProfile p where p.employee.id = :id")
+    EmployeeProfile findProfileByUserId(@Param("id") Long id);
 }

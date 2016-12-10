@@ -17,7 +17,7 @@ public class ConsumerProfileServiceImpl implements ConsumerProfileService{
 
     @Override
     public ConsumerProfile findProfileByUserId(Long id) {
-        return consumerProfileRepository.findConsumerProfileByUserId(id);
+        return consumerProfileRepository.findProfileByUserId(id);
     }
 
     @Override

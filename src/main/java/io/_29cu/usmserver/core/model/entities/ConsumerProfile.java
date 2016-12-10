@@ -18,10 +18,7 @@ package io._29cu.usmserver.core.model.entities;
 
 import org.hibernate.annotations.NaturalId;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -30,6 +27,7 @@ public class ConsumerProfile {
     @GeneratedValue
     private Long id;
     @NotNull
+    @Column(unique = true)
     private String email;
     private String website;
     @OneToOne
