@@ -16,12 +16,8 @@
 
 package io._29cu.usmserver.controllers.rest;
 
-import io._29cu.usmserver.core.model.enumerations.AppListType;
-import io._29cu.usmserver.core.model.enumerations.AppState;
-import io._29cu.usmserver.core.service.ApplicationService;
-import io._29cu.usmserver.core.service.utilities.ApplicationList;
-import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
-import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,13 +27,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.net.URI;
+import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
+import io._29cu.usmserver.core.model.enumerations.AppListType;
+import io._29cu.usmserver.core.model.enumerations.AppState;
+import io._29cu.usmserver.core.service.ApplicationListService;
+import io._29cu.usmserver.core.service.ApplicationService;
+import io._29cu.usmserver.core.service.utilities.ApplicationList;
 
 @Controller
 @RequestMapping("/api/1/store")
 public class StoreController {
     @Autowired
     private ApplicationService applicationService;
+    
+    @Autowired
+	ApplicationListService applicationListService;
+
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> store() {
@@ -68,12 +74,12 @@ public class StoreController {
     }
     
     
-    @RequestMapping(value = "/{browseType}", method = RequestMethod.GET)
+    @RequestMapping(value = "/browse/{browseType}", method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> getApplicationsByBrowseType(
             @PathVariable AppListType browseType
     ) {
-        try {
-            ApplicationList appList = applicationService.findApplications(browseType);
+        try {        	
+        	ApplicationList appList = applicationListService.getApplicationBrowsingList(browseType);
             ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(resource.getLink("self").getHref()));

@@ -36,5 +36,4 @@ public interface ApplicationService {
     public ApplicationList findApplicationsByCategoryAndState(String category, int state);
     public ApplicationList getAllActiveApplications();
     public Boolean blockApplication(Application application);
-	public ApplicationList findApplications(AppListType browseType);
 }
