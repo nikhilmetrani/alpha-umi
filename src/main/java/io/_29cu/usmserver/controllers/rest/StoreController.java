@@ -29,16 +29,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
-import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
 import io._29cu.usmserver.controllers.rest.resources.CategoryListResource;
 import io._29cu.usmserver.controllers.rest.resources.CategoryResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
-import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.CategoryListResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.CategoryResourceAssembler;
-import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Category;
-import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppListType;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationListService;
@@ -152,7 +148,7 @@ public class StoreController {
 		return new ResponseEntity<CategoryResource>(updatedCategoryResource, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/category/delete/{categoryId}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/category/{categoryId}", method = RequestMethod.DELETE)
 	public ResponseEntity<CategoryResource> deleteCategory(@PathVariable Long categoryId) {
 		try {
 			Category category = categoryService.findCategory(categoryId);
