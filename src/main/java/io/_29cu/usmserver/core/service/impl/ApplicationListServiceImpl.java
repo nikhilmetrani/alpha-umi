@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.ApplicationBrowsingList;
+import io._29cu.usmserver.core.model.entities.FeaturedApplication;
 import io._29cu.usmserver.core.model.enumerations.AppListType;
 import io._29cu.usmserver.core.repositories.ApplicationListRepository;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
@@ -21,21 +22,30 @@ public class ApplicationListServiceImpl implements ApplicationListService {
 	@Autowired
 	ApplicationRepository applicationRepository;
 
-	ApplicationBrowsingList applicationBrowsingList;
-
-	ApplicationList applicationList;
-
 	@Override
 	public ApplicationList getApplicationBrowsingList(AppListType appType) {
-		applicationList = new ApplicationList();
+		ApplicationList applicationList = new ApplicationList();
 		if (AppListType.Trending.equals(appType)) {
 			List<Application> trendingApplications = applicationRepository.findTrendingApplication();
 			applicationList.setApplications(trendingApplications);
 
 		} else if (AppListType.Featured.equals(appType)) {
-			applicationBrowsingList = applicationListRepository.findFeaturedApplications();
+			ApplicationBrowsingList applicationBrowsingList = applicationListRepository.findFeaturedApplications();
 			applicationList.setApplications(applicationBrowsingList.getApplications());
 		}
+		return applicationList;
+	}
+
+	@Override
+	public ApplicationList saveFeaturedApplications(List<Application> applications) {
+		ApplicationList applicationList = new ApplicationList();
+		ApplicationBrowsingList appBrowsingList = applicationListRepository.findFeaturedApplications();
+		if (appBrowsingList == null) {
+			appBrowsingList = new FeaturedApplication();
+		}
+		appBrowsingList.setApplications(applications);
+		appBrowsingList = applicationListRepository.save(appBrowsingList);
+		applicationList.setApplications(appBrowsingList.getApplications());
 		return applicationList;
 	}
 
