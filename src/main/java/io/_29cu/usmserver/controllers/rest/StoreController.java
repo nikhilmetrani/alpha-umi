@@ -24,16 +24,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
+import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
 import io._29cu.usmserver.controllers.rest.resources.CategoryListResource;
 import io._29cu.usmserver.controllers.rest.resources.CategoryResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.CategoryListResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.CategoryResourceAssembler;
+import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppListType;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationListService;
@@ -119,6 +124,19 @@ public class StoreController {
 		} catch (Exception ex) {
 			return new ResponseEntity<CategoryResource>(HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	@RequestMapping(path = "/category/create", method = RequestMethod.POST)
+	public ResponseEntity<CategoryResource> createCategory(@RequestBody CategoryResource categoryResource) {
+		Category category = categoryResource.toEntity();
+		Category existingCategory = categoryService.findCategoryByName(categoryResource.getName());
+		if (existingCategory != null) {
+			return new ResponseEntity<CategoryResource>(HttpStatus.FOUND);
+		}
+		category = categoryService.createCategory(category);
+		CategoryResource createdCategoryResource = new CategoryResourceAssembler().toResource(category);
+
+		return new ResponseEntity<CategoryResource>(createdCategoryResource, HttpStatus.CREATED);
 	}
 
 }
