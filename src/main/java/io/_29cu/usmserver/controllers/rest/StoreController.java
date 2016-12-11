@@ -17,7 +17,6 @@
 package io._29cu.usmserver.controllers.rest;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -30,8 +29,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
 import io._29cu.usmserver.controllers.rest.resources.CategoryListResource;
+import io._29cu.usmserver.controllers.rest.resources.CategoryResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.CategoryListResourceAssembler;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.CategoryResourceAssembler;
 import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.model.enumerations.AppListType;
 import io._29cu.usmserver.core.model.enumerations.AppState;
@@ -44,74 +45,80 @@ import io._29cu.usmserver.core.service.utilities.CategoryList;
 @Controller
 @RequestMapping("/api/1/store")
 public class StoreController {
-    @Autowired
-    private ApplicationService applicationService;
-    
-    @Autowired
+	@Autowired
+	private ApplicationService applicationService;
+
+	@Autowired
 	ApplicationListService applicationListService;
-    
-    @Autowired
-    CategoryService categoryService;
 
+	@Autowired
+	CategoryService categoryService;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<ApplicationListResource> store() {
-        try {
-            ApplicationList appList = applicationService.getAllActiveApplications();
-            ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create(resource.getLink("self").getHref()));
-            return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
-        } catch (Exception ex) {
-            return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
-        }
-    }
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<ApplicationListResource> store() {
+		try {
+			ApplicationList appList = applicationService.getAllActiveApplications();
+			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setLocation(URI.create(resource.getLink("self").getHref()));
+			return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+		}
+	}
 
-    @RequestMapping(value = "/{category}", method = RequestMethod.GET)
-    public ResponseEntity<ApplicationListResource> getApplication(
-            @PathVariable String category
-    ) {
-        try {
-            ApplicationList appList = applicationService.findApplicationsByCategoryAndState(category, AppState.Active.ordinal());
-            ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create(resource.getLink("self").getHref()));
-            return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
-        } catch (Exception ex) {
-            return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
-        }
-    }
-    
-    
-    @RequestMapping(value = "/browse/{browseType}", method = RequestMethod.GET)
-    public ResponseEntity<ApplicationListResource> getApplicationsByBrowseType(
-            @PathVariable AppListType browseType
-    ) {
-        try {        	
-        	ApplicationList appList = applicationListService.getApplicationBrowsingList(browseType);
-            ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create(resource.getLink("self").getHref()));
-            return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
-        } catch (Exception ex) {
-            return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
-        }
-    }
-    
-    
-    @RequestMapping(value = "/category",method = RequestMethod.GET)
-    public ResponseEntity<CategoryListResource> getCategories() {
-        try {
-        	CategoryList categoryList = categoryService.findCategories();
-            CategoryListResource resource = new CategoryListResourceAssembler().toResource(categoryList);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create(resource.getLink("self").getHref()));
-            return new ResponseEntity<CategoryListResource>(resource, headers, HttpStatus.OK);
-        } catch (Exception ex) {
-            return new ResponseEntity<CategoryListResource>(HttpStatus.BAD_REQUEST);
-        }
-    }
+	@RequestMapping(value = "/{category}", method = RequestMethod.GET)
+	public ResponseEntity<ApplicationListResource> getApplication(@PathVariable String category) {
+		try {
+			ApplicationList appList = applicationService.findApplicationsByCategoryAndState(category,
+					AppState.Active.ordinal());
+			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setLocation(URI.create(resource.getLink("self").getHref()));
+			return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+		}
+	}
 
+	@RequestMapping(value = "/browse/{browseType}", method = RequestMethod.GET)
+	public ResponseEntity<ApplicationListResource> getApplicationsByBrowseType(@PathVariable AppListType browseType) {
+		try {
+			ApplicationList appList = applicationListService.getApplicationBrowsingList(browseType);
+			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setLocation(URI.create(resource.getLink("self").getHref()));
+			return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+		}
+	}
 
+	@RequestMapping(value = "/category", method = RequestMethod.GET)
+	public ResponseEntity<CategoryListResource> getCategories() {
+		try {
+			CategoryList categoryList = categoryService.findCategories();
+			CategoryListResource resource = new CategoryListResourceAssembler().toResource(categoryList);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setLocation(URI.create(resource.getLink("self").getHref()));
+			return new ResponseEntity<CategoryListResource>(resource, headers, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<CategoryListResource>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@RequestMapping(value = "/category/{categoryId}", method = RequestMethod.GET)
+	public ResponseEntity<CategoryResource> getCategory(@PathVariable Long categoryId) {
+		try {
+			Category category = categoryService.findCategory(categoryId);
+			if (category == null) {
+				return new ResponseEntity<CategoryResource>(HttpStatus.NOT_FOUND);
+			}
+			CategoryResource categoryResource = new CategoryResourceAssembler().toResource(category);
+			return new ResponseEntity<CategoryResource>(categoryResource, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<CategoryResource>(HttpStatus.BAD_REQUEST);
+		}
+	}
 
 }
