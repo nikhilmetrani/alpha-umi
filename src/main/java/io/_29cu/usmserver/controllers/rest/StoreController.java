@@ -135,10 +135,9 @@ public class StoreController {
 		}
 		category = categoryService.createCategory(category);
 		CategoryResource createdCategoryResource = new CategoryResourceAssembler().toResource(category);
-
 		return new ResponseEntity<CategoryResource>(createdCategoryResource, HttpStatus.CREATED);
 	}
-	
+
 	@RequestMapping(path = "/category/update", method = RequestMethod.POST)
 	public ResponseEntity<CategoryResource> updateCategory(@RequestBody CategoryResource categoryResource) {
 		Category category = categoryResource.toEntity();
@@ -150,8 +149,21 @@ public class StoreController {
 		existingCategory.setName(category.getName());
 		category = categoryService.updateCategory(existingCategory);
 		CategoryResource updatedCategoryResource = new CategoryResourceAssembler().toResource(category);
-
 		return new ResponseEntity<CategoryResource>(updatedCategoryResource, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/category/delete/{categoryId}", method = RequestMethod.DELETE)
+	public ResponseEntity<CategoryResource> deleteCategory(@PathVariable Long categoryId) {
+		try {
+			Category category = categoryService.findCategory(categoryId);
+			if (category == null) {
+				return new ResponseEntity<CategoryResource>(HttpStatus.NOT_FOUND);
+			}
+			categoryService.deleteCategory(categoryId);
+			return new ResponseEntity<CategoryResource>(HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<CategoryResource>(HttpStatus.BAD_REQUEST);
+		}
 	}
 
 }

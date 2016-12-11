@@ -61,4 +61,9 @@ public class CategoryServiceImpl implements CategoryService{
     	categoryList.setCategories(categoryRepository.findCategories());
         return categoryList;
     }
+
+	@Override
+	public void deleteCategory(Long categoryId) {
+		categoryRepository.delete(categoryId);		
+	}
 }
