@@ -19,6 +19,10 @@ package io._29cu.usmserver.core.service.impl;
 import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.repositories.CategoryRepository;
 import io._29cu.usmserver.core.service.CategoryService;
+import io._29cu.usmserver.core.service.utilities.CategoryList;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -46,5 +50,12 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public Category findCategoryByName(String name) {
         return categoryRepository.findByName(name);
+    }
+    
+    @Override
+    public CategoryList findCategories() {
+    	CategoryList categoryList = new CategoryList();
+    	categoryList.setCategories(categoryRepository.findCategories());
+        return categoryList;
     }
 }

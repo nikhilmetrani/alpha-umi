@@ -17,6 +17,7 @@
 package io._29cu.usmserver.controllers.rest;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,12 +29,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
+import io._29cu.usmserver.controllers.rest.resources.CategoryListResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.CategoryListResourceAssembler;
+import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.model.enumerations.AppListType;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationListService;
 import io._29cu.usmserver.core.service.ApplicationService;
+import io._29cu.usmserver.core.service.CategoryService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
+import io._29cu.usmserver.core.service.utilities.CategoryList;
 
 @Controller
 @RequestMapping("/api/1/store")
@@ -43,6 +49,9 @@ public class StoreController {
     
     @Autowired
 	ApplicationListService applicationListService;
+    
+    @Autowired
+    CategoryService categoryService;
 
 
     @RequestMapping(method = RequestMethod.GET)
@@ -86,6 +95,20 @@ public class StoreController {
             return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    
+    @RequestMapping(value = "/category",method = RequestMethod.GET)
+    public ResponseEntity<CategoryListResource> getCategories() {
+        try {
+        	CategoryList categoryList = categoryService.findCategories();
+            CategoryListResource resource = new CategoryListResourceAssembler().toResource(categoryList);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create(resource.getLink("self").getHref()));
+            return new ResponseEntity<CategoryListResource>(resource, headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<CategoryListResource>(HttpStatus.BAD_REQUEST);
         }
     }
 

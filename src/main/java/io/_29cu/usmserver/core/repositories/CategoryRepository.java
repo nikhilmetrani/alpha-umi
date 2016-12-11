@@ -17,6 +17,9 @@
 package io._29cu.usmserver.core.repositories;
 
 import io._29cu.usmserver.core.model.entities.Category;
+
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -24,4 +27,7 @@ import org.springframework.data.repository.query.Param;
 public interface CategoryRepository extends CrudRepository<Category, Long> {
     @Query("select a from Category a where a.name = :name")
     Category findByName(@Param("name") String name);
+    
+    @Query("select a from Category a")
+	List<Category> findCategories();
 }

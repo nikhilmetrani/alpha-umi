@@ -17,10 +17,12 @@
 package io._29cu.usmserver.core.service;
 
 import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.service.utilities.CategoryList;
 
 public interface CategoryService {
     public Category createCategory(Category category);
     public Category createCategory(String categoryName);
     public Category findCategory(Long id);
     public Category findCategoryByName(String name);
+	public CategoryList findCategories();
 }
