@@ -25,4 +25,5 @@ public interface CategoryService {
     public Category findCategory(Long id);
     public Category findCategoryByName(String name);
 	public CategoryList findCategories();
+	public Category updateCategory(Category category);
 }

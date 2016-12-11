@@ -138,5 +138,20 @@ public class StoreController {
 
 		return new ResponseEntity<CategoryResource>(createdCategoryResource, HttpStatus.CREATED);
 	}
+	
+	@RequestMapping(path = "/category/update", method = RequestMethod.POST)
+	public ResponseEntity<CategoryResource> updateCategory(@RequestBody CategoryResource categoryResource) {
+		Category category = categoryResource.toEntity();
+		Category existingCategory = categoryService.findCategoryByName(categoryResource.getName());
+		if (existingCategory != null) {
+			return new ResponseEntity<CategoryResource>(HttpStatus.FOUND);
+		}
+		existingCategory = categoryService.findCategory(category.getId());
+		existingCategory.setName(category.getName());
+		category = categoryService.updateCategory(existingCategory);
+		CategoryResource updatedCategoryResource = new CategoryResourceAssembler().toResource(category);
+
+		return new ResponseEntity<CategoryResource>(updatedCategoryResource, HttpStatus.OK);
+	}
 
 }
