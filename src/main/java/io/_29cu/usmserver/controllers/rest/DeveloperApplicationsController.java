@@ -102,6 +102,7 @@ public class DeveloperApplicationsController {
         Application receivedApplication = applicationResource.toEntity();
         receivedApplication.setDeveloper(user);
         receivedApplication.setCategory(categoryService.findCategory(Long.valueOf(receivedApplication.getCategory().getName())));
+        receivedApplication.setState(AppState.Staging);
         Application application = applicationService.createApplication(receivedApplication);
         ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application); 
         return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
@@ -127,9 +128,27 @@ public class DeveloperApplicationsController {
         }
     }
 
+    // Create Application
+    @RequestMapping(path = "/applications/publish", method = RequestMethod.POST)
+    public ResponseEntity<ApplicationResource> createAndPublishDeveloperApplication(
+            @RequestBody ApplicationResource applicationResource
+    ) {
+        // Let's get the user from principal and validate the userId against it.
+        User user = userService.findAuthenticatedUser();
+        if (user == null)
+            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+        Application receivedApplication = applicationResource.toEntity();
+        receivedApplication.setDeveloper(user);
+        receivedApplication.setCategory(categoryService.findCategory(Long.valueOf(receivedApplication.getCategory().getName())));
+        receivedApplication.setState(AppState.Active);
+        Application application = applicationService.createApplication(receivedApplication);
+        ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application); 
+        return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
+    }
+
     // Update Application
     @RequestMapping(path = "/applications/{appId}/update", method = RequestMethod.POST)
-    public ResponseEntity<ApplicationResource> UpdateDeveloperApplication(
+    public ResponseEntity<ApplicationResource> updateDeveloperApplication(
             @PathVariable String appId,
             @RequestBody ApplicationResource applicationResource
     ) {
