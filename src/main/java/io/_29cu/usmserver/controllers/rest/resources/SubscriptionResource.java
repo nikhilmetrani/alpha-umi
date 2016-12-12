@@ -14,32 +14,26 @@
  * limitations under the License.
  **/
 
-package io._29cu.usmserver.core.model.entities;
+package io._29cu.usmserver.controllers.rest.resources;
 
-import org.hibernate.annotations.NaturalId;
+import java.util.Date;
 
-import javax.persistence.*;
+import io._29cu.usmserver.core.model.entities.*;
 
-@Entity
-public class Subscription {
-    @Id
-    @GeneratedValue
-    private Long id;
-    @OneToOne
-    @NaturalId
+
+public class SubscriptionResource extends EntityResourceBase<Subscription>{
+    private Long rid;
     private Application application;
-    @ManyToOne
-    @NaturalId
     private User user;
     private String dateSubscribed;
     private Boolean active;
 
-    public Long getId() {
-        return id;
+    public Long getRid() {
+        return rid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRid(Long id) {
+        this.rid = rid;
     }
 
     public Application getApplication() {
@@ -69,6 +63,18 @@ public class Subscription {
     public Boolean getActive() {
         return active;
     }
-    public void setActive(Boolean active) {this.active = active;}
 
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    @Override
+    public Subscription toEntity() {
+        Subscription subscription = new Subscription();
+        subscription.setApplication(application);
+        subscription.setUser(user);
+        subscription.setDateSubscribed(dateSubscribed);
+        subscription.setActive(active);
+        return subscription;
+    }
 }
