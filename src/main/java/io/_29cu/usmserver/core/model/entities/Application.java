@@ -18,6 +18,8 @@ package io._29cu.usmserver.core.model.entities;
 
 import io._29cu.usmserver.core.model.enumerations.AppState;
 
+import java.util.List;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -29,8 +31,18 @@ public class Application extends ApplicationBase{
     private User developer;
     @ManyToOne
     private Category category;
+    @OneToMany(mappedBy="review")
+    private List<Review> reviews;    
 
-    public Category getCategory() {
+    public List<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
+	}
+
+	public Category getCategory() {
         return category;
     }
 
