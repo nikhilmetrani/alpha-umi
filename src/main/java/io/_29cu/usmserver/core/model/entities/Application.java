@@ -31,7 +31,7 @@ public class Application extends ApplicationBase{
     private User developer;
     @ManyToOne
     private Category category;
-    @OneToMany(mappedBy="review")
+    @OneToMany(mappedBy="application")
     private List<Review> reviews;    
 
     public List<Review> getReviews() {

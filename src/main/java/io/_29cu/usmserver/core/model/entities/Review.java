@@ -2,6 +2,7 @@ package io._29cu.usmserver.core.model.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -15,28 +16,20 @@ public class Review extends BaseValueObject {
 	@NaturalId
 	private User consumer;
 
+	@NotNull
 	private String title;
 
+	@NotNull
 	private String description;
 	
 	private boolean featured;
-	
-	private Boolean like;	 
-
+		
 	public boolean isFeatured() {
 		return featured;
 	}
 
 	public void setFeatured(boolean featured) {
 		this.featured = featured;
-	}
-
-	public Boolean getLike() {
-		return like;
-	}
-
-	public void setLike(Boolean like) {
-		this.like = like;
 	}
 
 	public Application getApplication() {
