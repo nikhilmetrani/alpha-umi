@@ -25,16 +25,31 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 public class Application extends ApplicationBase{
+	
     @NotNull
     private AppState state;
+    
     @ManyToOne
     private User developer;
+    
     @ManyToOne
     private Category category;
+    
     @OneToMany(mappedBy="application")
-    private List<Review> reviews;    
+    private List<Review> reviews;
+    
+    @OneToMany(mappedBy="application")
+    private List<Rate> ratings;    
 
-    public List<Review> getReviews() {
+    public List<Rate> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(List<Rate> ratings) {
+		this.ratings = ratings;
+	}
+
+	public List<Review> getReviews() {
 		return reviews;
 	}
 
