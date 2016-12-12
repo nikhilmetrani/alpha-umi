@@ -12,7 +12,7 @@ public class ReviewReply extends BaseValueObject {
 	@ManyToOne
 	private Review review;
 
-	@OneToOne
+	@ManyToOne
 	@NaturalId
 	private User developer;
 

@@ -1,7 +1,10 @@
 package io._29cu.usmserver.core.model.entities;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NaturalId;
@@ -15,6 +18,9 @@ public class Review extends BaseValueObject {
 	@ManyToOne
 	@NaturalId
 	private User consumer;
+	
+	@OneToMany(mappedBy = "review")
+	private List<ReviewReply> replies;
 
 	@NotNull
 	private String title;
@@ -22,8 +28,16 @@ public class Review extends BaseValueObject {
 	@NotNull
 	private String description;
 	
-	private boolean featured;
+	private boolean featured;	
 		
+	public List<ReviewReply> getReplies() {
+		return replies;
+	}
+
+	public void setReplies(List<ReviewReply> replies) {
+		this.replies = replies;
+	}
+
 	public boolean isFeatured() {
 		return featured;
 	}
