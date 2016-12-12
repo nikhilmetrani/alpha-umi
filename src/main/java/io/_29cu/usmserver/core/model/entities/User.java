@@ -76,6 +76,28 @@ public class User {
             joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
     private List<Authority> authorities;
+    
+    @OneToMany(mappedBy="consumer")
+    private List<Review> reviews;
+    
+    @OneToMany(mappedBy="consumer")
+    private List<Rate> ratings;    
+
+    public List<Rate> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(List<Rate> ratings) {
+		this.ratings = ratings;
+	}
+
+	public List<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
+	}
 
     public Long getId() {
         return id;
