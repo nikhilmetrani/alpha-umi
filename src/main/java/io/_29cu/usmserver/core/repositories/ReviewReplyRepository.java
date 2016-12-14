@@ -13,5 +13,8 @@ public interface ReviewReplyRepository extends CrudRepository<ReviewReply, Long>
 	
 	 @Query("select rr From ReviewReply rr where rr.review.id = :reviewId")
 	 public List<ReviewReply> findReviewRepliesByReviewId(Long reviewId);
+	 
+	 @Query("select rr.developer.username from ReviewReply rr where rr.id = :reviewReplyId ")
+	 public String getUserNameFromReviewReply(Long reviewReplyId);
 
 }
