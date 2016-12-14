@@ -16,9 +16,12 @@
 
 package io._29cu.usmserver.core.service;
 
+import org.springframework.stereotype.Component;
+
 import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.service.utilities.CategoryList;
 
+@Component
 public interface CategoryService {
     public Category createCategory(Category category);
     public Category createCategory(String categoryName);
