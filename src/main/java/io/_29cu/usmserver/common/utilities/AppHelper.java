@@ -38,4 +38,11 @@ public class AppHelper {
         }
         return list;
     }
+
+    public static String escapeSQLString(String source) {
+    	if(source != null) {
+    		return source.replaceAll("'", "''");
+    	}
+    	return source;
+    }
 }

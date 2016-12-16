@@ -124,4 +124,25 @@ public class ApplicationServiceImpl implements ApplicationService {
 		return application != null && application.getState().equals(AppState.Blocked);
 	}
 
+	@Override
+	public ApplicationList findApplicationsByKeyword(String keyword) {
+		ApplicationList appList = new ApplicationList();
+		keyword = AppHelper.escapeSQLString(keyword.trim());
+		if(keyword.contains(" ")) {
+			keyword = keyword.replaceAll(" ", "([[:>:]]|$))|(([[:<:]]|^)");
+		}
+		appList.setApplications(AppHelper.getInstance().convertIterableToList(applicationRepository.findApplicationsByKeyword(keyword)));
+		return appList;
+	}
+
+	@Override
+	public ApplicationList findApplicationsByCategoryAndKeyword(Long categoryId, String keyword) {
+		ApplicationList appList = new ApplicationList();
+		keyword = AppHelper.escapeSQLString(keyword.trim());
+		if(keyword.contains(" ")) {
+			keyword = keyword.replaceAll(" ", "([[:>:]]|$))|(([[:<:]]|^)");
+		}
+		appList.setApplications(AppHelper.getInstance().convertIterableToList(applicationRepository.findApplicationsByCategoryAndKeyword(categoryId, keyword)));
+		return appList;
+	}
 }

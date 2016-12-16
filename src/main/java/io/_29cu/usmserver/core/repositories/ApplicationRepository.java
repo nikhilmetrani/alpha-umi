@@ -16,16 +16,27 @@
 
 package io._29cu.usmserver.core.repositories;
 
-import io._29cu.usmserver.core.model.entities.Application;
+import java.util.List;
+
+import org.hibernate.dialect.MySQLDialect;
+import org.hibernate.dialect.function.SQLFunctionTemplate;
+import org.hibernate.type.IntegerType;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import io._29cu.usmserver.core.model.entities.Application;
 
 @Component
 public interface ApplicationRepository extends CrudRepository<Application, String> {
+	public class AppMySQLDialect extends MySQLDialect {
+		public AppMySQLDialect() {
+			super();
+			registerFunction("regexp", new SQLFunctionTemplate(IntegerType.INSTANCE, "?1 REGEXP ?2"));
+		}
+	}
+	
     @Query("select u from Application u where u.state = 1")
     List<Application> findAllActive();
 
@@ -53,4 +64,22 @@ public interface ApplicationRepository extends CrudRepository<Application, Strin
     @Query("select u from Application u where u.state = 1")
     List<Application> findTrendingApplication();
     
+    @Query("select a from Application a where a.state = 1 and ( " + 
+    		" regexp(a.name, '([[:<:]]|^):keyword([[:>:]]|$)') = 1 " +
+    		" or regexp(a.description, '([[:<:]]|^):keyword([[:>:]]|$)') = 1 " +
+    		" or regexp(a.version, '([[:<:]]|^):keyword([[:>:]]|$)') = 1 " +
+    		" or regexp(a.whatsNew, '([[:<:]]|^):keyword([[:>:]]|$)') = 1 " +
+    		" or regexp(a.category.name, '([[:<:]]|^):keyword([[:>:]]|$)') = 1 " +
+    		" or regexp(concat(a.developer.firstname, ' ', a.developer.lastname), '([[:<:]]|^):keyword([[:>:]]|$)') = 1 " +
+    		")")
+    List<Application> findApplicationsByKeyword(@Param("keyword") String keyword);
+
+    @Query("select a from Application a where a.state = 1 and a.category.id = :categoryId and ( " + 
+    		" regexp(a.name, '([[:<:]]|^):keyword([[:>:]]|$)') = 1 " +
+    		" or regexp(a.description, '([[:<:]]|^):keyword([[:>:]]|$)') = 1 " +
+    		" or regexp(a.version, '([[:<:]]|^):keyword([[:>:]]|$)') = 1 " +
+    		" or regexp(a.whatsNew, '([[:<:]]|^):keyword([[:>:]]|$)') = 1 " +
+    		" or regexp(concat(a.developer.firstname, ' ', a.developer.lastname), '([[:<:]]|^):keyword([[:>:]]|$)') = 1 " +
+    		")")
+    List<Application> findApplicationsByCategoryAndKeyword(@Param("categoryId") Long categoryId, @Param("keyword") String keyword);
 }

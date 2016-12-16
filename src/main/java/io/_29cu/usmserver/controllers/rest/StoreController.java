@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
 import io._29cu.usmserver.controllers.rest.resources.CategoryListResource;
@@ -162,4 +163,41 @@ public class StoreController {
 		}
 	}
 
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public ResponseEntity<ApplicationListResource> searchApplication(@RequestParam("keyword") String keyword) {
+		try {
+			if(keyword == null || keyword.isEmpty()) {
+				return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+			}
+			ApplicationList appList = applicationService.findApplicationsByKeyword(keyword);
+			if (appList.getItems() == null || appList.getItems().isEmpty()) {
+				return new ResponseEntity<ApplicationListResource>(HttpStatus.NOT_FOUND);
+			}
+			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setLocation(URI.create(resource.getLink("self").getHref()));
+			return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@RequestMapping(value = "/search/category/{categoryId}", method = RequestMethod.GET)
+	public ResponseEntity<ApplicationListResource> searchApplicationByCateogry(@PathVariable Long categoryId, @RequestParam("keyword") String keyword) {
+		try {
+			if(keyword == null || keyword.isEmpty()) {
+				return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+			}
+			ApplicationList appList = applicationService.findApplicationsByCategoryAndKeyword(categoryId, keyword);
+			if (appList.getItems() == null || appList.getItems().isEmpty()) {
+				return new ResponseEntity<ApplicationListResource>(HttpStatus.NOT_FOUND);
+			}
+			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setLocation(URI.create(resource.getLink("self").getHref()));
+			return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+		}
+	}
 }
