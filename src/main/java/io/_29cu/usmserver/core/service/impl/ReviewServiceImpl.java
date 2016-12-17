@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import io._29cu.usmserver.core.model.entities.Review;
 import io._29cu.usmserver.core.repositories.ReviewRepository;
 import io._29cu.usmserver.core.service.ReviewService;
+import io._29cu.usmserver.core.service.exception.ReviewDoesNotExistException;
 
 @Component
 public class ReviewServiceImpl implements ReviewService{
@@ -22,9 +23,12 @@ public class ReviewServiceImpl implements ReviewService{
 	}
 
 	@Override
-	public void removeReview(Long reviewId) {
-		reviewRepository.delete(reviewId);
-		
+	public void removeReview(Long reviewId) throws ReviewDoesNotExistException {
+		if(reviewRepository.exists(reviewId)){
+			reviewRepository.delete(reviewId);
+		}else{
+			throw new ReviewDoesNotExistException("Review Does not exist");
+		}		
 	}
 
 	@Override

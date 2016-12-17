@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import io._29cu.usmserver.core.model.entities.Review;
+import io._29cu.usmserver.core.service.exception.ReviewDoesNotExistException;
 
 @Component
 public interface ReviewService {
@@ -13,7 +14,7 @@ public interface ReviewService {
 	
 	public Review createReview(Review review);
 	
-	public void removeReview(Long reviewId);
+	public void removeReview(Long reviewId) throws ReviewDoesNotExistException;
 	
 	public void featureReview(Long reviewId);
 	
