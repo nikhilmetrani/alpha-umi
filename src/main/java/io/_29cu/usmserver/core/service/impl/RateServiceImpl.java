@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import io._29cu.usmserver.core.model.entities.Rate;
+import io._29cu.usmserver.core.model.enumerations.Rating;
 import io._29cu.usmserver.core.repositories.RateRepository;
 import io._29cu.usmserver.core.service.RateService;
 
@@ -31,12 +32,7 @@ public class RateServiceImpl implements RateService{
 	}
 
 	@Override
-	public Rate updateRating(Rate rate) {
-		return rateRepository.save(rate);
+	public int countRatingsByApplicationId(String applicationId, Rating rating) {
+		return rateRepository.countRatingsByApplicationId(applicationId, rating);
 	}
-
-	
-	
-	
-
 }
