@@ -41,6 +41,8 @@ import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationListService;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.CategoryService;
+import io._29cu.usmserver.core.service.exception.CategoryAlreadyExistException;
+import io._29cu.usmserver.core.service.exception.CategoryDoesNotExistException;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import io._29cu.usmserver.core.service.utilities.CategoryList;
 
@@ -126,11 +128,11 @@ public class StoreController {
 	@RequestMapping(path = "/category/create", method = RequestMethod.POST)
 	public ResponseEntity<CategoryResource> createCategory(@RequestBody CategoryResource categoryResource) {
 		Category category = categoryResource.toEntity();
-		Category existingCategory = categoryService.findCategoryByName(categoryResource.getName());
-		if (existingCategory != null) {
+		try {
+			category = categoryService.createCategory(category);
+		} catch (CategoryAlreadyExistException e) {
 			return new ResponseEntity<CategoryResource>(HttpStatus.FOUND);
 		}
-		category = categoryService.createCategory(category);
 		CategoryResource createdCategoryResource = new CategoryResourceAssembler().toResource(category);
 		return new ResponseEntity<CategoryResource>(createdCategoryResource, HttpStatus.CREATED);
 	}
@@ -138,13 +140,11 @@ public class StoreController {
 	@RequestMapping(path = "/category/update", method = RequestMethod.POST)
 	public ResponseEntity<CategoryResource> updateCategory(@RequestBody CategoryResource categoryResource) {
 		Category category = categoryResource.toEntity();
-		Category existingCategory = categoryService.findCategoryByName(categoryResource.getName());
-		if (existingCategory != null) {
+		try {
+			category = categoryService.updateCategory(category);
+		} catch (CategoryAlreadyExistException e) {
 			return new ResponseEntity<CategoryResource>(HttpStatus.FOUND);
 		}
-		existingCategory = categoryService.findCategory(category.getId());
-		existingCategory.setName(category.getName());
-		category = categoryService.updateCategory(existingCategory);
 		CategoryResource updatedCategoryResource = new CategoryResourceAssembler().toResource(category);
 		return new ResponseEntity<CategoryResource>(updatedCategoryResource, HttpStatus.OK);
 	}
@@ -152,15 +152,11 @@ public class StoreController {
 	@RequestMapping(value = "/category/{categoryId}", method = RequestMethod.DELETE)
 	public ResponseEntity<CategoryResource> deleteCategory(@PathVariable Long categoryId) {
 		try {
-			Category category = categoryService.findCategory(categoryId);
-			if (category == null) {
-				return new ResponseEntity<CategoryResource>(HttpStatus.NOT_FOUND);
-			}
 			categoryService.deleteCategory(categoryId);
-			return new ResponseEntity<CategoryResource>(HttpStatus.OK);
-		} catch (Exception ex) {
-			return new ResponseEntity<CategoryResource>(HttpStatus.BAD_REQUEST);
+		} catch (CategoryDoesNotExistException e) {
+			return new ResponseEntity<CategoryResource>(HttpStatus.NOT_FOUND);
 		}
+		return new ResponseEntity<CategoryResource>(HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)

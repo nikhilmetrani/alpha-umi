@@ -22,6 +22,8 @@ import org.springframework.stereotype.Component;
 import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.repositories.CategoryRepository;
 import io._29cu.usmserver.core.service.CategoryService;
+import io._29cu.usmserver.core.service.exception.CategoryAlreadyExistException;
+import io._29cu.usmserver.core.service.exception.CategoryDoesNotExistException;
 import io._29cu.usmserver.core.service.utilities.CategoryList;
 
 @Component
@@ -30,14 +32,25 @@ public class CategoryServiceImpl implements CategoryService{
     private CategoryRepository categoryRepository;
 
     @Override
-    public Category createCategory(Category category) {
+    public Category createCategory(Category category) throws CategoryAlreadyExistException {
+    	checkForExistingCategory(category);
         return categoryRepository.save(category);
     }
     
     @Override
-    public Category updateCategory(Category category) {
-        return categoryRepository.save(category);
+    public Category updateCategory(Category category) throws CategoryAlreadyExistException {
+    	checkForExistingCategory(category);
+    	Category existingCategory = findCategory(category.getId());
+    	existingCategory.setName(category.getName());
+        return categoryRepository.save(existingCategory);
     }
+
+	private void checkForExistingCategory(Category category) throws CategoryAlreadyExistException {
+		Category existingCategory = findCategoryByName(category.getName());
+    	if (existingCategory != null) {
+			throw new CategoryAlreadyExistException("Category already exists");
+		}
+	}
 
     @Override
     public Category createCategory(String categoryName) {
@@ -63,7 +76,11 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
 	@Override
-	public void deleteCategory(Long categoryId) {
+	public void deleteCategory(Long categoryId) throws CategoryDoesNotExistException {
+		Category category = findCategory(categoryId);
+		if(category==null){
+			throw new CategoryDoesNotExistException("Category does not exist");
+		}
 		categoryRepository.delete(categoryId);		
 	}
 }

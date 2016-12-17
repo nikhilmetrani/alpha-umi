@@ -19,15 +19,17 @@ package io._29cu.usmserver.core.service;
 import org.springframework.stereotype.Component;
 
 import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.service.exception.CategoryAlreadyExistException;
+import io._29cu.usmserver.core.service.exception.CategoryDoesNotExistException;
 import io._29cu.usmserver.core.service.utilities.CategoryList;
 
 @Component
 public interface CategoryService {
-    public Category createCategory(Category category);
+    public Category createCategory(Category category) throws CategoryAlreadyExistException;
     public Category createCategory(String categoryName);
     public Category findCategory(Long id);
     public Category findCategoryByName(String name);
 	public CategoryList findCategories();
-	public Category updateCategory(Category category);
-	public void deleteCategory(Long categoryId);
+	public Category updateCategory(Category category) throws CategoryAlreadyExistException;
+	public void deleteCategory(Long categoryId) throws CategoryDoesNotExistException;
 }
