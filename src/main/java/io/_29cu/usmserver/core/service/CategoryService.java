@@ -26,7 +26,7 @@ import io._29cu.usmserver.core.service.utilities.CategoryList;
 @Component
 public interface CategoryService {
     public Category createCategory(Category category) throws CategoryAlreadyExistException;
-    public Category createCategory(String categoryName);
+    public Category createCategory(String categoryName) throws CategoryAlreadyExistException;
     public Category findCategory(Long id);
     public Category findCategoryByName(String name);
 	public CategoryList findCategories();

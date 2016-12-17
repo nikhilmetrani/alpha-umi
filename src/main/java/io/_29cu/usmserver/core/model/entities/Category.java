@@ -16,8 +16,6 @@
 
 package io._29cu.usmserver.core.model.entities;
 
-import org.hibernate.annotations.NaturalId;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,7 +26,7 @@ public class Category {
     @Id
     @GeneratedValue
     private Long id;
-    @NaturalId
+
     @Column(unique = true)
     private String name;
 

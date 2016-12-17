@@ -53,9 +53,9 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 
     @Override
-    public Category createCategory(String categoryName) {
+    public Category createCategory(String categoryName) throws CategoryAlreadyExistException {
         Category category = new Category(categoryName);
-        return categoryRepository.save(category);
+        return createCategory(category);
     }
 
     @Override
