@@ -9,7 +9,7 @@ import io._29cu.usmserver.core.model.entities.ReviewReply;
 @Component
 public interface ReviewReplyService {
 	
-	public List<ReviewReply> findReviewRepliesByReviewId(Long ratingId);
+	public List<ReviewReply> findReviewRepliesByReviewId(Long reviewId);
 	
 	public ReviewReply createReviewReply(ReviewReply reviewReply);
 	
