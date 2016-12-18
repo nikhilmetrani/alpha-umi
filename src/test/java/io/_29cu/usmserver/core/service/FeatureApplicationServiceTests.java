@@ -194,12 +194,14 @@ public class FeatureApplicationServiceTests {
 		Exception ex = null;
 		FeaturedApplication unFeaturedApp = null;
 		try {
-			 unFeaturedApp = applicationListService.unFeatureApplication(featuredApplication1.getId(),"maintainer");
+			 unFeaturedApp = applicationListService.unFeatureApplication(featuredApplication1.getId(),"maintainer1");
 		} catch (FeatureApplicationException e) {
 			ex=e;
 		}
 		assertNull(ex);
 		assertNotNull(unFeaturedApp);
+		assertNotNull(unFeaturedApp.getUnFeatureDate());
+		assertNotNull("maintainer1",unFeaturedApp.getLastUpdateBy());
 		assertEquals(FeatureAppState.Inactive,unFeaturedApp.getFeatureAppState());
 		
 		AppListType appType = AppListType.Featured;
