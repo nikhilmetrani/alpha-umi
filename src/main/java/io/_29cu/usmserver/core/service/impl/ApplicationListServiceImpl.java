@@ -35,7 +35,7 @@ public class ApplicationListServiceImpl implements ApplicationListService {
 		if (AppListType.Trending.equals(appType)) {
 			applications = applicationRepository.findTrendingApplication();
 		} else if (AppListType.Featured.equals(appType)) {
-			applications = featuredApplicationRepository.findFeaturedApplications();			
+			applications = featuredApplicationRepository.findFeaturedApplications(FeatureAppState.Active);			
 		}
 		applicationList.setApplications(applications);
 		return applicationList;
@@ -44,7 +44,7 @@ public class ApplicationListServiceImpl implements ApplicationListService {
 	@Override
 	public FeaturedApplication createFeaturedApplication(String applicationId,String maintainerName) throws  ApplicationDoesNotExistException,ApplicationAlreadyFeaturedException{
 		FeaturedApplication featuredApplication = new FeaturedApplication();
-		Application application = featuredApplicationRepository.findFeaturedApplicationByApplId(applicationId);
+		Application application = featuredApplicationRepository.findFeaturedApplicationByApplId(applicationId,FeatureAppState.Active);
 		if(application==null){
 			application = applicationRepository.findOne(applicationId);
 			if(application==null){
@@ -75,6 +75,7 @@ public class ApplicationListServiceImpl implements ApplicationListService {
 		featuredApplication.setUnFeatureDate(new Date());
 		featuredApplication.setLastUpdateBy(maintainerName);
 		featuredApplication.setLastUpdateDate(new Date());
+		featuredApplication = featuredApplicationRepository.save(featuredApplication);
 		return featuredApplication;
 	}
 
