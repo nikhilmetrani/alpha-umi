@@ -66,7 +66,7 @@ public class ApplicationController {
 	}
 
 	@RequestMapping(path = "/0/admin/applications/{appId}/block", method = RequestMethod.POST)
-	public ResponseEntity<Boolean> UpdateDeveloperApplication(
+	public ResponseEntity<Boolean> updateDeveloperApplication(
 			@PathVariable String appId
 	) {
 		// Let's get the user from principal and validate the userId against it.

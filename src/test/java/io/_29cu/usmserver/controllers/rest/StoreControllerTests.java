@@ -18,6 +18,7 @@ package io._29cu.usmserver.controllers.rest;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.either;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.not;
@@ -44,10 +45,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.model.entities.FeaturedApplication;
 import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.enumerations.AppListType;
 import io._29cu.usmserver.core.model.enumerations.AppState;
+import io._29cu.usmserver.core.service.ApplicationListService;
 import io._29cu.usmserver.core.service.ApplicationService;
+import io._29cu.usmserver.core.service.CategoryService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
+import io._29cu.usmserver.core.service.utilities.CategoryList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -58,6 +64,12 @@ public class StoreControllerTests {
 
     @Mock
     private ApplicationService applicationService;
+
+    @Mock
+    private ApplicationListService applicationListService;
+
+    @Mock 
+    private CategoryService categoryService;
 
     private MockMvc mockMvc;
 
@@ -316,4 +328,115 @@ public class StoreControllerTests {
         mockMvc.perform(get("/api/1/store/search/category/1?keyword=tool"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    public void testGetApplicationsByBrowseType() throws Exception {
+        List<Application> list = new ArrayList<>();
+        Application appA = new Application();
+        appA.setId(appUUID2);
+        appA.setName("Dreamweaver 1.0");
+        appA.setDescription("Dreamweaver description. Powerful tool to build web applications");
+        appA.setVersion("1.0");
+        appA.setWhatsNew("This is the 1st version.");
+        appA.setCategory(new Category("Development"));
+        appA.setState(AppState.Active);
+        appA.setDeveloper(appOwner);
+        // list.add(appA);
+
+        Application appB = new Application();
+        appB.setId(appUUID2);
+        appB.setName("Acrobat Reader 2.0");
+        appB.setDescription("Acrobat Reader. Application to create/edit pdf");
+        appB.setVersion("2.0");
+        appB.setWhatsNew("This is the version 2.0.");
+        appB.setCategory(new Category("Productivity"));
+        appB.setState(AppState.Active);
+        appB.setDeveloper(appOwner);
+        list.add(appB);
+
+        appList.setApplications(list);
+        
+        FeaturedApplication featuredApp1 = new FeaturedApplication(); 
+        featuredApp1.setApplication(appA);
+        FeaturedApplication featuredApp2 = new FeaturedApplication(); 
+        featuredApp2.setApplication(appB);
+
+        when(applicationListService.getApplicationBrowsingList(AppListType.Featured)).thenReturn(appList);
+
+        mockMvc.perform(get("/api/1/store/browse/Featured"))
+                .andExpect(jsonPath("$.applications[*].name",
+                        hasItems(either(containsString("Reader")).or(containsString("Dreamweaver")))))
+                .andExpect(jsonPath("$.applications[*].description",
+                        hasItems(either(containsString("tool")).or(containsString("Reader")))))
+                .andExpect(jsonPath("$.applications[*].state",
+        		        hasItems("Active")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testGetApplicationsByBrowseTypeForBadRequest() throws Exception {
+    	when(applicationListService.getApplicationBrowsingList(AppListType.Featured)).thenReturn(null);
+
+        mockMvc.perform(get("/api/1/store/browse/Featured"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testGetCategory() throws Exception {
+        List<Category> list = new ArrayList<>();
+        Category cat1 = new Category("Development");
+        cat1.setId(1L);
+        Category cat2 = new Category("Productivity");
+        cat2.setId(2L);
+        
+        list.add(cat1);
+        list.add(cat2);
+        
+        CategoryList catList = new CategoryList(list);
+
+        when(categoryService.findCategories()).thenReturn(catList);
+
+        mockMvc.perform(get("/api/1/store/category"))
+                .andExpect(jsonPath("$.categories[*].name",
+                        hasItems(either(containsString("Development")).or(containsString("Productivity")))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testGetCategoryForBadRequest() throws Exception {
+    	when(categoryService.findCategories()).thenReturn(null);
+
+        mockMvc.perform(get("/api/1/store/category"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testGetCategoryById() throws Exception {
+        List<Category> list = new ArrayList<>();
+        Category cat1 = new Category("Development");
+        cat1.setId(1L);
+        Category cat2 = new Category("Productivity");
+        cat2.setId(2L);
+        
+        list.add(cat1);
+        list.add(cat2);
+        
+        CategoryList catList = new CategoryList(list);
+
+        when(categoryService.findCategory(1L)).thenReturn(cat1);
+
+        mockMvc.perform(get("/api/1/store/category/1"))
+                .andExpect(jsonPath("$.name",
+                        equalTo(("Development"))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testGetCategoryByIdForNotFound() throws Exception {
+    	when(categoryService.findCategory(1L)).thenReturn(null);
+
+        mockMvc.perform(get("/api/1/store/category/1"))
+                .andExpect(status().isNotFound());
+    }
+
 }

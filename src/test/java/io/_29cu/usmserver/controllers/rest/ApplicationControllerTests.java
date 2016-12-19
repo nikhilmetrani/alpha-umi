@@ -19,13 +19,13 @@ package io._29cu.usmserver.controllers.rest;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-import io._29cu.usmserver.core.model.entities.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +40,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationService;
+import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -52,6 +55,9 @@ public class ApplicationControllerTests {
 
     @Mock
     private ApplicationService applicationService;
+
+    @Mock 
+    private UserService userService;
 
     private MockMvc mockMvc;
 
@@ -112,6 +118,36 @@ public class ApplicationControllerTests {
     	when(applicationService.findApplicationsByDeveloper(uuid)).thenReturn(applicationList);
 
         mockMvc.perform(get("/api/1/store/application/developer/" + uuid))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void  testUpdateDeveloperApplicationForAuthenticationFailed() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(null);
+
+        mockMvc.perform(post("/api/0/admin/applications/" + uuid + "/block/"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void  testUpdateDeveloperApplicationForPreConditionFailed() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(appOwner);
+        when(applicationService.findApplication(uuid)).thenReturn(null);
+
+        mockMvc.perform(post("/api/0/admin/applications/" + uuid + "/block/"))
+                .andExpect(status().isPreconditionFailed());
+    }
+
+    @Test
+    public void  testUpdateDeveloperApplication() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(appOwner);
+        when(applicationService.findApplication(uuid)).thenReturn(app);
+        app.setState(AppState.Blocked);
+        when(applicationService.blockApplication(app)).thenReturn(true);
+
+        mockMvc.perform(post("/api/0/admin/applications/" + app.getId() + "/block/"))
+                .andExpect(jsonPath("$",
+                        equalTo(true)))
                 .andExpect(status().isOk());
     }
 }
