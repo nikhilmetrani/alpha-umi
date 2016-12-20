@@ -50,8 +50,8 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
 
 
     @Override
-    public ApplicationUpdate createApplicationUpdateByDeveloper(String developerId, ApplicationUpdate appToBePublished) {
-        if(appToBePublished != null && developerId != null){
+    public ApplicationUpdate createApplicationUpdateByDeveloper(long developerId, ApplicationUpdate appToBePublished) {
+        if(appToBePublished != null){
             // appToBePublished - application for which update to be Published, this excludes all the staging applications
             // fetches all the existing applications(existingAppList) by the developer
             List<Application> existingAppList = applicationRepository.findApplicationsByDeveloper(developerId);
@@ -69,8 +69,8 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
 
 
     @Override
-    public ApplicationUpdate modifyApplicationUpdateByDeveloper(String developerId, ApplicationUpdate appToBeModified) {
-        if(appToBeModified != null && developerId != null){
+    public ApplicationUpdate modifyApplicationUpdateByDeveloper(long developerId, ApplicationUpdate appToBeModified) {
+        if(appToBeModified != null){
             // appToBePublished - application for which update to be Published, this is the application in staging area only
             // fetches all the existing applications(existingAppList) by the developer
             List<Application> existingAppList = applicationRepository.findApplicationsByDeveloper(developerId);

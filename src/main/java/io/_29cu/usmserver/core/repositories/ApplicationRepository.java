@@ -40,8 +40,8 @@ public interface ApplicationRepository extends CrudRepository<Application, Strin
     @Query("select u from Application u where u.state = 1")
     List<Application> findAllActive();
 
-	@Query("select u from Application u where LOWER(u.developer.username) = lower(:username)")
-    List<Application> findApplicationsByDeveloper(@Param("username") String username);
+	@Query("select u from Application u where u.developer.id = :developerId")
+    List<Application> findApplicationsByDeveloper(@Param("developerId") long developerId);
 
     @Query("select u from Application u where u.category.name = :category")
     List<Application> findApplicationsByCategory(@Param("category") String category);
@@ -56,10 +56,10 @@ public interface ApplicationRepository extends CrudRepository<Application, Strin
     Application findApplicationByUsernameAndAppId(@Param("username") String username, @Param("applicationId") String applicationId);
 
     @Query("select a from Application a where LOWER(a.developer.id) = LOWER(:id) and a.name = :applicationName")
-    Application findApplicationByDeveloperIdAndAppName(@Param("id") Long id, @Param("applicationName") String applicationName);
+    Application findApplicationByDeveloperIdAndAppName(@Param("id") long id, @Param("applicationName") String applicationName);
 
     @Query("select a from Application a where LOWER(a.developer.id) = LOWER(:id) and a.id = :applicationId")
-    Application findApplicationByDeveloperIdAndAppId(@Param("id") Long id, @Param("applicationId") String applicationId);
+    Application findApplicationByDeveloperIdAndAppId(@Param("id") long id, @Param("applicationId") String applicationId);
     
     @Query("select u from Application u where u.state = 1")
     List<Application> findTrendingApplication();

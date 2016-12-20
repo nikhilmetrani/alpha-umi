@@ -179,7 +179,7 @@ public class DeveloperApplicationsControllerTests {
     @Test
     public void testGetApplicationsIsBadRequest() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
-        when(applicationService.findApplicationsByDeveloper(developer.getUsername())).thenReturn(null);
+        when(applicationService.findApplicationsByDeveloper(developer.getId())).thenReturn(null);
 
         mockMvc.perform(get("/api/0/developer/applications"))
                 .andExpect(status().isBadRequest());
@@ -188,7 +188,7 @@ public class DeveloperApplicationsControllerTests {
     @Test
     public void testGetApplicationsIsOk() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
-        when(applicationService.findApplicationsByDeveloper(developer.getUsername())).thenReturn(applicationList);
+        when(applicationService.findApplicationsByDeveloper(developer.getId())).thenReturn(applicationList);
 
         mockMvc.perform(get("/api/0/developer/applications"))
                 .andExpect(status().isOk());

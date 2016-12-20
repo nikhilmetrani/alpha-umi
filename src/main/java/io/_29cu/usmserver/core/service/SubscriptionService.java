@@ -18,9 +18,11 @@ package io._29cu.usmserver.core.service;
 
 import io._29cu.usmserver.core.model.entities.Subscription;
 import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import io._29cu.usmserver.core.model.entities.Application;
 
 public interface SubscriptionService {
     Subscription subscribeApplication(Subscription subscription);
     Subscription unsubscribeApplication(Subscription subscription);
+    public ApplicationList getSubscribedApplications(long userId);
 }

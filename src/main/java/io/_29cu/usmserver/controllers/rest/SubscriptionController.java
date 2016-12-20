@@ -16,20 +16,24 @@
 
 package io._29cu.usmserver.controllers.rest;
 
-import io._29cu.usmserver.core.model.entities.Subscription;
-import io._29cu.usmserver.core.model.entities.User;
-import io._29cu.usmserver.core.service.SubscriptionService;
-import io._29cu.usmserver.core.service.UserService;
-import io._29cu.usmserver.controllers.rest.resources.SubscriptionResource;
-import io._29cu.usmserver.controllers.rest.resources.assemblers.SubscriptionResourceAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
+import io._29cu.usmserver.controllers.rest.resources.SubscriptionResource;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.SubscriptionResourceAssembler;
+import io._29cu.usmserver.core.model.entities.Subscription;
+import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.service.ApplicationService;
+import io._29cu.usmserver.core.service.SubscriptionService;
+import io._29cu.usmserver.core.service.UserService;
+import io._29cu.usmserver.core.service.utilities.ApplicationList;
 
 @Controller
 @RequestMapping("/api/0/store/subscription")
@@ -69,5 +73,20 @@ public class SubscriptionController {
         Subscription subscription = subscriptionService.unsubscribeApplication(receivedSubscription);
         SubscriptionResource createdSubscriptionResource = new SubscriptionResourceAssembler().toResource(subscription);
         return new ResponseEntity<SubscriptionResource>(createdSubscriptionResource, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/myapps", method = RequestMethod.GET)
+    public ResponseEntity<ApplicationListResource> getSubscribedApplications() {
+        // Let's get the user from principal and validate the userId against it.
+        User user = userService.findAuthenticatedUser();
+        if (user == null)
+            return new ResponseEntity<ApplicationListResource>(HttpStatus.FORBIDDEN);
+
+        ApplicationList appList = subscriptionService.getSubscribedApplications(user.getId());
+        if(appList == null || appList.getItems().isEmpty()) {
+        	return new ResponseEntity<ApplicationListResource>(HttpStatus.NOT_FOUND);
+        }
+        ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(appList);
+        return new ResponseEntity<ApplicationListResource>(appListResource, HttpStatus.OK);
     }
 }

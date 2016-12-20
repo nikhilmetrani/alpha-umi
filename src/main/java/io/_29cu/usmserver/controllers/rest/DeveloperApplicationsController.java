@@ -64,7 +64,7 @@ public class DeveloperApplicationsController {
         if (user == null)
             return new ResponseEntity<ApplicationListResource>(HttpStatus.FORBIDDEN);
         try {
-            ApplicationList appList = applicationService.findApplicationsByDeveloper(user.getUsername());
+            ApplicationList appList = applicationService.findApplicationsByDeveloper(user.getId());
             ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(appList);
             return new ResponseEntity<ApplicationListResource>(appListResource, HttpStatus.OK);
         } catch (Exception ex) {
@@ -249,7 +249,7 @@ public class DeveloperApplicationsController {
                 application.setName(applicationUpdate.getName());
                 application.setWhatsNew(applicationUpdate.getWhatsNew());
                 applicationUpdate.setTarget(application);
-                ApplicationUpdate newApplicationUpdate = applicationUpdateService.createApplicationUpdateByDeveloper(user.getUsername(),applicationUpdate);
+                ApplicationUpdate newApplicationUpdate = applicationUpdateService.createApplicationUpdateByDeveloper(user.getId(),applicationUpdate);
                 ApplicationResource newApplicationResource = new ApplicationResourceAssembler().toResource(application);
                 return new ResponseEntity<ApplicationResource>(newApplicationResource, HttpStatus.OK);
             }else{

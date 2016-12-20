@@ -24,6 +24,6 @@ import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
 public interface ApplicationUpdateService {
 	public ApplicationUpdate findByApplication(String applicationId);
     public ApplicationUpdate createApplicationUpdate(ApplicationUpdate applicationUpdate);
-    public ApplicationUpdate createApplicationUpdateByDeveloper(String developerId, ApplicationUpdate appToBePublished);
-    public ApplicationUpdate modifyApplicationUpdateByDeveloper(String developerId, ApplicationUpdate appToBeModified);
+    public ApplicationUpdate createApplicationUpdateByDeveloper(long developerId, ApplicationUpdate appToBePublished);
+    public ApplicationUpdate modifyApplicationUpdateByDeveloper(long developerId, ApplicationUpdate appToBeModified);
  }

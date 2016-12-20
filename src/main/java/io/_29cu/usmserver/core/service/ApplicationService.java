@@ -26,12 +26,12 @@ public interface ApplicationService {
     public ApplicationList getAllApplications();
     public Application createApplication(Application application);
     public Application updateApplication(Application application);
-    public Application findApplicationByDeveloperIdAndAppName(Long developerId, String applicationName);
-    public Application findApplicationByDeveloperIdAndAppId(Long developerId, String applicationId);
+    public Application findApplicationByDeveloperIdAndAppName(long developerId, String applicationName);
+    public Application findApplicationByDeveloperIdAndAppId(long developerId, String applicationId);
     public Application findApplicationByUsernameAndAppName(String username, String applicationName);
     public Application findApplicationByUsernameAndAppId(String username, String applicationId);
     public Application findApplication(String id);
-    public ApplicationList findApplicationsByDeveloper(String developerId);
+    public ApplicationList findApplicationsByDeveloper(long developerId);
     public ApplicationList findApplicationsByCategory(String category);
     public ApplicationList findApplicationsByCategoryAndState(String category, int state);
     public ApplicationList getAllActiveApplications();

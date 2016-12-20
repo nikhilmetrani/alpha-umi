@@ -60,6 +60,7 @@ public class ApplicationUpdateServiceTests {
     @Rollback(false)
     public void setup() {
         developer = new User();
+        developer.setId(1l);
         developer.setUsername("developer");
         developer.setEmail("developer@email.com");
         Authority authority = new Authority();
@@ -156,7 +157,7 @@ public class ApplicationUpdateServiceTests {
     @Test
     @Transactional
     public void testCreateApplicationUpdateByDeveloper() {
-        ApplicationUpdate applicationUpdate = appUpdateService.createApplicationUpdateByDeveloper(application1.getDeveloper().getUsername(), applicationUpdate1);
+        ApplicationUpdate applicationUpdate = appUpdateService.createApplicationUpdateByDeveloper(application1.getDeveloper().getId(), applicationUpdate1);
         assertNotNull("applicationUpdate should not be not null",applicationUpdate);
         assertEquals("Developer should be same",applicationUpdate1.getTarget().getDeveloper().getId(),application1.getDeveloper().getId());
         assertEquals("Returned Application state should be Active",applicationUpdate.getTarget().getState(),AppState.Active);
@@ -165,7 +166,7 @@ public class ApplicationUpdateServiceTests {
     @Test
     @Transactional
     public void testModifyApplicationUpdateByDeveloper() {
-        ApplicationUpdate applicationUpdate = appUpdateService.modifyApplicationUpdateByDeveloper(application2.getDeveloper().getUsername(), applicationUpdate2);
+        ApplicationUpdate applicationUpdate = appUpdateService.modifyApplicationUpdateByDeveloper(application2.getDeveloper().getId(), applicationUpdate2);
         assertNotNull("applicationUpdate should not be not null",applicationUpdate);
         assertEquals("Developer should be same",applicationUpdate2.getTarget().getDeveloper().getId(),application2.getDeveloper().getId());
         assertEquals("Returned Application state should be Staging",applicationUpdate.getTarget().getState(),AppState.Staging);

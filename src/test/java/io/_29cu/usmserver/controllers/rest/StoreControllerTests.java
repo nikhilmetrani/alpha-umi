@@ -312,10 +312,10 @@ public class StoreControllerTests {
     public void testSearchApplicationByCateogryForBadRequest() throws Exception {
         when(applicationService.findApplicationsByCategoryAndKeyword(1l, "tool")).thenReturn(null);
 
-        mockMvc.perform(get("/api/1/store/search/category/1?keyword=tool"))
+        mockMvc.perform(get("/api/1/store/search?keyword="))
                 .andExpect(status().isBadRequest());
 
-        mockMvc.perform(get("/api/1/store/search?keyword="))
+        mockMvc.perform(get("/api/1/store/search/category/1?keyword=tool"))
                 .andExpect(status().isBadRequest());
     }
 

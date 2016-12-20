@@ -25,11 +25,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import io._29cu.usmserver.core.model.entities.*;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.*;
+import io._29cu.usmserver.core.service.utilities.ApplicationList;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,6 +74,8 @@ public class SubscriptionControllerTests {
     private Application application;
     private String uuid;
 
+    private ApplicationList appList;
+    private String appUUID2;
 
     @Before
     public void setup() throws Exception {
@@ -78,6 +83,7 @@ public class SubscriptionControllerTests {
         mockMvc = MockMvcBuilders.standaloneSetup(subscriptionController).build();
 
         uuid = UUID.randomUUID().toString();
+        appUUID2 = UUID.randomUUID().toString();
 
         user = new User();
         user.setId(1L);
@@ -94,6 +100,25 @@ public class SubscriptionControllerTests {
         application.setDeveloper(user);
         application.setDescription("test description");
 
+        List<Application> list = new ArrayList<>();
+        appList = new ApplicationList();
+
+        Application appA = new Application();
+        appA.setName("Application A");
+        appA.setId(uuid);
+        appA.setCategory(new Category("Productivity"));
+        appA.setState(AppState.Active);
+        list.add(appA);
+
+        Application appB = new Application();
+        appB.setName("Application B");
+        appB.setId(appUUID2);
+        appB.setCategory(new Category("Development"));
+        appB.setState(AppState.Active);
+        list.add(appB);
+        
+        appList.setApplications(list);
+
         // Let's mock the security context
         authenticationMocked = Mockito.mock(Authentication.class);
         securityContextMocked = Mockito.mock(SecurityContext.class);
@@ -109,5 +134,31 @@ public class SubscriptionControllerTests {
                 .content("{'application':{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'PhotoShop Description'}, 'user':{'username': 'Test Owner', 'email': 'owner@test.com', 'password': 'password'},'dateSubscribed':'2016/11/11', 'active':'True'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void  testGetSubscribedApplications() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(user);
+        when(subscriptionService.getSubscribedApplications(user.getId())).thenReturn(appList);
+
+        mockMvc.perform(get("/api/0/store/subscription/myapps"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void  testGetSubscribedApplicationsForForbidden() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(null);
+
+        mockMvc.perform(get("/api/0/store/subscription/myapps"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void  testGetSubscribedApplicationsForNotFound() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(user);
+        when(subscriptionService.getSubscribedApplications(user.getId())).thenReturn(null);
+
+        mockMvc.perform(get("/api/0/store/subscription/myapps"))
+                .andExpect(status().isNotFound());
     }
 }

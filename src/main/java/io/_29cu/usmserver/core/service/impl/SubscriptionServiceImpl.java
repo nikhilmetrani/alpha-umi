@@ -17,12 +17,15 @@
 package io._29cu.usmserver.core.service.impl;
 
 import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.common.utilities.AppHelper;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Subscription;
 import io._29cu.usmserver.core.repositories.SubscriptionRepository;
 import io._29cu.usmserver.core.repositories.AuthorityRepository;
 import io._29cu.usmserver.core.service.SecurityContextService;
 import io._29cu.usmserver.core.service.SubscriptionService;
+import io._29cu.usmserver.core.service.utilities.ApplicationList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,4 +48,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         return subscriptionRepository.save(subscription);
     }
 
+    @Override
+    public ApplicationList getSubscribedApplications(long userId) {
+		ApplicationList appList = new ApplicationList();
+		appList.setApplications(AppHelper.getInstance().convertIterableToList(subscriptionRepository.getSubscribedApplications(userId)));
+		return appList;
+    }
 }

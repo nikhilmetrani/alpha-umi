@@ -55,7 +55,7 @@ public class ApplicationController {
 
 	@RequestMapping(value = "/1/store/application/developer/{developerId}", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> getApplicationsByDeveloper(
-			@PathVariable String developerId
+			@PathVariable long developerId
 	) {
 		ApplicationList applicationList = applicationService.findApplicationsByDeveloper(developerId);
 		if (null == applicationList)
