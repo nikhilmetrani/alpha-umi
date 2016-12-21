@@ -110,7 +110,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	}
 
 	@Override
-	public ApplicationList findApplicationsByCategoryAndState(String category, String state) {
+	public ApplicationList findApplicationsByCategoryAndState(String category, AppState state) {
 		List<Application> appList = applicationRepository.findApplicationsByCategoryAndState(category, state);
 		ApplicationList applicationList = new ApplicationList();
 		applicationList.setApplications(appList);

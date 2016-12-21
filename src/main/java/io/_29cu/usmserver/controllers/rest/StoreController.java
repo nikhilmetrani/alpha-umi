@@ -75,7 +75,7 @@ public class StoreController {
 	public ResponseEntity<ApplicationListResource> getApplication(@PathVariable String category) {
 		try {
 			ApplicationList appList = applicationService.findApplicationsByCategoryAndState(category,
-					AppState.Active.name());
+					AppState.Active);
 			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));

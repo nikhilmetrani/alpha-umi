@@ -24,6 +24,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
 import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.enumerations.AppState;
 
 @Component
 public interface ApplicationRepository extends CrudRepository<Application, String> {
@@ -36,8 +37,8 @@ public interface ApplicationRepository extends CrudRepository<Application, Strin
     @Query("select u from Application u where u.category.name = :category")
     List<Application> findApplicationsByCategory(@Param("category") String category);
 
-    @Query("select u from Application u where u.category.name = :category and u.state.name = :state")
-    List<Application> findApplicationsByCategoryAndState(@Param("category") String category, @Param("state") String state);
+    @Query("select u from Application u where u.category.name = :category and u.state = :state")
+    List<Application> findApplicationsByCategoryAndState(@Param("category") String category, @Param("state") AppState state);
 
     @Query("select a from Application a where LOWER(a.developer.username) = LOWER(:username) and a.name = :applicationName")
     Application findApplicationByUsernameAndAppName(@Param("username") String username, @Param("applicationName") String applicationName);

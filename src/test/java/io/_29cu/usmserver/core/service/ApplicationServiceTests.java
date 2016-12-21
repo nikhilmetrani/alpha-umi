@@ -214,6 +214,9 @@ public class ApplicationServiceTests {
     @Transactional
     public void testFindApplicationsByDeveloper() {
         ApplicationList fromDb = service.findApplicationsByDeveloper(developer.getId());
+        assertNotNull("ApplicationList is Null", fromDb);
+        assertNotNull("ApplicationList is Null", fromDb.getItems());
+        assertFalse("ApplicationList is empty", fromDb.getItems().isEmpty());
         for(Application app: fromDb.getItems()) {
         	assertTrue("Invalid Application Found", app.getDeveloper().getId().equals(developer.getId()));
         }
@@ -223,6 +226,9 @@ public class ApplicationServiceTests {
     @Transactional
     public void testFindApplicationsByCategory() {
         ApplicationList fromDb = service.findApplicationsByCategory(cat1.getName());
+        assertNotNull("ApplicationList is Null", fromDb);
+        assertNotNull("ApplicationList is Null", fromDb.getItems());
+        assertFalse("ApplicationList is empty", fromDb.getItems().isEmpty());
         for(Application app: fromDb.getItems()) {
         	assertTrue("Invalid Application Found", app.getCategory().getId().equals(cat1.getId()));
         }
@@ -231,9 +237,12 @@ public class ApplicationServiceTests {
     @Test
     @Transactional
     public void testFindApplicationsByCategoryAndState() {
-        ApplicationList fromDb = service.findApplicationsByCategoryAndState(cat1.getName(), AppState.Active.name());
+        ApplicationList fromDb = service.findApplicationsByCategoryAndState(cat2.getName(), AppState.Active);
+        assertNotNull("ApplicationList is Null", fromDb);
+        assertNotNull("ApplicationList is Null", fromDb.getItems());
+        assertFalse("ApplicationList is empty", fromDb.getItems().isEmpty());
         for(Application app: fromDb.getItems()) {
-        	assertTrue("Invalid Application Found", (app.getCategory().getId().equals(cat1.getId()) && app.getState().equals(AppState.Active)));
+        	assertTrue("Invalid Application Found", (app.getCategory().getId().equals(cat2.getId()) && app.getState().equals(AppState.Active)));
         }
     }
 

@@ -161,7 +161,7 @@ public class StoreControllerTests {
         appList.setApplications(list);
 
         when(applicationService.findApplicationsByCategory("Development")).thenReturn(appList);
-        when(applicationService.findApplicationsByCategoryAndState("Development", AppState.Active.name())).thenReturn(appList);
+        when(applicationService.findApplicationsByCategoryAndState("Development", AppState.Active)).thenReturn(appList);
 
         mockMvc.perform(get("/api/1/store/Development"))
                 .andExpect(jsonPath("$.applications[*].category.name",

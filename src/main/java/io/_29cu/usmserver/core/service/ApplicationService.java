@@ -19,6 +19,7 @@ package io._29cu.usmserver.core.service;
 import org.springframework.stereotype.Component;
 
 import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 
 @Component
@@ -33,7 +34,7 @@ public interface ApplicationService {
     public Application findApplication(String id);
     public ApplicationList findApplicationsByDeveloper(long developerId);
     public ApplicationList findApplicationsByCategory(String category);
-    public ApplicationList findApplicationsByCategoryAndState(String category, String state);
+    public ApplicationList findApplicationsByCategoryAndState(String category, AppState state);
     public ApplicationList getAllActiveApplications();
     public Boolean blockApplication(Application application);
     public ApplicationList findApplicationsByKeyword(String keyword);
