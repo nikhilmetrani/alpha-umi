@@ -25,6 +25,8 @@ import org.springframework.stereotype.Component;
 
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.enumerations.AppState;
+import java.util.Date;
+
 
 @Component
 public interface ApplicationRepository extends CrudRepository<Application, String> {
@@ -73,4 +75,8 @@ public interface ApplicationRepository extends CrudRepository<Application, Strin
     		" or (fn_regexp_like(concat(a.developer.firstname, ' ', a.developer.lastname), :keyword) = 1) " +
     		")")
     List<Application> findApplicationsByCategoryAndKeyword(@Param("categoryId") Long categoryId, @Param("keyword") String keyword);
+
+    @Query("select u from Application u where LOWER(u.developer.username) = LOWER(:username) and u.state = 1 and u.applicationPublishDate <= :applicationPublishDate")
+    List<Application> findApplicationsByUserNameAndState(@Param("username") String username, @Param("applicationPublishDate") Date applicationPublishDate);
+
 }

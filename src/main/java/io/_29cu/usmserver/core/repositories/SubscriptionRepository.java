@@ -24,9 +24,21 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Date;
+
 
 @Component
 public interface SubscriptionRepository extends CrudRepository<Subscription, String> {
     @Query("select s.application from Subscription s where s.user.id = :userId and s.active = 1")
     List<Application> getSubscribedApplications(@Param("userId") long userId);
+
+    @Query("select s from Subscription s where s.application.name = :applicationId and s.dateSubscribed <= :subscriptionDate")
+    List<Subscription> findSubscribedUsersPerApplication(@Param("applicationId") String applicationName,@Param("subscriptionDate") Date subscriptionDate);
+
+    @Query("select s from Subscription s where s.application.name = :applicationId and s.dateSubscribed <= :subscriptionDate and s.active = 1")
+    List<Subscription> findSubscribedActiveUsersPerApplication(@Param("applicationId") String applicationName,@Param("subscriptionDate") Date subscriptionDate);
+
+    @Query("select s from Subscription s where s.application.name = :applicationId and s.dateUnsubscribed <= :unsubscriptionDate")
+    List<Subscription> findTerminatedSubscriptionsPerApplication(@Param("applicationId") String applicationName,@Param("unsubscriptionDate") Date unsubscriptionDate);
+
 }

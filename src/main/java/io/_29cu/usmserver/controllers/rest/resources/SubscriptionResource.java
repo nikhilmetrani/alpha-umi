@@ -25,7 +25,9 @@ public class SubscriptionResource extends EntityResourceBase<Subscription>{
     private Long rid;
     private Application application;
     private User user;
-    private String dateSubscribed;
+   // private String dateSubscribed;
+    private Date dateSubscribed;
+
     private Boolean active;
 
     public Long getRid() {
@@ -52,11 +54,19 @@ public class SubscriptionResource extends EntityResourceBase<Subscription>{
         this.user = user;
     }
 
-    public String getDateSubscribed() {
+  /*  public String getDateSubscribed() {
         return dateSubscribed;
     }
 
     public void setDateSubscribed(String dateSubscribed) {
+        this.dateSubscribed = dateSubscribed;
+    }*/
+
+    public Date getDateSubscribed() {
+        return dateSubscribed;
+    }
+
+    public void setDateSubscribed(Date dateSubscribed) {
         this.dateSubscribed = dateSubscribed;
     }
 

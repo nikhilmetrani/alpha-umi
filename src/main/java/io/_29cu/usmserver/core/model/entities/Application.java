@@ -22,6 +22,8 @@ import java.util.List;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
+
 
 @Entity
 public class Application extends ApplicationBase{
@@ -39,7 +41,12 @@ public class Application extends ApplicationBase{
     private List<Review> reviews;
     
     @OneToMany(mappedBy="application")
-    private List<Rate> ratings;    
+    private List<Rate> ratings;
+
+    @Column(name = "applicationpublishdate")
+    @Temporal(TemporalType.DATE)
+    private Date applicationPublishDate;
+
 
     public List<Rate> getRatings() {
 		return ratings;
@@ -75,6 +82,15 @@ public class Application extends ApplicationBase{
 
     public void setDeveloper(User developer) {
         this.developer = developer;
+    }
+
+
+    public Date getApplicationPublishDate() {
+        return applicationPublishDate;
+    }
+
+    public void setApplicationPublishDate(Date applicationPublishDate) {
+        this.applicationPublishDate = applicationPublishDate;
     }
 
 }

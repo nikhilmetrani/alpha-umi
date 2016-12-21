@@ -19,6 +19,8 @@ package io._29cu.usmserver.core.model.entities;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.util.Date;
+
 
 @Entity
 public class Subscription {
@@ -31,7 +33,15 @@ public class Subscription {
     @ManyToOne
     @NaturalId
     private User user;
-    private String dateSubscribed;
+    //private String dateSubscribed;
+    @Column(name = "dateSubscribed")
+    @Temporal(TemporalType.DATE)
+    private Date dateSubscribed;
+
+    @Column(name = "dateUnsubscribed")
+    @Temporal(TemporalType.DATE)
+    private Date dateUnsubscribed;
+
     private Boolean active;
 
     public Long getId() {
@@ -58,12 +68,31 @@ public class Subscription {
         this.user = user;
     }
 
-    public String getDateSubscribed() {
+   /* public String getDateSubscribed() {
         return dateSubscribed;
     }
 
     public void setDateSubscribed(String dateSubscribed) {
         this.dateSubscribed = dateSubscribed;
+    }*/
+
+
+
+
+    public Date getDateSubscribed() {
+        return dateSubscribed;
+    }
+
+    public void setDateSubscribed(Date dateSubscribed) {
+        this.dateSubscribed = dateSubscribed;
+    }
+
+    public Date getDateUnsubscribed() {
+        return dateUnsubscribed;
+    }
+
+    public void setDateUnsubscribed(Date dateUnsubscribed) {
+        this.dateUnsubscribed = dateUnsubscribed;
     }
 
     public Boolean getActive() {
