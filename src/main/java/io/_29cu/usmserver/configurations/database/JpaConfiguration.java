@@ -83,6 +83,7 @@ public class JpaConfiguration {
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.jdbc.fetch_size", "100");
         properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+        properties.setProperty("hibernate.dialect", "io._29cu.usmserver.configurations.database.AppMySQLDialect");
 
         lef.setJpaProperties(properties);
         return lef;

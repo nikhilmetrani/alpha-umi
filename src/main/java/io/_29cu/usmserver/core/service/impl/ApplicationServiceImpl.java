@@ -110,7 +110,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	}
 
 	@Override
-	public ApplicationList findApplicationsByCategoryAndState(String category, int state) {
+	public ApplicationList findApplicationsByCategoryAndState(String category, String state) {
 		List<Application> appList = applicationRepository.findApplicationsByCategoryAndState(category, state);
 		ApplicationList applicationList = new ApplicationList();
 		applicationList.setApplications(appList);
@@ -129,8 +129,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 		ApplicationList appList = new ApplicationList();
 		keyword = AppHelper.escapeSQLString(keyword.trim());
 		if(keyword.contains(" ")) {
-			keyword = keyword.replaceAll(" ", "([[:>:]]|$))|(([[:<:]]|^)");
+			keyword = keyword.replaceAll(" ", "([[:>:]]|\\$))|(([[:<:]]|^)");
 		}
+		keyword = "(([[:<:]]|^)" + keyword + "([[:>:]]|$))";
 		appList.setApplications(AppHelper.getInstance().convertIterableToList(applicationRepository.findApplicationsByKeyword(keyword)));
 		return appList;
 	}
@@ -140,8 +141,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 		ApplicationList appList = new ApplicationList();
 		keyword = AppHelper.escapeSQLString(keyword.trim());
 		if(keyword.contains(" ")) {
-			keyword = keyword.replaceAll(" ", "([[:>:]]|$))|(([[:<:]]|^)");
+			keyword = keyword.replaceAll(" ", "([[:>:]]|\\$))|(([[:<:]]|^)");
 		}
+		keyword = "(([[:<:]]|^)" + keyword + "([[:>:]]|$))";
 		appList.setApplications(AppHelper.getInstance().convertIterableToList(applicationRepository.findApplicationsByCategoryAndKeyword(categoryId, keyword)));
 		return appList;
 	}

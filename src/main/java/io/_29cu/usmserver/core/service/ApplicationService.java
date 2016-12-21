@@ -33,7 +33,7 @@ public interface ApplicationService {
     public Application findApplication(String id);
     public ApplicationList findApplicationsByDeveloper(long developerId);
     public ApplicationList findApplicationsByCategory(String category);
-    public ApplicationList findApplicationsByCategoryAndState(String category, int state);
+    public ApplicationList findApplicationsByCategoryAndState(String category, String state);
     public ApplicationList getAllActiveApplications();
     public Boolean blockApplication(Application application);
     public ApplicationList findApplicationsByKeyword(String keyword);
