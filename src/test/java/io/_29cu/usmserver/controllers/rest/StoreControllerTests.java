@@ -18,12 +18,15 @@ package io._29cu.usmserver.controllers.rest;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.either;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.not;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,6 +41,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -52,6 +56,8 @@ import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationListService;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.CategoryService;
+import io._29cu.usmserver.core.service.exception.CategoryAlreadyExistException;
+import io._29cu.usmserver.core.service.exception.CategoryDoesNotExistException;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import io._29cu.usmserver.core.service.utilities.CategoryList;
 
@@ -79,12 +85,12 @@ public class StoreControllerTests {
 
     private String uuid;
     private String appUUID2;
+    private Category category1,category2;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(storeController).build();
-
         uuid = UUID.randomUUID().toString();
         appUUID2 = UUID.randomUUID().toString();
 
@@ -102,7 +108,9 @@ public class StoreControllerTests {
         appA.setDeveloper(appOwner);
         appA.setName("Application A");
         appA.setId(uuid);
-        appA.setCategory(new Category("Productivity"));
+        category2 = new Category("Productivity");
+        category2.setId(25l);
+		appA.setCategory(category2);
         appA.setState(AppState.Active);
         list.add(appA);
 
@@ -110,7 +118,9 @@ public class StoreControllerTests {
         appB.setDeveloper(appOwner);
         appB.setName("Application B");
         appB.setId(appUUID2);
-        appB.setCategory(new Category("Development"));
+        category1 = new Category("Development");
+        category1.setId(22l);
+		appB.setCategory(category1);
         appB.setState(AppState.Active);
         list.add(appB);
         
@@ -120,7 +130,7 @@ public class StoreControllerTests {
         appC.setDeveloper(appOwner);
         appC.setName("Application C");
         appC.setId(appUUID2);
-        appC.setCategory(new Category("Development"));
+        appC.setCategory(category1);
         appC.setState(AppState.Staging);
         list.add(appC);
 
@@ -421,8 +431,6 @@ public class StoreControllerTests {
         list.add(cat1);
         list.add(cat2);
         
-        CategoryList catList = new CategoryList(list);
-
         when(categoryService.findCategory(1L)).thenReturn(cat1);
 
         mockMvc.perform(get("/api/1/store/category/1"))
@@ -438,5 +446,60 @@ public class StoreControllerTests {
         mockMvc.perform(get("/api/1/store/category/1"))
                 .andExpect(status().isNotFound());
     }
-
+    
+    @Test
+    public void testCreateCategory() throws Exception {
+        when(categoryService.createCategory(any(Category.class))).thenReturn(category1);
+        mockMvc.perform(post("/api/1/store/category/create")
+                .content("{'name':'Development'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.name",
+                equalTo(("Development"))))
+        .andExpect(status().isCreated());
+        
+    }
+    
+    
+    @Test
+    public void testCreateCategoryThrowsCategoryAlreadyExistException() throws Exception {
+        when(categoryService.createCategory(any(Category.class))).thenThrow(new CategoryAlreadyExistException("Category already exists"));
+        mockMvc.perform(post("/api/1/store/category/create")
+                .content("{'name':'Development'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isFound());
+        
+    }
+    
+    @Test
+    public void testUpdateCategory() throws Exception {
+    	Category category = new Category("Development_Updated");
+    	category.setId(22l);
+        when(categoryService.updateCategory(any(Category.class))).thenReturn(category);
+        mockMvc.perform(post("/api/1/store/category/update")
+                .content("{'rid':'22','name':'Development_Updated'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.name",
+                equalTo(("Development_Updated"))))
+        .andExpect(status().isOk());
+    }
+    
+    @Test
+    public void testUpdateCategoryThrowsCategoryAlreadyExistException() throws Exception {
+    	Category category = new Category("Development_Updated");
+    	category.setId(22l);
+        when(categoryService.updateCategory(any(Category.class))).thenThrow(new CategoryAlreadyExistException("Category already exists"));
+        mockMvc.perform(post("/api/1/store/category/update")
+                .content("{'rid':'22','name':'Development_Updated'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isFound());
+    }
+    
+    @Test
+    public void testDeleteCategory() throws Exception {
+        mockMvc.perform(delete("/api/1/store/category/22")
+                .content("{'rid':'22'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+    }
+    
 }
