@@ -12,7 +12,7 @@ before_script:
   - "mysql -uroot -e \"DELETE FROM mysql.user WHERE User = 'travis';\""
   - "mysql -uroot -e \"FLUSH PRIVILEGES;\""
 script:
-  - "mvn test > /dev/null && mvn cobertura:cobertura" # So that unit test failures are captured
+  - "mvn test && mvn cobertura:cobertura > /dev/null" # So that unit test failures are captured
                                                       # This will rerun the test, need a better solution
   # - "mvn cobertura:check" # To be enabled after coverage per class is above 75%
 after_success:
