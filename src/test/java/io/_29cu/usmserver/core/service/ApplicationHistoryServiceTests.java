@@ -16,13 +16,13 @@
 
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.ApplicationHistory;
-import io._29cu.usmserver.core.model.entities.User;
-import io._29cu.usmserver.core.model.entities.Authority;
-import io._29cu.usmserver.core.model.enumerations.AppState;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import io._29cu.usmserver.core.model.enumerations.AuthorityName;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,11 +33,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.ApplicationHistory;
+import io._29cu.usmserver.core.model.entities.Authority;
+import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.enumerations.AppState;
+import io._29cu.usmserver.core.model.enumerations.AuthorityName;
+import io._29cu.usmserver.core.repositories.ApplicationHistoryRepository;
+import io._29cu.usmserver.core.repositories.ApplicationRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -55,6 +59,15 @@ public class ApplicationHistoryServiceTests {
     @Autowired
     private ApplicationHistoryService applicationHistoryService;
 
+    @Autowired
+    private UserRepository userRepository;
+    
+    @Autowired
+    private ApplicationRepository applicationRepository;
+
+    @Autowired
+    private ApplicationHistoryRepository applicationHistoryRepository;
+    
     private ApplicationHistory applicationHistory;
 
     @Before
@@ -81,15 +94,22 @@ public class ApplicationHistoryServiceTests {
         application.setDescription("applicationHistoryTest description");
         application.setVersion("10.0");
         application.setWhatsNew("applicationHistoryTest");
-        applicationService.createApplication(application);
+        application = applicationService.createApplication(application);
 
         applicationHistory = new ApplicationHistory();
         applicationHistory.setApplication(application);
         applicationHistory.setName(application.getName());
         applicationHistory.setVersion(application.getVersion());
         applicationHistory.setWhatsNew(application.getWhatsNew());
-        applicationHistoryService.createApplicationHistory(applicationHistory);
+        applicationHistory = applicationHistoryService.createApplicationHistory(applicationHistory);
     }
+
+	@After
+	public void tearDown() {
+		applicationHistoryRepository.delete(applicationHistory.getId());
+		applicationRepository.delete(application.getId());
+		userRepository.delete(developer.getId());
+	}
 
     @Test
     @Transactional
