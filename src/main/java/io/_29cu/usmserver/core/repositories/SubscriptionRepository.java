@@ -28,7 +28,7 @@ import java.util.Date;
 
 
 @Component
-public interface SubscriptionRepository extends CrudRepository<Subscription, String> {
+public interface SubscriptionRepository extends CrudRepository<Subscription, Long> {
     @Query("select s.application from Subscription s where s.user.id = :userId and s.active = 1")
     List<Application> getSubscribedApplications(@Param("userId") long userId);
 
