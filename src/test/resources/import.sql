@@ -1,4 +1,4 @@
-USE usmdevdb;
+USE usmtestdb;
 DROP FUNCTION IF EXISTS fn_regexp_like;
 CREATE FUNCTION fn_regexp_like (value1 nvarchar(4000),value2 nvarchar(4000)) RETURNS CHAR(1) DETERMINISTIC RETURN value1 REGEXP value2;
 
