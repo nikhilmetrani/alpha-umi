@@ -11,10 +11,18 @@ before_script:
   # Some extras for Travis-CI only
   - "mysql -uroot -e \"DELETE FROM mysql.user WHERE User = 'travis';\""
   - "mysql -uroot -e \"FLUSH PRIVILEGES;\""
-script: "mvn cobertura:cobertura"
-after_success:
+script:
+  - "mvn cobertura:cobertura"
+  - "mvn cobertura:check"
+after_script:
   bash <(curl -s https://codecov.io/bash) -t 4f523273-00ba-49d5-bc3b-27b84da15c79
 cache:
   directories:
   - .autoconf
   - $HOME/.m2
+notifications:
+  email:
+    recipients:
+      - nus-iss-se23-pt02@nusu.onmicrosoft.com
+    on_success: change # default: change
+    on_failure: always # default: always

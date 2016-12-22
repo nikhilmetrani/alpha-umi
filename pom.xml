@@ -156,7 +156,9 @@
                         <format>html</format>
                         <format>xml</format>
                     </formats>
-                    <check />
+                    <check>
+                        <branchRate>75...100</branchRate>
+                    </check>
                 </configuration>
             </plugin>
             <plugin>
