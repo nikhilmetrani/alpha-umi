@@ -39,6 +39,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -500,6 +501,15 @@ public class StoreControllerTests {
                 .content("{'rid':'22'}".replaceAll("'", "\""))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
+    }
+    
+    @Test
+    public void testDeleteCategoryThrowsCategoryDoesNotExistException() throws Exception {
+    	Mockito.doThrow(new CategoryDoesNotExistException("Category does not exist")).when(categoryService).deleteCategory(any(Long.class));
+        mockMvc.perform(delete("/api/1/store/category/22")
+                .content("{'rid':'22'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
     }
     
 }
