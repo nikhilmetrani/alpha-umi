@@ -16,9 +16,10 @@
 
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entities.ApplicationBundle;
-import io._29cu.usmserver.core.model.entities.User;
-import io._29cu.usmserver.core.model.enumerations.AppState;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,8 +30,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import io._29cu.usmserver.core.model.entities.ApplicationBundle;
+import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.enumerations.AppState;
+import io._29cu.usmserver.core.repositories.ApplicationBundleRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -40,6 +44,12 @@ public class ApplicationBundleServiceTests {
 	private ApplicationBundleService service;
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private ApplicationBundleRepository applicationBundleRepository;
 
 	private User developer;
 	private ApplicationBundle applicationBundle;
@@ -52,14 +62,20 @@ public class ApplicationBundleServiceTests {
 		developer.setUsername("developer");
 		developer.setEmail("developer@email.com");
 		developer.setEnabled(true);
-		userService.createUser(developer);
+		developer = userService.createUser(developer);
 
 		applicationBundle = new ApplicationBundle();
 		applicationBundle.setName("applicationBundle");
 		applicationBundle.setDeveloper(developer);
 		applicationBundle.setState(AppState.Staging);
 		applicationBundle.setDescription("test description");
-		service.createApplicationBundle(applicationBundle);
+		applicationBundle = service.createApplicationBundle(applicationBundle);
+	}
+
+	@After
+	public void tearDown() {
+		userRepository.delete(developer.getId());
+		applicationBundleRepository.delete(applicationBundle.getId());
 	}
 
 	@Test
