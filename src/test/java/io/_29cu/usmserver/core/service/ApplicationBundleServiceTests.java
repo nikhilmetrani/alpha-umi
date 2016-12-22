@@ -74,8 +74,8 @@ public class ApplicationBundleServiceTests {
 
 	@After
 	public void tearDown() {
-		userRepository.delete(developer.getId());
 		applicationBundleRepository.delete(applicationBundle.getId());
+		userRepository.delete(developer.getId());
 	}
 
 	@Test

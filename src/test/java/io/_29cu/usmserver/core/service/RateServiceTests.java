@@ -22,7 +22,9 @@ import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.model.enumerations.AuthorityName;
 import io._29cu.usmserver.core.model.enumerations.Rating;
+import io._29cu.usmserver.core.repositories.ApplicationRepository;
 import io._29cu.usmserver.core.repositories.RateRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -44,6 +46,12 @@ public class RateServiceTests {
 
 	@Autowired
 	private RateRepository rateRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private ApplicationRepository applicationRepository;
 
 	@Before
 	public void setup() {
@@ -78,7 +86,7 @@ public class RateServiceTests {
 		application.setDescription("test description");
 		application.setVersion("1.0");
 		application.setWhatsNew("test");
-		applicationService.createApplication(application);
+		application = applicationService.createApplication(application);
 
 		rate = new Rate();
 		rate.setApplication(application);
@@ -152,6 +160,9 @@ public class RateServiceTests {
 		rateRepository.delete(rate2.getId());
 		rateRepository.delete(rate3.getId());
 		rateRepository.delete(rate4.getId());
+		applicationRepository.delete(application.getId());
+		userRepository.delete(consumer.getId());
+		userRepository.delete(developer.getId());
 	}
 
 }

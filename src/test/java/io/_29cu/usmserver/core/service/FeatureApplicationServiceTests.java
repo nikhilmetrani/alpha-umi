@@ -27,6 +27,7 @@ import io._29cu.usmserver.core.model.enumerations.AuthorityName;
 import io._29cu.usmserver.core.model.enumerations.FeatureAppState;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
 import io._29cu.usmserver.core.repositories.FeaturedApplicationRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 import io._29cu.usmserver.core.service.exception.ApplicationAlreadyFeaturedException;
 import io._29cu.usmserver.core.service.exception.ApplicationDoesNotExistException;
 import io._29cu.usmserver.core.service.exception.FeatureApplicationException;
@@ -44,6 +45,8 @@ public class FeatureApplicationServiceTests {
 	private UserService userService;
 	@Autowired
 	FeaturedApplicationRepository featuredApplicationRepository;
+	@Autowired
+	private UserRepository userRepository;
 	
 	private User developer;
 	private User maintainer;
@@ -249,6 +252,7 @@ public class FeatureApplicationServiceTests {
 		applicationRepository.delete(application3);
 		applicationRepository.delete(application4);
 		applicationRepository.delete(application5);
-		
+		userRepository.delete(developer.getId());
+		userRepository.delete(maintainer.getId());
 	}
 }

@@ -19,8 +19,10 @@ package io._29cu.usmserver.core.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import io._29cu.usmserver.core.model.entities.*;
-import io._29cu.usmserver.core.model.enumerations.AuthorityName;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,10 +33,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
+import io._29cu.usmserver.core.model.entities.Authority;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
-
-import java.util.ArrayList;
-import java.util.List;
+import io._29cu.usmserver.core.model.enumerations.AuthorityName;
+import io._29cu.usmserver.core.repositories.ApplicationRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -46,6 +52,12 @@ public class ApplicationUpdateServiceTests {
     private ApplicationService appService;
     @Autowired
     private UserService userService;
+
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private ApplicationRepository applicationRepository;
 
     private User developer;
     private Application application;
@@ -131,6 +143,14 @@ public class ApplicationUpdateServiceTests {
         applicationUpdate2.setVersion("2.0");
         applicationUpdate2.setWhatsNew("What is new");
     }
+
+	@After
+	public void tearDown() {
+		applicationRepository.delete(application.getId());
+		applicationRepository.delete(application1.getId());
+		applicationRepository.delete(application2.getId());
+		userRepository.delete(developer.getId());
+	}
 
     @Test
     @Transactional

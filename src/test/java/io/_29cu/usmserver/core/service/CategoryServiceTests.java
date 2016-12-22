@@ -3,6 +3,7 @@ package io._29cu.usmserver.core.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -15,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.repositories.CategoryRepository;
 import io._29cu.usmserver.core.service.exception.CategoryAlreadyExistException;
 import io._29cu.usmserver.core.service.exception.CategoryDoesNotExistException;
 import io._29cu.usmserver.core.service.utilities.CategoryList;
@@ -26,6 +28,9 @@ public class CategoryServiceTests {
 
 	@Autowired
 	CategoryService categoryService;
+
+	@Autowired
+	CategoryRepository categoryRepository;
 
 	private Category category;
 
@@ -179,8 +184,7 @@ public class CategoryServiceTests {
 		CategoryList categoryList = categoryService.findCategories();
 		assertNotNull(categoryList);
 		assertNotNull(categoryList.getCategories());
-		assertEquals(1, categoryList.getCategories().size());
-		assertEquals("os", categoryList.getCategories().get(0).getName());
+		assertTrue(!categoryList.getCategories().isEmpty());
 	}
 
 	@After

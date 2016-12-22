@@ -78,7 +78,7 @@ public class ReviewServiceTests {
 		application.setDescription("test description");
 		application.setVersion("1.0");
 		application.setWhatsNew("test");
-		applicationService.createApplication(application);
+		application = applicationService.createApplication(application);
 
 		review = new Review();
 		review.setApplication(application);

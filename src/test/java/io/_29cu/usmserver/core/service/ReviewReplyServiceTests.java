@@ -24,6 +24,9 @@ import io._29cu.usmserver.core.model.entities.ReviewReply;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.model.enumerations.AuthorityName;
+import io._29cu.usmserver.core.repositories.ApplicationRepository;
+import io._29cu.usmserver.core.repositories.ReviewRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -38,6 +41,15 @@ public class ReviewReplyServiceTests {
 	private UserService userService;
 	@Autowired
 	ReviewService reviewService;
+
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private ApplicationRepository applicationRepository;
+	
+	@Autowired
+	private ReviewRepository reviewRepository;
 	
 	private User developer;
 	private User consumer;
@@ -150,5 +162,9 @@ public class ReviewReplyServiceTests {
 		reviewReplyService.removeReviewReply(reviewReply3.getId());
 		reviewReplyService.removeReviewReply(reviewReply4.getId());
 		reviewReplyService.removeReviewReply(reviewReply5.getId());
+		reviewRepository.delete(review.getId());
+		applicationRepository.delete(application.getId());
+		userRepository.delete(consumer.getId());
+		userRepository.delete(developer.getId());
 	}
 }

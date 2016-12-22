@@ -16,12 +16,17 @@
 
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.Authority;
-import io._29cu.usmserver.core.model.entities.Subscription;
-import io._29cu.usmserver.core.model.entities.User;
-import io._29cu.usmserver.core.model.enumerations.AppState;
-import io._29cu.usmserver.core.model.enumerations.AuthorityName;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,19 +37,16 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.Authority;
+import io._29cu.usmserver.core.model.entities.Subscription;
+import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.enumerations.AppState;
+import io._29cu.usmserver.core.model.enumerations.AuthorityName;
+import io._29cu.usmserver.core.repositories.ApplicationRepository;
+import io._29cu.usmserver.core.repositories.SubscriptionRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
-
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -57,8 +59,16 @@ public class ReportServiceTests {
     @Autowired
     private SubscriptionService subscriptionService;
 
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private ApplicationRepository applicationRepository;
 
-    private User developer;
+	@Autowired
+	private SubscriptionRepository subscriptionRepository;
+
+    private User developer, developer1, developer2, developer3;
     private Application application,application1,application2,application3;
     private Subscription subscription,subscription1,subscription2,subscription3;
     SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -80,7 +90,7 @@ public class ReportServiceTests {
         developer.setEnabled(true);
         developer = userService.createUser(developer);
 
-        User developer1 = new User();
+        developer1 = new User();
         developer1.setUsername("developer1");
         developer1.setEmail("developer1@email.com");
         Authority authority1 = new Authority();
@@ -91,7 +101,7 @@ public class ReportServiceTests {
         developer1.setEnabled(true);
         developer1 = userService.createUser(developer1);
 
-        User developer2 = new User();
+        developer2 = new User();
         developer2.setUsername("developer2");
         developer2.setEmail("developer2@email.com");
         Authority authority2 = new Authority();
@@ -102,7 +112,7 @@ public class ReportServiceTests {
         developer2.setEnabled(true);
         developer2 = userService.createUser(developer2);
 
-        User developer3 = new User();
+        developer3 = new User();
         developer3.setUsername("developer3");
         developer3.setEmail("developer3@email.com");
         Authority authority3 = new Authority();
@@ -127,7 +137,7 @@ public class ReportServiceTests {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        service.createApplication(application);
+        application = service.createApplication(application);
 
         application1 = new Application();
         application1.setName("application1");
@@ -141,7 +151,7 @@ public class ReportServiceTests {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        service.createApplication(application1);
+        application1 = service.createApplication(application1);
 
         application2 = new Application();
         application2.setName("application2");
@@ -155,7 +165,7 @@ public class ReportServiceTests {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        service.createApplication(application2);
+        application2 = service.createApplication(application2);
 
         application3 = new Application();
         application3.setName("application3");
@@ -169,7 +179,7 @@ public class ReportServiceTests {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        service.createApplication(application3);
+        application3 = service.createApplication(application3);
 
 
         subscription = new Subscription();
@@ -183,7 +193,7 @@ public class ReportServiceTests {
         }
         subscription.setId(1L);
         subscription.setUser(developer);
-        subscriptionService.subscribeApplication(subscription);
+        subscription = subscriptionService.subscribeApplication(subscription);
 
         subscription1 = new Subscription();
         subscription1.setActive(Boolean.TRUE);
@@ -196,7 +206,7 @@ public class ReportServiceTests {
         }
         subscription1.setId(11L);
         subscription1.setUser(developer1);
-        subscriptionService.subscribeApplication(subscription1);
+        subscription1 = subscriptionService.subscribeApplication(subscription1);
 
         subscription2 = new Subscription();
         subscription2.setActive(Boolean.FALSE);
@@ -209,7 +219,7 @@ public class ReportServiceTests {
         }
         subscription2.setId(111L);
         subscription2.setUser(developer2);
-        subscriptionService.subscribeApplication(subscription2);
+        subscription2 = subscriptionService.subscribeApplication(subscription2);
 
 
         subscription3 = new Subscription();
@@ -223,10 +233,25 @@ public class ReportServiceTests {
         }
         subscription3.setId(1111L);
         subscription3.setUser(developer3);
-        subscriptionService.subscribeApplication(subscription3);
+        subscription3 = subscriptionService.subscribeApplication(subscription3);
 
     }
 
+	@After
+	public void tearDown() {
+		subscriptionRepository.delete(subscription.getId());
+		subscriptionRepository.delete(subscription1.getId());
+		subscriptionRepository.delete(subscription2.getId());
+		subscriptionRepository.delete(subscription3.getId());
+		applicationRepository.delete(application.getId());
+		applicationRepository.delete(application1.getId());
+		applicationRepository.delete(application2.getId());
+		applicationRepository.delete(application3.getId());
+		userRepository.delete(developer.getId());
+		userRepository.delete(developer1.getId());
+		userRepository.delete(developer2.getId());
+		userRepository.delete(developer3.getId());
+	}
 
     @Test
     @Transactional

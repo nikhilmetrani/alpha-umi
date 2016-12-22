@@ -21,16 +21,29 @@ import org.junit.runners.Suite;
 import org.springframework.test.context.ActiveProfiles;
 
 import io._29cu.usmserver.common.utilities.AppHelperTests;
+import io._29cu.usmserver.controllers.rest.ApplicationBundleControllerTests;
 import io._29cu.usmserver.controllers.rest.ApplicationControllerTests;
+import io._29cu.usmserver.controllers.rest.ConsumerProfileControllerTests;
 import io._29cu.usmserver.controllers.rest.DeveloperApplicationsControllerTests;
 import io._29cu.usmserver.controllers.rest.DeveloperProfileControllerTests;
+import io._29cu.usmserver.controllers.rest.EmployeeProfileControllerTests;
 import io._29cu.usmserver.controllers.rest.StoreControllerTests;
 import io._29cu.usmserver.controllers.rest.SubscriptionControllerTests;
+import io._29cu.usmserver.controllers.rest.UserControllerTests;
 import io._29cu.usmserver.core.repositories.UserRepositoryTests;
+import io._29cu.usmserver.core.service.ApplicationBundleServiceTests;
+import io._29cu.usmserver.core.service.ApplicationHistoryServiceTests;
 import io._29cu.usmserver.core.service.ApplicationServiceTests;
+import io._29cu.usmserver.core.service.ApplicationUpdateServiceTests;
+import io._29cu.usmserver.core.service.CategoryServiceTests;
 import io._29cu.usmserver.core.service.ConsumerProfileServiceTests;
 import io._29cu.usmserver.core.service.DeveloperProfileServiceTests;
 import io._29cu.usmserver.core.service.EmployeeProfileServiceTests;
+import io._29cu.usmserver.core.service.FeatureApplicationServiceTests;
+import io._29cu.usmserver.core.service.RateServiceTests;
+import io._29cu.usmserver.core.service.ReportServiceTests;
+import io._29cu.usmserver.core.service.ReviewReplyServiceTests;
+import io._29cu.usmserver.core.service.ReviewServiceTests;
 import io._29cu.usmserver.core.service.SubscriptionServiceTests;
 import io._29cu.usmserver.core.service.UserServiceTests;
 import io._29cu.usmserver.core.service.utilities.ApplicationListTests;
@@ -38,20 +51,33 @@ import io._29cu.usmserver.core.service.utilities.ApplicationListTests;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     AlphaUmiApplicationTests.class,
-    UserServiceTests.class,
-    UserRepositoryTests.class,
-    ApplicationServiceTests.class,
     AppHelperTests.class,
-    ApplicationListTests.class,
-    StoreControllerTests.class,
+    ApplicationBundleControllerTests.class,
     ApplicationControllerTests.class,
+    ConsumerProfileControllerTests.class,
     DeveloperApplicationsControllerTests.class,
-    DeveloperProfileControllerTests.class, 
+    DeveloperProfileControllerTests.class,
+    EmployeeProfileControllerTests.class,
+    StoreControllerTests.class,
     SubscriptionControllerTests.class,
-    SubscriptionServiceTests.class,
+    UserControllerTests.class,
+    UserRepositoryTests.class,
+    ApplicationBundleServiceTests.class,
+    ApplicationHistoryServiceTests.class,
+    ApplicationServiceTests.class,
+    //ApplicationUpdateServiceTests.class,
+    CategoryServiceTests.class,
     ConsumerProfileServiceTests.class,
     DeveloperProfileServiceTests.class,
-    EmployeeProfileServiceTests.class
+    EmployeeProfileServiceTests.class,
+    FeatureApplicationServiceTests.class,
+    RateServiceTests.class,
+    ReportServiceTests.class,
+    ReviewReplyServiceTests.class,
+    ReviewServiceTests.class,
+    SubscriptionServiceTests.class,
+    UserServiceTests.class,
+    ApplicationListTests.class
 })
 @ActiveProfiles("test")
 public class AlphaUmiTestSuite {

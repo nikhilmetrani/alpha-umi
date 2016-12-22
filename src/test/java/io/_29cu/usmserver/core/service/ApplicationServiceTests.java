@@ -112,11 +112,11 @@ public class ApplicationServiceTests {
 
 	@After
 	public void tearDown() {
-		userRepository.delete(developer.getId());
 		applicationRepository.delete(application.getId());
 		applicationRepository.delete(application2.getId());
 		categoryRepository.delete(cat1.getId());
 		categoryRepository.delete(cat2.getId());
+		userRepository.delete(developer.getId());
 	}
 
     @Test
