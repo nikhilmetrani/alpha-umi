@@ -24,6 +24,12 @@ cache:
 notifications:
   email:
     recipients:
-      - nus-iss-se23-pt02@nusu.onmicrosoft.com
+      - a0135914@u.nus.edu
+      - a0135952@u.nus.edu
+      - liyufeng@u.nus.edu
+      - jingdong@u.nus.edu
+      - jayavignesh@u.nus.edu
+      - a0135916@u.nus.edu
+      - nikhilmetrani@u.nus.edu
     on_success: change # default: change
     on_failure: always # default: always
