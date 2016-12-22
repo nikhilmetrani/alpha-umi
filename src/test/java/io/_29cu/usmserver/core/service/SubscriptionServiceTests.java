@@ -81,8 +81,8 @@ public class SubscriptionServiceTests {
     @Rollback(false)
     public void setup() {
         developer = new User();
-        developer.setUsername("developer");
-        developer.setEmail("developer@email.com");
+        developer.setUsername("developer1");
+        developer.setEmail("developer1@email.com");
         Authority authority = new Authority();
         authority.setName(AuthorityName.ROLE_CONSUMER);
         List<Authority> authList = new ArrayList<>();
@@ -94,8 +94,8 @@ public class SubscriptionServiceTests {
         developer = userService.createUser(developer);
 
         consumer = new User();
-        consumer.setUsername("consumer");
-        consumer.setEmail("consumer@email.com");
+        consumer.setUsername("consumer1");
+        consumer.setEmail("consumer1@email.com");
         authority = new Authority();
         authority.setName(AuthorityName.ROLE_CONSUMER);
         authList = new ArrayList<>();

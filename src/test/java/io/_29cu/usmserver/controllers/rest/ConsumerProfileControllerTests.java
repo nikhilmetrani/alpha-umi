@@ -11,6 +11,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -121,8 +122,9 @@ public class ConsumerProfileControllerTests {
         when(profileService.createProfile(any(ConsumerProfile.class))).thenReturn(profile);
 
         mockMvc.perform(post("/api/0/consumer/profile")
-                .content("{\"rid\":\"23L\",\"email\":\"test@test.com\",\"website\":\"https://test.com\",}")
+                .content("{'email':'test@test.com','website':'https://test.com'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(jsonPath("$.rid",
                         equalTo(23)))
                 .andExpect(jsonPath("$.email",
@@ -151,7 +153,7 @@ public class ConsumerProfileControllerTests {
     public void  testCreateConsumerProfileErrorHandling() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
         mockMvc.perform(post("/api/0/consumer/profile")
-                .content("{\"rid\":\"23L\",\"email\":\"test@test.com\",\"website\":\"https://test.com\",}")
+                .content("{'email':'test@test.com','website':'https://test.com'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
