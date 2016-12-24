@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Review;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.repositories.ReviewRepository;
 import io._29cu.usmserver.core.service.ReviewService;
 import io._29cu.usmserver.core.service.exception.ReviewDoesNotExistException;
@@ -18,7 +20,11 @@ public class ReviewServiceImpl implements ReviewService{
 
 
 	@Override
-	public Review createReview(Review review) {
+	public Review createReview(Review review, Application application, User consumer) {
+		review.setApplication(application);
+		review.setConsumer(consumer);
+		review.setCreateBy(consumer.getUsername());
+		review.setLastUpdateBy(consumer.getUsername());
 		return reviewRepository.save(review);
 	}
 

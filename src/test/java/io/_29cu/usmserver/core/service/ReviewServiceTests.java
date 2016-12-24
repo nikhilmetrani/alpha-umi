@@ -19,12 +19,15 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Authority;
 import io._29cu.usmserver.core.model.entities.Review;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.model.enumerations.AuthorityName;
+import io._29cu.usmserver.core.repositories.ApplicationRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 import io._29cu.usmserver.core.service.exception.ReviewDoesNotExistException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -35,7 +38,11 @@ public class ReviewServiceTests {
 	@Autowired
 	private ApplicationService applicationService;
 	@Autowired
+	private ApplicationRepository applicationRepository;
+	@Autowired
 	private UserService userService;
+	@Autowired
+	private UserRepository UserRepository;
 	@Autowired
 	ReviewService reviewService;
 
@@ -81,30 +88,31 @@ public class ReviewServiceTests {
 		application = applicationService.createApplication(application);
 
 		review = new Review();
-		review.setApplication(application);
-		review.setConsumer(consumer);
 		review.setTitle("testTitle");
 		review.setDescription("testDescription");
-		review = reviewService.createReview(review);
+		review = reviewService.createReview(review,application,consumer);
 	}
 
 	@After
 	public void tearDown() {
 		Exception exception = null;
-		if (review != null) {
+		if (review != null && review.getId() !=null) {
 			try {
 				reviewService.removeReview(review.getId());
+				
 			} catch (ReviewDoesNotExistException e) {
 				exception = e;
 			} finally {
 				assertNull("ReviewDoesNotExistException is thrown", exception);
 			}
 		}
+		applicationRepository.delete(application);	
+		UserRepository.delete(consumer);
 	}
 	
 	@Test
 	public void testCreateReview(){
-		review = reviewService.createReview(review);
+		review = reviewService.createReview(review,application,consumer);
 		assertEquals(application.getId(),review.getApplication().getId());
 		assertEquals(consumer.getId(),review.getConsumer().getId());
 		assertEquals("testTitle",review.getTitle());
