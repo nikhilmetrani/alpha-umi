@@ -17,7 +17,6 @@
 package io._29cu.usmserver.controllers.rest;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,8 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import io._29cu.usmserver.controllers.rest.resources.CodesResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.CodesResourceAssembler;
-import io._29cu.usmserver.core.model.entities.Category;
-import io._29cu.usmserver.core.model.entities.Code;
 import io._29cu.usmserver.core.service.CategoryService;
 import io._29cu.usmserver.core.service.utilities.Codes;
 
@@ -43,11 +40,7 @@ public class CodeDefinitionController {
     @RequestMapping(value = "/category", method = RequestMethod.GET)
     public ResponseEntity<CodesResource> getCategoryCodes() {
         try {
-            List<Category> categoryList = categoryService.getCategories();
-            Codes codes = new Codes();
-            for(Category category : categoryList) {
-            	codes.add(new Code(category.getId().toString(), category.getName()));
-            }
+        	Codes codes = categoryService.getCategories();
             CodesResource resource = new CodesResourceAssembler().toResource(codes);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(resource.getLink("self").getHref()));
