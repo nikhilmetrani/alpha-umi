@@ -16,6 +16,8 @@
 
 package io._29cu.usmserver.core.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -83,4 +85,12 @@ public class CategoryServiceImpl implements CategoryService{
 		}
 		categoryRepository.delete(categoryId);		
 	}
+
+    public List<Category> getCategories() {
+    	List<Category> categories = new ArrayList<Category>();
+    	for(Category category : categoryRepository.findAll()) {
+    		categories.add(category);
+    	}
+    	return categories;
+    }
 }

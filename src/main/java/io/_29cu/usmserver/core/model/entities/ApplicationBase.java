@@ -37,8 +37,8 @@ public class ApplicationBase {
     private String version;
     @NotNull
     private String whatsNew;
-  
-	public String getId() {
+
+    public String getId() {
         return id;
     }
 
