@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.matchers.Any;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -44,6 +45,7 @@ public class UserControllerTests {
     private MockMvc mockMvc;
 
     private User user;
+    private User moderator;
     
     @Before
     public void setup() throws Exception {
@@ -54,11 +56,21 @@ public class UserControllerTests {
         user.setEmail("owner@test.com");
         user.setUsername("Test Owner");
         user.setEnabled(true);
-        Authority auth = new Authority();
-        auth.setName(AuthorityName.ROLE_CONSUMER);
-        List<Authority> authList = new ArrayList<>();
-        authList.add(auth);
-        user.setAuthorities(authList);
+        Authority authUser = new Authority();
+        authUser.setName(AuthorityName.ROLE_CONSUMER);
+        List<Authority> authUserList = new ArrayList<>();
+        authUserList.add(authUser);
+        user.setAuthorities(authUserList);
+
+        moderator = new User();
+        moderator.setEmail("moderator@test.com");
+        moderator.setUsername("Test Moderator");
+        moderator.setEnabled(true);
+        Authority authModerator = new Authority();
+        authModerator.setName(AuthorityName.ROLE_ADMIN);
+        List<Authority> authModeratorList = new ArrayList<>();
+        authModeratorList.add(authModerator);
+        moderator.setAuthorities(authModeratorList);
     }
     
     @Test
@@ -82,6 +94,17 @@ public class UserControllerTests {
                 .content("{'username': 'Test Owner', 'email': 'owner@test.com', 'password': 'password'}".replace("'", "\"")))
                 .andExpect(jsonPath("$.username",
                         equalTo(user.getUsername())))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testBlockUser() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(moderator);
+        when(userService.findUser(1l)).thenReturn(user);
+        when(userService.blockUser(any(User.class))).thenReturn(true);
+
+        mockMvc.perform(post("/api/0/admin/users/" + 1l + "/block/"))
+                .andExpect(jsonPath("$", equalTo(true)))
                 .andExpect(status().isOk());
     }
 }
