@@ -67,7 +67,7 @@ import io._29cu.usmserver.core.service.utilities.ApplicationListTests;
     ApplicationBundleServiceTests.class,
     ApplicationHistoryServiceTests.class,
     ApplicationServiceTests.class,
-    //ApplicationUpdateServiceTests.class,
+    ApplicationUpdateServiceTests.class,
     CategoryServiceTests.class,
     ConsumerProfileServiceTests.class,
     DeveloperProfileServiceTests.class,
