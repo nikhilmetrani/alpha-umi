@@ -20,7 +20,6 @@ import io._29cu.usmserver.core.repositories.CategoryRepository;
 import io._29cu.usmserver.core.service.exception.CategoryAlreadyExistException;
 import io._29cu.usmserver.core.service.exception.CategoryDoesNotExistException;
 import io._29cu.usmserver.core.service.utilities.CategoryList;
-import io._29cu.usmserver.core.service.utilities.Codes;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -186,14 +185,6 @@ public class CategoryServiceTests {
 		assertNotNull(categoryList);
 		assertNotNull(categoryList.getCategories());
 		assertTrue(!categoryList.getCategories().isEmpty());
-	}
-
-	@Test
-	public void testGetCategories() {
-		Codes codes = categoryService.getCategories();
-		assertNotNull(codes);
-		assertNotNull(codes.getCodes());
-		assertTrue(!codes.getCodes().isEmpty());
 	}
 
 	@After

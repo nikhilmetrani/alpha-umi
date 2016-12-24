@@ -16,17 +16,17 @@
 
 package io._29cu.usmserver.core.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import io._29cu.usmserver.core.model.entities.Category;
-import io._29cu.usmserver.core.model.entities.Code;
 import io._29cu.usmserver.core.repositories.CategoryRepository;
 import io._29cu.usmserver.core.service.CategoryService;
 import io._29cu.usmserver.core.service.exception.CategoryAlreadyExistException;
 import io._29cu.usmserver.core.service.exception.CategoryDoesNotExistException;
 import io._29cu.usmserver.core.service.utilities.CategoryList;
-import io._29cu.usmserver.core.service.utilities.Codes;
 
 @Component
 public class CategoryServiceImpl implements CategoryService{
@@ -86,12 +86,11 @@ public class CategoryServiceImpl implements CategoryService{
 		categoryRepository.delete(categoryId);		
 	}
 
-	@Override
-    public Codes getCategories() {
-    	Codes codes = new Codes();
+    public List<Category> getCategories() {
+    	List<Category> categories = new ArrayList<Category>();
     	for(Category category : categoryRepository.findAll()) {
-    		codes.add(new Code(category.getId().toString(), category.getName()));
+    		categories.add(category);
     	}
-    	return codes;
+    	return categories;
     }
 }
