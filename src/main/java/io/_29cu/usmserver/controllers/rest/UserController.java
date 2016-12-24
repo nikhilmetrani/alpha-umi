@@ -73,8 +73,9 @@ public class UserController {
 	) {
 		// Let's get the user from principal and validate the userId against it.
 		User user = userService.findAuthenticatedUser();
-		if (user == null)
+		if (user == null) {
 			return new ResponseEntity<Boolean>(HttpStatus.FORBIDDEN);
+		}
 
 		// Existing pwd not match
 		if (!user.getPassword().equals(changePasswordRequest.getCurrentPwd())) {
@@ -94,8 +95,9 @@ public class UserController {
 	) {
 		// Let's get the user from principal and validate the userId against it.
 		User user = userService.findAuthenticatedUser();
-		if (user == null)
+		if (user == null) {
 			return new ResponseEntity<Boolean>(HttpStatus.FORBIDDEN);
+		}
 
 		// TODO check and ensure user is Moderator role
 

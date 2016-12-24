@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 - 29cu.io and the authors of alpha-umi open source project
-
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
-
- *     http://www.apache.org/licenses/LICENSE-2.0
-
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,35 +27,43 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
 public class UserServiceTests {
 
-    @Autowired
-    private UserService service;
+	@Autowired
+	private UserService service;
 
-    private User account;
+	private User account;
 
-    @Before
-    @Transactional
-    @Rollback(false)
-    public void setup() {
-        account = new User();
-        account.setEmail("email");
-        account.setUsername("username");
-        account.setEnabled(true);
-        service.createUser(account);
-    }
+	@Before
+	@Transactional
+	@Rollback(false)
+	public void setup() {
+		account = new User();
+		account.setEmail("email");
+		account.setUsername("username");
+		account.setEnabled(true);
+		service.createUser(account);
+	}
 
-    @Test
-    @Transactional
-    public void testFind() {
-        User fromDb = service.findUser(account.getId());
-        assertNotNull(fromDb);
-        assertEquals("Account was retrieved", account.getEmail(), fromDb.getEmail());
-    }
+	@Test
+	@Transactional
+	public void testFind() {
+		User fromDb = service.findUser(account.getId());
+		assertNotNull(fromDb);
+		assertEquals("Account was retrieved", account.getEmail(), fromDb.getEmail());
+	}
+
+	@Test
+	@Transactional
+	public void testBlockUser() {
+		User fromDb = service.findUser(account.getId());
+		assertNotNull(fromDb);
+		boolean blocked = service.blockUser(fromDb);
+		assertTrue("Account was blocked", blocked);
+	}
 }
