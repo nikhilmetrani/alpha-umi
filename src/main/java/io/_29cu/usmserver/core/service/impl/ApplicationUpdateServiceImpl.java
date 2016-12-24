@@ -43,46 +43,42 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
 
     @Override
     public ApplicationUpdate createApplicationUpdate(ApplicationUpdate applicationUpdate) {
-        Application application = applicationRepository.save(applicationUpdate.getTarget());
+        //Application application = applicationRepository.save(applicationUpdate.getTarget());
     	applicationUpdate = applicationUpdateRepository.save(applicationUpdate);
     	return applicationUpdate;
     }
 
 
     @Override
-    public ApplicationUpdate createApplicationUpdateByDeveloper(long developerId, ApplicationUpdate appToBePublished) {
-        if(appToBePublished != null){
+    public ApplicationUpdate createApplicationUpdateByDeveloper(long developerId, ApplicationUpdate newAppUpdate) {
+        if(newAppUpdate != null){
             // appToBePublished - application for which update to be Published, this excludes all the staging applications
             // fetches all the existing applications(existingAppList) by the developer
-            List<Application> existingAppList = applicationRepository.findApplicationsByDeveloper(developerId);
-            if(existingAppList != null && !existingAppList.isEmpty()){
-                for(Application updatedApp : existingAppList){
-                    if(updatedApp.getName().equals(appToBePublished.getName()) && updatedApp.getDeveloper().getUsername().equals(appToBePublished.getTarget().getDeveloper().getUsername())){
-                        appToBePublished = createApplicationUpdate(appToBePublished);
-                        return appToBePublished;
-                    }
-                }
-            }
+            Application targetApp = applicationRepository.findOne(newAppUpdate.getTarget().getId());
+            if (null == targetApp || targetApp.getState() != AppState.Active)
+                return null; // Throw exception instead.
+            newAppUpdate.setTarget(targetApp);
+
+            return createApplicationUpdate(newAppUpdate);
+
         }
-        return appToBePublished;
+        return null;
     }
 
 
     @Override
-    public ApplicationUpdate modifyApplicationUpdateByDeveloper(long developerId, ApplicationUpdate appToBeModified) {
-        if(appToBeModified != null){
+    public ApplicationUpdate modifyApplicationUpdateByDeveloper(long developerId, ApplicationUpdate appUpdate) {
+        if(appUpdate != null){
             // appToBePublished - application for which update to be Published, this is the application in staging area only
             // fetches all the existing applications(existingAppList) by the developer
-            List<Application> existingAppList = applicationRepository.findApplicationsByDeveloper(developerId);
-            if(existingAppList != null && !existingAppList.isEmpty()){
-                for(Application updatedApp : existingAppList){
-                    if((AppState.Staging.equals(updatedApp.getState())) && updatedApp.getName().equals(appToBeModified.getName()) && updatedApp.getDeveloper().getUsername().equals(appToBeModified.getTarget().getDeveloper().getUsername())){
-                        appToBeModified = createApplicationUpdate(appToBeModified);
-                        return appToBeModified;
-                    }
-                }
-            }
+            Application targetApp = applicationRepository.findOne(appUpdate.getTarget().getId());
+            if (null == targetApp || targetApp.getState() != AppState.Staging)
+                return null; // Throw exception instead.
+            appUpdate.setTarget(targetApp);
+
+            return createApplicationUpdate(appUpdate);
+
         }
-        return appToBeModified;
+        return null;
     }
 }
