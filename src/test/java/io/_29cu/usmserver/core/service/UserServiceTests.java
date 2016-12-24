@@ -16,7 +16,10 @@
 
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entities.User;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,8 +30,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import io._29cu.usmserver.core.model.entities.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -57,5 +59,14 @@ public class UserServiceTests {
         User fromDb = service.findUser(account.getId());
         assertNotNull(fromDb);
         assertEquals("Account was retrieved", account.getEmail(), fromDb.getEmail());
+    }
+
+    @Test
+    @Transactional
+    public void testBlockUser() {
+        User fromDb = service.findUser(account.getId());
+        assertNotNull(fromDb);
+        boolean blocked = service.blockUser(fromDb);
+        assertTrue("Account was blocked", blocked);
     }
 }

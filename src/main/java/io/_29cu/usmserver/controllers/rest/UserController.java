@@ -16,17 +16,22 @@
 
 package io._29cu.usmserver.controllers.rest;
 
-import io._29cu.usmserver.configurations.security.ChangePasswordRequest;
-import io._29cu.usmserver.configurations.security.JwtUser;
-import io._29cu.usmserver.configurations.security.JwtUserFactory;
-import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
-import io._29cu.usmserver.controllers.rest.resources.UserResource;
-import io._29cu.usmserver.core.model.entities.User;
-import io._29cu.usmserver.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import io._29cu.usmserver.configurations.security.ChangePasswordRequest;
+import io._29cu.usmserver.configurations.security.JwtUser;
+import io._29cu.usmserver.configurations.security.JwtUserFactory;
+import io._29cu.usmserver.controllers.rest.resources.UserResource;
+import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.service.UserService;
 
 @RestController
 @RequestMapping("/api")
@@ -73,8 +78,9 @@ public class UserController {
 	) {
 		// Let's get the user from principal and validate the userId against it.
 		User user = userService.findAuthenticatedUser();
-		if (user == null)
+		if (user == null) {
 			return new ResponseEntity<Boolean>(HttpStatus.FORBIDDEN);
+		}
 
 		// Existing pwd not match
 		if (!user.getPassword().equals(changePasswordRequest.getCurrentPwd())) {
@@ -94,8 +100,9 @@ public class UserController {
 	) {
 		// Let's get the user from principal and validate the userId against it.
 		User user = userService.findAuthenticatedUser();
-		if (user == null)
+		if (user == null) {
 			return new ResponseEntity<Boolean>(HttpStatus.FORBIDDEN);
+		}
 
 		// TODO check and ensure user is Moderator role
 

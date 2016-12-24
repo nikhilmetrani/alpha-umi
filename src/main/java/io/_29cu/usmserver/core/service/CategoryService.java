@@ -16,16 +16,13 @@
 
 package io._29cu.usmserver.core.service;
 
-<<<<<<< HEAD
 import org.springframework.stereotype.Component;
-=======
-import java.util.List;
->>>>>>> devcenter
 
 import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.service.exception.CategoryAlreadyExistException;
 import io._29cu.usmserver.core.service.exception.CategoryDoesNotExistException;
 import io._29cu.usmserver.core.service.utilities.CategoryList;
+import io._29cu.usmserver.core.service.utilities.Codes;
 
 @Component
 public interface CategoryService {
@@ -36,5 +33,5 @@ public interface CategoryService {
 	public CategoryList findCategories();
 	public Category updateCategory(Category category) throws CategoryAlreadyExistException;
 	public void deleteCategory(Long categoryId) throws CategoryDoesNotExistException;
-    public List<Category> getCategories();
+    public Codes getCategories();
 }
