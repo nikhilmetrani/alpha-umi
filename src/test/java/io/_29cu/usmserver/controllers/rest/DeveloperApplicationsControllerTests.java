@@ -17,6 +17,7 @@
 package io._29cu.usmserver.controllers.rest;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,8 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.UUID;
 
-import io._29cu.usmserver.core.model.entities.*;
-import io._29cu.usmserver.core.service.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +45,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.ApplicationHistory;
+import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
+import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
+import io._29cu.usmserver.core.service.ApplicationHistoryService;
+import io._29cu.usmserver.core.service.ApplicationService;
+import io._29cu.usmserver.core.service.ApplicationUpdateService;
+import io._29cu.usmserver.core.service.CategoryService;
+import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -82,6 +91,7 @@ public class DeveloperApplicationsControllerTests {
     private Application recalledApplication;
     private Application activeApplication;
     private ApplicationHistory applicationHistory;
+    private Category cat1, cat2;
     private String uuid;
 
     @Before
@@ -97,9 +107,14 @@ public class DeveloperApplicationsControllerTests {
         developer.setUsername("Test Owner");
         developer.setEnabled(true);
 
+        cat1 = new Category("Productivity");
+        cat1.setId(1l);
+        cat2 = new Category("LifeStyle");
+        cat2.setId(3l);
+
         application = new Application();
         application.setId(uuid);
-        application.setCategory(new Category("Productivity"));
+        application.setCategory(cat1);
         application.setName("Dreamweaver");
         application.setState(AppState.Staging);
         application.setVersion("1.0");
@@ -115,7 +130,7 @@ public class DeveloperApplicationsControllerTests {
 
         existingApplication = new Application();
         existingApplication.setId(uuid);
-        existingApplication.setCategory(new Category("Productivity"));
+        existingApplication.setCategory(cat1);
         existingApplication.setName("Dreamweaver");
         existingApplication.setState(AppState.Staging);
         existingApplication.setVersion("1.0");
@@ -124,7 +139,7 @@ public class DeveloperApplicationsControllerTests {
 
 	    updatedApplication = new Application();
 	    updatedApplication.setId(uuid);
-	    updatedApplication.setCategory(new Category("LifeStyle"));
+	    updatedApplication.setCategory(cat2);
 	    updatedApplication.setName("PhotoShop");
 	    updatedApplication.setState(AppState.Staging);
 	    updatedApplication.setVersion("1.1");
@@ -133,7 +148,7 @@ public class DeveloperApplicationsControllerTests {
 
         recalledApplication = new Application();
         recalledApplication.setId(uuid);
-        recalledApplication.setCategory(new Category("LifeStyle"));
+        recalledApplication.setCategory(cat2);
         recalledApplication.setName("PhotoShop");
         recalledApplication.setState(AppState.Recalled);
         recalledApplication.setVersion("1.1");
@@ -142,7 +157,7 @@ public class DeveloperApplicationsControllerTests {
 
         activeApplication = new Application();
         activeApplication.setId(uuid);
-        activeApplication.setCategory(new Category("LifeStyle"));
+        activeApplication.setCategory(cat2);
         activeApplication.setName("PhotoShop");
         activeApplication.setState(AppState.Active);
         activeApplication.setVersion("1.1");
@@ -220,16 +235,52 @@ public class DeveloperApplicationsControllerTests {
         when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(post("/api/0/developer/applications/create")
-                .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description'}".replaceAll("'",  "\""))
+                .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': '1'}, 'description':'test description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
         when(userService.findAuthenticatedUser()).thenReturn(developer);
-        when(categoryService.findCategoryByName("Productivity")).thenReturn(new Category("Productivity"));
+        when(categoryService.findCategoryByName("Productivity")).thenReturn(cat1);
         when(applicationService.createApplication(any(Application.class))).thenReturn(application);
+        assertTrue("AppState is not in Staging", application.getState()==AppState.Staging);
 
         mockMvc.perform(post("/api/0/developer/applications/create")
-                .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description'}".replaceAll("'",  "\""))
+                .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': '1'}, 'description':'test description'}".replaceAll("'",  "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name",
+                        equalTo(application.getName())))
+                .andExpect(jsonPath("$.rid",
+                        equalTo(uuid)))
+                .andExpect(jsonPath("$.version",
+                        equalTo(application.getVersion())))
+                .andExpect(jsonPath("$.state",
+                        equalTo(application.getState().name())))
+                .andExpect(jsonPath("$.category.name",
+                        equalTo(application.getCategory().getName())))
+                .andExpect(jsonPath("$.description",
+                        equalTo(application.getDescription())))
+                .andExpect(jsonPath("$.state",
+                        equalTo(application.getState().name())))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void  testCreateAndPublishDeveloperApplication() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(null);
+    	
+        mockMvc.perform(post("/api/0/developer/applications/create")
+                .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': '1'}, 'description':'test description'}".replaceAll("'",  "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        when(categoryService.findCategoryByName("Productivity")).thenReturn(cat1);
+        application.setState(AppState.Active);
+        when(applicationService.createApplication(any(Application.class))).thenReturn(application);
+        assertTrue("AppState is not in Staging", application.getState()==AppState.Active);
+
+        mockMvc.perform(post("/api/0/developer/applications/create")
+                .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': '1'}, 'description':'test description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name",
                         equalTo(application.getName())))
@@ -277,7 +328,7 @@ public class DeveloperApplicationsControllerTests {
     	when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(post("/api/0/developer/applications/"+ uuid +"/update")
-                .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
+                .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': '3'}, 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
@@ -285,7 +336,7 @@ public class DeveloperApplicationsControllerTests {
     	when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(null);
     	
         mockMvc.perform(post("/api/0/developer" +"/applications/22/update")
-                .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
+                .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': '3'}, 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isPreconditionFailed());
 
@@ -294,7 +345,7 @@ public class DeveloperApplicationsControllerTests {
 	    when(applicationService.updateApplication(any(Application.class))).thenReturn(updatedApplication);
 
 	    mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/update")
-                .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
+                .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': '3'}, 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
 		        .andExpect(jsonPath("$.name",
 				        equalTo(updatedApplication.getName())))
@@ -400,7 +451,7 @@ public class DeveloperApplicationsControllerTests {
         when(userService.findAuthenticatedUser()).thenReturn(null);
 
         mockMvc.perform(post("/api/0/developer/22/applications/"+ uuid +"/createUpdate")
-        		.content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.1', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description for Application Update'}".replaceAll("'",  "\""))
+        		.content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.1', 'category': { 'name': '1'}, 'description':'test description for Application Update'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
@@ -411,7 +462,7 @@ public class DeveloperApplicationsControllerTests {
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(null);
 
         mockMvc.perform(post("/api/0/developer/"+ developer.getId() +"/applications/22/createUpdate")
-        		.content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.1', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description for Application Update'}".replaceAll("'",  "\""))
+        		.content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.1', 'category': { 'name': '1'}, 'description':'test description for Application Update'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -422,7 +473,7 @@ public class DeveloperApplicationsControllerTests {
         application.setState(AppState.Blocked);
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
         mockMvc.perform(post("/api/0/developer/"+ developer.getId() +"/applications/" + uuid +"/createUpdate")
-        		.content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.1', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description for Application Update'}".replaceAll("'",  "\""))
+        		.content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.1', 'category': { 'name': '1'}, 'description':'test description for Application Update'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isPreconditionFailed());
     }
@@ -435,7 +486,7 @@ public class DeveloperApplicationsControllerTests {
         when(applicationUpdateService.findByApplication(uuid)).thenReturn(null);
 
         mockMvc.perform(post("/api/0/developer/"+ developer.getId() +"/applications/" + uuid +"/createUpdate")
-                .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.1', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description for Application Update'}".replaceAll("'",  "\""))
+                .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.1', 'category': { 'name': '1'}, 'description':'test description for Application Update'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name",
                         equalTo(application.getName())))
