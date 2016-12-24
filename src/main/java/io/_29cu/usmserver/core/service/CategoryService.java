@@ -16,12 +16,8 @@
 
 package io._29cu.usmserver.core.service;
 
-<<<<<<< HEAD
-import org.springframework.stereotype.Component;
-=======
 import java.util.List;
->>>>>>> devcenter
-
+import org.springframework.stereotype.Component;
 import io._29cu.usmserver.core.model.entities.Category;
 import io._29cu.usmserver.core.service.exception.CategoryAlreadyExistException;
 import io._29cu.usmserver.core.service.exception.CategoryDoesNotExistException;
