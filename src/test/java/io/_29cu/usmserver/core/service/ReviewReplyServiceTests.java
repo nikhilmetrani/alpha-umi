@@ -94,11 +94,9 @@ public class ReviewReplyServiceTests {
 		applicationService.createApplication(application);
 
 		review = new Review();
-		review.setApplication(application);
-		review.setConsumer(consumer);
 		review.setTitle("testTitle");
 		review.setDescription("testDescription");
-		review = reviewService.createReview(review);
+		review = reviewService.createReview(review,application,consumer);
 		
 		reviewReply1 = new ReviewReply();
 		reviewReply1.setDescription("reply1");
