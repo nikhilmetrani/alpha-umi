@@ -51,8 +51,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public Subscription subscribeApplication(String appId) {
-        User user = userService.findAuthenticatedUser();
+    public Subscription subscribeApplication(String appId, User user) {
         Subscription receivedSubscription = new Subscription();
         Application application = applicationService.findApplication(appId);
         if(application != null && application.getState() == AppState.Active) {
@@ -76,8 +75,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
 
     @Override
-    public Subscription unsubscribeApplication(String appId){
-        User user = userService.findAuthenticatedUser();
+    public Subscription unsubscribeApplication(String appId, User user){
         Subscription subscription = findSubscriptionByUserIdAndApplicationId(user.getId(),appId);
         subscription.setActive(false);
         subscription.setDateUnsubscribed(new Date());

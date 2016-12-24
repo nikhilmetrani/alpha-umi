@@ -60,7 +60,7 @@ public class SubscriptionController {
         User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<SubscriptionResource>(HttpStatus.FORBIDDEN);
-        Subscription subscription = subscriptionService.subscribeApplication(appId);
+        Subscription subscription = subscriptionService.subscribeApplication(appId,user);
         if(subscription != null){
             SubscriptionResource createdSubscriptionResource = new SubscriptionResourceAssembler().toResource(subscription);
             return new ResponseEntity<SubscriptionResource>(createdSubscriptionResource, HttpStatus.OK);
@@ -78,7 +78,7 @@ public class SubscriptionController {
         User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<SubscriptionResource>(HttpStatus.FORBIDDEN);
-        Subscription updatedSubscription = subscriptionService.unsubscribeApplication(appId);
+        Subscription updatedSubscription = subscriptionService.unsubscribeApplication(appId,user);
         SubscriptionResource updatedSubscriptionResource = new SubscriptionResourceAssembler().toResource(updatedSubscription);
         return new ResponseEntity<SubscriptionResource>(updatedSubscriptionResource, HttpStatus.OK);
     }

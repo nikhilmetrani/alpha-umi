@@ -160,7 +160,7 @@ public class SubscriptionControllerTests {
     @Test
     public void  testSubscribeApplication() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(user);
-        when(subscriptionService.subscribeApplication(uuid)).thenReturn(subscription);
+        when(subscriptionService.subscribeApplication(uuid,user)).thenReturn(subscription);
         mockMvc.perform(post("/api/0/store/applications/"+uuid+"/subscribe"))
                 .andExpect(status().isOk());
     }
@@ -176,7 +176,7 @@ public class SubscriptionControllerTests {
     @Test
     public void  testUnsubscribeApplication() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(user);
-        when(subscriptionService.unsubscribeApplication(uuid)).thenReturn(unsubscription);
+        when(subscriptionService.unsubscribeApplication(uuid,user)).thenReturn(unsubscription);
         mockMvc.perform(post("/api/0/store/applications/"+uuid+"/unsubscribe"))
                 .andExpect(status().isOk());
     }
