@@ -23,9 +23,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,8 +35,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.model.entities.Code;
 import io._29cu.usmserver.core.service.CategoryService;
+import io._29cu.usmserver.core.service.utilities.Codes;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -53,31 +51,27 @@ public class CodeDefinitionControllerTests {
 
     private MockMvc mockMvc;
 
-    private List<Category> catlist;
-    private Category cat1;
-    private Category cat2;
+    private Code code1;
+    private Code code2;
+
+    private Codes codes;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(codeDefinitionController).build();
 
-        catlist = new ArrayList<>();
-
-        cat1 = new Category();
-        cat1.setId(1l);
-        cat1.setName("Productivity");
-        catlist.add(cat1);
-
-        cat2 = new Category();
-        cat2.setId(2l);
-        cat2.setName("Others");
-        catlist.add(cat2);
+        code1 = new Code("1", "Productivity");
+        code2 = new Code("2", "Others");
+        
+        codes = new Codes();
+        codes.add(code1);
+        codes.add(code2);
     }
 
     @Test
     public void  testCategory() throws Exception {
-        when(categoryService.getCategories()).thenReturn(catlist);
+        when(categoryService.getCategories()).thenReturn(codes);
 
         mockMvc.perform(get("/api/1/codes/category"))
                 .andExpect(jsonPath("$.codes[*].value",

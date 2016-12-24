@@ -23,6 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import io._29cu.usmserver.common.utilities.AppHelperTests;
 import io._29cu.usmserver.controllers.rest.ApplicationBundleControllerTests;
 import io._29cu.usmserver.controllers.rest.ApplicationControllerTests;
+import io._29cu.usmserver.controllers.rest.CodeDefinitionControllerTests;
 import io._29cu.usmserver.controllers.rest.ConsumerProfileControllerTests;
 import io._29cu.usmserver.controllers.rest.DeveloperApplicationsControllerTests;
 import io._29cu.usmserver.controllers.rest.DeveloperProfileControllerTests;
@@ -54,6 +55,7 @@ import io._29cu.usmserver.core.service.utilities.ApplicationListTests;
     AppHelperTests.class,
     ApplicationBundleControllerTests.class,
     ApplicationControllerTests.class,
+    CodeDefinitionControllerTests.class,
     ConsumerProfileControllerTests.class,
     DeveloperApplicationsControllerTests.class,
     DeveloperProfileControllerTests.class,
