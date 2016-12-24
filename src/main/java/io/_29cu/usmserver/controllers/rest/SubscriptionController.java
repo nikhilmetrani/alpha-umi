@@ -16,6 +16,11 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import java.util.Date;
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.enumerations.AppState;
+import io._29cu.usmserver.controllers.rest.resources.SubscriptionResource;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.SubscriptionResourceAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,57 +30,60 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
-import io._29cu.usmserver.controllers.rest.resources.SubscriptionResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
-import io._29cu.usmserver.controllers.rest.resources.assemblers.SubscriptionResourceAssembler;
 import io._29cu.usmserver.core.model.entities.Subscription;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.SubscriptionService;
 import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
-@RequestMapping("/api/0/store/subscription")
+@RequestMapping("/api/0/store")
 public class SubscriptionController {
     @Autowired
     private UserService userService;
 
     @Autowired
+    private ApplicationService applicationService;
+
+    @Autowired
     private SubscriptionService subscriptionService;
 
     // Create Subscription
-    @RequestMapping(path = "/subscribe", method = RequestMethod.POST)
+    @RequestMapping(path = "/applications/{appId}/subscribe", method = RequestMethod.POST)
     public ResponseEntity<SubscriptionResource> SubscribeApplication(
-            @RequestBody SubscriptionResource subscriptionResource
+            @PathVariable String appId
     ) {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<SubscriptionResource>(HttpStatus.FORBIDDEN);
-        Subscription receivedSubscription = subscriptionResource.toEntity();
-        receivedSubscription.setUser(user);
-        Subscription subscription = subscriptionService.subscribeApplication(receivedSubscription);
-        SubscriptionResource createdSubscriptionResource = new SubscriptionResourceAssembler().toResource(subscription);
-        return new ResponseEntity<SubscriptionResource>(createdSubscriptionResource, HttpStatus.OK);
+        Subscription subscription = subscriptionService.subscribeApplication(appId);
+        if(subscription != null){
+            SubscriptionResource createdSubscriptionResource = new SubscriptionResourceAssembler().toResource(subscription);
+            return new ResponseEntity<SubscriptionResource>(createdSubscriptionResource, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<SubscriptionResource>(HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @RequestMapping(path = "/unsubscribe", method = RequestMethod.POST)
+    @RequestMapping(path = "/applications/{appId}/unsubscribe", method = RequestMethod.POST)
     public ResponseEntity<SubscriptionResource> UnsubscribeApplication(
-            @RequestBody SubscriptionResource subscriptionResource
+            @PathVariable String appId
     ) {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<SubscriptionResource>(HttpStatus.FORBIDDEN);
-        Subscription receivedSubscription = subscriptionResource.toEntity();
-        receivedSubscription.setUser(user);
-        Subscription subscription = subscriptionService.unsubscribeApplication(receivedSubscription);
-        SubscriptionResource createdSubscriptionResource = new SubscriptionResourceAssembler().toResource(subscription);
-        return new ResponseEntity<SubscriptionResource>(createdSubscriptionResource, HttpStatus.OK);
+        Subscription updatedSubscription = subscriptionService.unsubscribeApplication(appId);
+        SubscriptionResource updatedSubscriptionResource = new SubscriptionResourceAssembler().toResource(updatedSubscription);
+        return new ResponseEntity<SubscriptionResource>(updatedSubscriptionResource, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/myapps", method = RequestMethod.GET)
+    @RequestMapping(path = "/subscription/myapps", method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> getSubscribedApplications() {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();

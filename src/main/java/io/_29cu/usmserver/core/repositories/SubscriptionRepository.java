@@ -41,4 +41,6 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Lon
     @Query("select s from Subscription s where s.application.name = :applicationId and s.dateUnsubscribed <= :unsubscriptionDate")
     List<Subscription> findTerminatedSubscriptionsPerApplication(@Param("applicationId") String applicationName,@Param("unsubscriptionDate") Date unsubscriptionDate);
 
+    @Query("select a from Subscription a where a.user.id = :userId and a.application.id = :applicationId")
+    Subscription findSubscription(@Param("userId") Long userId, @Param("applicationId") String applicationId);
 }

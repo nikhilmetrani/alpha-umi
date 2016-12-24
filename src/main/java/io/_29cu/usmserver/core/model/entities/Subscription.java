@@ -21,19 +21,18 @@ import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
 import java.util.Date;
 
-
 @Entity
 public class Subscription {
     @Id
     @GeneratedValue
     private Long id;
-    @OneToOne
+    @ManyToOne
     @NaturalId
     private Application application;
     @ManyToOne
     @NaturalId
     private User user;
-    //private String dateSubscribed;
+
     @Column(name = "dateSubscribed")
     @Temporal(TemporalType.DATE)
     private Date dateSubscribed;
@@ -68,17 +67,6 @@ public class Subscription {
         this.user = user;
     }
 
-   /* public String getDateSubscribed() {
-        return dateSubscribed;
-    }
-
-    public void setDateSubscribed(String dateSubscribed) {
-        this.dateSubscribed = dateSubscribed;
-    }*/
-
-
-
-
     public Date getDateSubscribed() {
         return dateSubscribed;
     }
@@ -87,12 +75,12 @@ public class Subscription {
         this.dateSubscribed = dateSubscribed;
     }
 
-    public Date getDateUnsubscribed() {
-        return dateUnsubscribed;
-    }
-
     public void setDateUnsubscribed(Date dateUnsubscribed) {
         this.dateUnsubscribed = dateUnsubscribed;
+    }
+
+    public Date getDateUnsubscribed() {
+        return dateUnsubscribed;
     }
 
     public Boolean getActive() {

@@ -61,6 +61,9 @@ public class SubscriptionControllerTests {
     private SubscriptionService subscriptionService;
     @Mock
     private UserService userService;
+    @Mock
+    private ApplicationService applicationService;
+
 
 
     // @Mock not used here since they are mocked in setup()
@@ -73,9 +76,13 @@ public class SubscriptionControllerTests {
     private User user;
     private Application application;
     private String uuid;
+    private Subscription subscription;
+    private Subscription unsubscription;
+
 
     private ApplicationList appList;
     private String appUUID2;
+
 
     @Before
     public void setup() throws Exception {
@@ -119,6 +126,22 @@ public class SubscriptionControllerTests {
         
         appList.setApplications(list);
 
+        subscription = new Subscription();
+        subscription.setId(1L);
+        subscription.setApplication(application);
+        subscription.setActive(true);
+        subscription.setUser(user);
+
+        unsubscription = new Subscription();
+        unsubscription.setId(1L);
+        unsubscription.setApplication(application);
+        unsubscription.setActive(false);
+        unsubscription.setUser(user);
+
+
+
+
+
         // Let's mock the security context
         authenticationMocked = Mockito.mock(Authentication.class);
         securityContextMocked = Mockito.mock(SecurityContext.class);
@@ -130,10 +153,32 @@ public class SubscriptionControllerTests {
     public void  testSubscribeApplicationIsForbidden() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
 
-        mockMvc.perform(post("/api/0/store/subscription/subscribe")
-                .content("{'application':{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'PhotoShop Description'}, 'user':{'username': 'Test Owner', 'email': 'owner@test.com', 'password': 'password'},'dateSubscribed':'2016/11/11', 'active':'True'}".replaceAll("'",  "\""))
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/0/store/applications/22/subscribe"))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void  testSubscribeApplication() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(user);
+        when(subscriptionService.subscribeApplication(uuid)).thenReturn(subscription);
+        mockMvc.perform(post("/api/0/store/applications/"+uuid+"/subscribe"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void  testUnsubscribeApplicationIsForbidden() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(null);
+
+        mockMvc.perform(post("/api/0/store/applications/22/unsubscribe"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void  testUnsubscribeApplication() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(user);
+        when(subscriptionService.unsubscribeApplication(uuid)).thenReturn(unsubscription);
+        mockMvc.perform(post("/api/0/store/applications/"+uuid+"/unsubscribe"))
+                .andExpect(status().isOk());
     }
 
     @Test

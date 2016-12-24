@@ -1,12 +1,9 @@
 /**
  * Copyright 2016 - 29cu.io and the authors of alpha-umi open source project
-
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
-
  *     http://www.apache.org/licenses/LICENSE-2.0
-
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,14 +56,14 @@ public class ReportServiceTests {
     @Autowired
     private SubscriptionService subscriptionService;
 
-	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private ApplicationRepository applicationRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private SubscriptionRepository subscriptionRepository;
+    @Autowired
+    private ApplicationRepository applicationRepository;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     private User developer, developer1, developer2, developer3;
     private Application application,application1,application2,application3;
@@ -237,21 +234,21 @@ public class ReportServiceTests {
 
     }
 
-	@After
-	public void tearDown() {
-		subscriptionRepository.delete(subscription.getId());
-		subscriptionRepository.delete(subscription1.getId());
-		subscriptionRepository.delete(subscription2.getId());
-		subscriptionRepository.delete(subscription3.getId());
-		applicationRepository.delete(application.getId());
-		applicationRepository.delete(application1.getId());
-		applicationRepository.delete(application2.getId());
-		applicationRepository.delete(application3.getId());
-		userRepository.delete(developer.getId());
-		userRepository.delete(developer1.getId());
-		userRepository.delete(developer2.getId());
-		userRepository.delete(developer3.getId());
-	}
+    @After
+    public void tearDown() {
+        subscriptionRepository.delete(subscription.getId());
+        subscriptionRepository.delete(subscription1.getId());
+        subscriptionRepository.delete(subscription2.getId());
+        subscriptionRepository.delete(subscription3.getId());
+        applicationRepository.delete(application.getId());
+        applicationRepository.delete(application1.getId());
+        applicationRepository.delete(application2.getId());
+        applicationRepository.delete(application3.getId());
+        userRepository.delete(developer.getId());
+        userRepository.delete(developer1.getId());
+        userRepository.delete(developer2.getId());
+        userRepository.delete(developer3.getId());
+    }
 
     @Test
     @Transactional

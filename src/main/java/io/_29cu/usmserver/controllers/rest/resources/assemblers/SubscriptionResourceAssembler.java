@@ -36,6 +36,7 @@ public class SubscriptionResourceAssembler extends ResourceAssemblerSupport<Subs
         subscriptionResource.setUser(subscription.getUser());
         subscriptionResource.setApplication(subscription.getApplication());
         subscriptionResource.setDateSubscribed(subscription.getDateSubscribed());
+        subscriptionResource.setDateUnsubscribed(subscription.getDateUnsubscribed());
         subscriptionResource.setActive(subscription.getActive());
         return subscriptionResource;
     }

@@ -22,7 +22,10 @@ import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import io._29cu.usmserver.core.model.entities.Application;
 
 public interface SubscriptionService {
-    Subscription subscribeApplication(Subscription subscription);
-    Subscription unsubscribeApplication(Subscription subscription);
+    Subscription subscribeApplication(String applicationId);
+    Subscription unsubscribeApplication(String applicationId);
     public ApplicationList getSubscribedApplications(long userId);
+    Subscription findSubscriptionByUserIdAndApplicationId(Long userId, String applicationId);
+    Subscription subscribeApplication(Subscription subscription);
+
 }

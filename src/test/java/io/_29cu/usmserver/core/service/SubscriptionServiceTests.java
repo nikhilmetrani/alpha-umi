@@ -145,6 +145,7 @@ public class SubscriptionServiceTests {
 		subscriptionRepository.delete(subscription.getId());
 	}
 
+
     @Test
     @Transactional
     public void testGetSubscribedApplications() {
