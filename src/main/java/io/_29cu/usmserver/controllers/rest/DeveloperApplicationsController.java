@@ -245,7 +245,7 @@ public class DeveloperApplicationsController {
 
     // Create Update Application
     @RequestMapping(path = "/{userId}/applications/{appId}/createUpdate", method = RequestMethod.POST)
-    public ResponseEntity<ApplicationUpdateResource> createUpdateDeveloperApplication(
+    public ResponseEntity<ApplicationResource> createUpdateDeveloperApplication(
             @PathVariable String userId,
             @PathVariable String appId,
             @RequestBody ApplicationUpdateResource applicationUpdateResource
@@ -253,7 +253,7 @@ public class DeveloperApplicationsController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
 
         try{
             ApplicationUpdate applicationUpdate = applicationUpdateResource.toEntity();
@@ -262,13 +262,18 @@ public class DeveloperApplicationsController {
             if(null != application && !application.getState().equals(AppState.Blocked) && application.getState().equals(AppState.Active)) {
                 applicationUpdate.setTarget(application);
                 ApplicationUpdate newApplicationUpdate = applicationUpdateService.createApplicationUpdateByDeveloper(user.getId(),applicationUpdate);
-                ApplicationUpdateResource newApplicationUpdateResource = new ApplicationUpdateResourceAssembler().toResource(newApplicationUpdate);
-                return new ResponseEntity<ApplicationUpdateResource>(newApplicationUpdateResource, HttpStatus.OK);
+                application.setId(applicationUpdate.getTarget().getId());
+                application.setVersion(applicationUpdate.getVersion());
+                application.setWhatsNew(applicationUpdate.getWhatsNew());
+                application.setDescription(applicationUpdate.getDescription());
+                application.setName(applicationUpdate.getName());
+                ApplicationResource newApplicationUpdateResource = new ApplicationResourceAssembler().toResource(application);
+                return new ResponseEntity<ApplicationResource>(newApplicationUpdateResource, HttpStatus.OK);
             }else{
-                return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.PRECONDITION_FAILED);
+                return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
             }
         }catch(Exception ex){
-            return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
         }
     }
 
