@@ -37,6 +37,8 @@ import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResou
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 
+import java.util.Calendar;
+
 @Controller
 @RequestMapping("/api/0/developer")
 //@EnableResourceServer
@@ -141,6 +143,7 @@ public class DeveloperApplicationsController {
         receivedApplication.setDeveloper(user);
         receivedApplication.setCategory(categoryService.findCategory(Long.valueOf(receivedApplication.getCategory().getName())));
         receivedApplication.setState(AppState.Active);
+        receivedApplication.setApplicationPublishDate(Calendar.getInstance().getTime());
         Application application = applicationService.createApplication(receivedApplication);
         ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application); 
         return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
@@ -182,6 +185,7 @@ public class DeveloperApplicationsController {
 	        // If the application state is not 'blocked' 
 	        if(application!=null && !application.getState().equals(AppState.Blocked)) {
                 application.setState(AppState.Active);
+                application.setApplicationPublishDate(Calendar.getInstance().getTime());
                 //push the app to history
                 ApplicationHistory applicationHistory = new ApplicationHistory();
                 applicationHistory.setApplication(application);
@@ -241,7 +245,7 @@ public class DeveloperApplicationsController {
 
     // Create Update Application
     @RequestMapping(path = "/{userId}/applications/{appId}/createUpdate", method = RequestMethod.POST)
-    public ResponseEntity<ApplicationResource> createUpdateDeveloperApplication(
+    public ResponseEntity<ApplicationUpdateResource> createUpdateDeveloperApplication(
             @PathVariable String userId,
             @PathVariable String appId,
             @RequestBody ApplicationUpdateResource applicationUpdateResource
@@ -249,34 +253,22 @@ public class DeveloperApplicationsController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.FORBIDDEN);
 
         try{
             ApplicationUpdate applicationUpdate = applicationUpdateResource.toEntity();
             Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
-            // If the application state is not 'blocked'
-            if(!application.getState().equals(AppState.Blocked)) {
-                ApplicationUpdate dbApplicationUpdate = applicationUpdateService.findByApplication(appId);
-
-                //if(dbApplicationUpdate != null){
-                //    applicationUpdate.setId(dbApplicationUpdate.getId());
-                //}
-                applicationUpdate.setId(application.getId());
-                application.setState(AppState.Staging);
-                application.setVersion(applicationUpdate.getVersion());
-                application.setDescription(applicationUpdate.getDescription());
-                application.setName(applicationUpdate.getName());
-                application.setWhatsNew(applicationUpdate.getWhatsNew());
+            // If the application state is not 'blocked' and should be active for the update to take place
+            if(null != application && !application.getState().equals(AppState.Blocked) && application.getState().equals(AppState.Active)) {
                 applicationUpdate.setTarget(application);
                 ApplicationUpdate newApplicationUpdate = applicationUpdateService.createApplicationUpdateByDeveloper(user.getId(),applicationUpdate);
-                ApplicationResource newApplicationResource = new ApplicationResourceAssembler().toResource(application);
-                return new ResponseEntity<ApplicationResource>(newApplicationResource, HttpStatus.OK);
+                ApplicationUpdateResource newApplicationUpdateResource = new ApplicationUpdateResourceAssembler().toResource(newApplicationUpdate);
+                return new ResponseEntity<ApplicationUpdateResource>(newApplicationUpdateResource, HttpStatus.OK);
             }else{
-                return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
+                return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.PRECONDITION_FAILED);
             }
         }catch(Exception ex){
-            //ex.printStackTrace();
-            return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.BAD_REQUEST);
         }
     }
 
