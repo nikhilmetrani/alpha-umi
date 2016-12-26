@@ -92,31 +92,31 @@ public class RateServiceTests {
 		rate.setApplication(application);
 		rate.setConsumer(consumer);
 		rate.setRating(Rating.Like);
-		rate = rateService.createRate(rate);
+		rate = rateService.createRate(rate, application, consumer);
 
 		rate1 = new Rate();
 		rate1.setApplication(application);
 		rate1.setConsumer(consumer);
 		rate1.setRating(Rating.Like);
-		rate1 = rateService.createRate(rate1);
+		rate1 = rateService.createRate(rate1, application, consumer);
 
 		rate2 = new Rate();
 		rate2.setApplication(application);
 		rate2.setConsumer(consumer);
 		rate2.setRating(Rating.Like);
-		rate2 = rateService.createRate(rate2);
+		rate2 = rateService.createRate(rate2, application, consumer);
 
 		rate3 = new Rate();
 		rate3.setApplication(application);
 		rate3.setConsumer(consumer);
 		rate3.setRating(Rating.Dislike);
-		rate3 = rateService.createRate(rate3);
+		rate3 = rateService.createRate(rate3, application, consumer);
 
 		rate4 = new Rate();
 		rate4.setApplication(application);
 		rate4.setConsumer(consumer);
 		rate4.setRating(Rating.Dislike);
-		rate4 = rateService.createRate(rate4);
+		rate4 = rateService.createRate(rate4, application, consumer);
 	}
 
 	@Test
@@ -128,7 +128,7 @@ public class RateServiceTests {
 
 	@Test
 	public void testCreateRating() {
-		rate = rateService.createRate(rate);
+		rate = rateService.createRate(rate, application, consumer);
 		assertEquals(application.getId(), rate.getApplication().getId());
 		assertEquals(consumer.getId(), rate.getConsumer().getId());
 		assertEquals(Rating.Like, rate.getRating());
