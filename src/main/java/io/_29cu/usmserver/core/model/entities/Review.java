@@ -2,6 +2,7 @@ package io._29cu.usmserver.core.model.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -16,7 +17,7 @@ public class Review extends BaseValueObject {
 	@ManyToOne
 	private User consumer;
 	
-	@OneToMany(mappedBy = "review")
+	@OneToMany(mappedBy = "review",cascade = CascadeType.ALL)
 	private List<ReviewReply> replies;
 
 	@NotNull
