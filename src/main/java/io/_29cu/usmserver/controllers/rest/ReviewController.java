@@ -63,5 +63,27 @@ public class ReviewController {
 		}
         return new ResponseEntity<ReviewResource>(HttpStatus.OK);
     }
-
+    
+    
+    @RequestMapping(path = "/remove/{reviewId}/feature", method = RequestMethod.PUT)
+    public ResponseEntity<ReviewResource> featureReview(
+    		@PathVariable Long reviewId
+    ) {
+        User user = userService.findAuthenticatedUser();
+        if (user == null)
+            return new ResponseEntity<ReviewResource>(HttpStatus.FORBIDDEN);
+		reviewService.featureReview(reviewId);
+        return new ResponseEntity<ReviewResource>(HttpStatus.OK);
+    }
+    
+    @RequestMapping(path = "/remove/{reviewId}/unfeature", method = RequestMethod.PUT)
+    public ResponseEntity<ReviewResource> unFeatureReview(
+    		@PathVariable Long reviewId
+    ) {
+        User user = userService.findAuthenticatedUser();
+        if (user == null)
+            return new ResponseEntity<ReviewResource>(HttpStatus.FORBIDDEN);
+		reviewService.unfeatureReview(reviewId);
+        return new ResponseEntity<ReviewResource>(HttpStatus.OK);
+    }
 }

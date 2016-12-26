@@ -5,6 +5,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -155,7 +156,6 @@ public class ReviewControllerTests {
                 .content("{'rid':'22'}".replaceAll("'", "\""))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());		
-				
 	}
 	
 	@Test
@@ -177,7 +177,42 @@ public class ReviewControllerTests {
                 .content("{'rid':'22'}".replaceAll("'", "\""))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isForbidden());		
-				
+	}
+	
+	@Test
+	public void testFeatureReview() throws Exception {
+		when(userService.findAuthenticatedUser()).thenReturn(consumer);
+        mockMvc.perform(put("/api/0/consumer/22/review/remove/22/feature")
+                .content("{'rid':'22'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());		
+	}
+	
+	@Test
+	public void testUnFeaturedReviewWhenUserNotAuthenticated() throws Exception {
+		when(userService.findAuthenticatedUser()).thenReturn(consumer);
+        mockMvc.perform(put("/api/0/consumer/22/review/remove/22/unfeature")
+                .content("{'rid':'22'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());		
+	}
+	
+	@Test
+	public void testFeatureReviewWhenUserNotAuthenticated() throws Exception {
+		when(userService.findAuthenticatedUser()).thenReturn(null);
+        mockMvc.perform(put("/api/0/consumer/22/review/remove/22/feature")
+                .content("{'rid':'22'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isForbidden());		
+	}
+	
+	@Test
+	public void testUnFeaturedReview() throws Exception {
+		when(userService.findAuthenticatedUser()).thenReturn(null);
+        mockMvc.perform(put("/api/0/consumer/22/review/remove/22/unfeature")
+                .content("{'rid':'22'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isForbidden());		
 	}
 
 }
