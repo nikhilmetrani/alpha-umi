@@ -51,7 +51,7 @@ public interface ApplicationRepository extends CrudRepository<Application, Strin
     @Query("select a from Application a where LOWER(a.developer.id) = LOWER(:id) and a.name = :applicationName")
     Application findApplicationByDeveloperIdAndAppName(@Param("id") long id, @Param("applicationName") String applicationName);
 
-    @Query("select a from Application a where LOWER(a.developer.id) = LOWER(:id) and a.id = :applicationId")
+    @Query("select a from Application a where a.developer.id = :id and a.id = :applicationId")
     Application findApplicationByDeveloperIdAndAppId(@Param("id") long id, @Param("applicationId") String applicationId);
     
     @Query("select u from Application u where u.state = 1")

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import java.util.ArrayList;
 
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
@@ -38,6 +39,7 @@ import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 
 import java.util.Calendar;
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/0/developer")
@@ -68,6 +70,29 @@ public class DeveloperApplicationsController {
         try {
             ApplicationList appList = applicationService.findApplicationsByDeveloper(user.getId());
             ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(appList);
+            return new ResponseEntity<ApplicationListResource>(appListResource, HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(path = "/applications/{appId}/list", method = RequestMethod.GET)
+    public ResponseEntity<ApplicationListResource> getApplicationList(
+            @PathVariable String appId
+    ){
+        // Let's get the user from principal and validate the userId against it.
+        User user = userService.findAuthenticatedUser();
+        if (user == null)
+            return new ResponseEntity<ApplicationListResource>(HttpStatus.FORBIDDEN);
+        try {
+            Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
+            List<Application> appList= new ArrayList<Application>();
+            appList.add(application);
+            ApplicationList applicationList = new ApplicationList();
+            applicationList.setApplications(appList);
+
+
+            ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(applicationList);
             return new ResponseEntity<ApplicationListResource>(appListResource, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
