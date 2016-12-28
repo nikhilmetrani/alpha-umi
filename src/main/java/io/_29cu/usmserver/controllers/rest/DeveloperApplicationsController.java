@@ -191,9 +191,36 @@ public class DeveloperApplicationsController {
 	    Application receivedApplication = applicationResource.toEntity();
 	    receivedApplication.setDeveloper(user);
 	    receivedApplication.setId(appId);
+        String  categoryId = receivedApplication.getCategory().getName();
+        receivedApplication.setCategory(categoryService.findCategory(Long.valueOf(categoryId)));
 	    application = applicationService.updateApplication(receivedApplication);
 	    ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application);
 	    return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
+    }
+
+    // Update and Publish Application
+    @RequestMapping(path = "/applications/{appId}/updateAndPublish", method = RequestMethod.POST)
+    public ResponseEntity<ApplicationResource> updateAndPublishDeveloperApplication(
+            @PathVariable String appId,
+            @RequestBody ApplicationResource applicationResource
+    ) {
+        // Let's get the user from principal and validate the userId against it.
+        User user = userService.findAuthenticatedUser();
+        if (user == null)
+            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+        Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
+        if (application == null)
+            return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
+
+        Application receivedApplication = applicationResource.toEntity();
+        receivedApplication.setDeveloper(user);
+        receivedApplication.setId(appId);
+        receivedApplication.setState(AppState.Active);
+        String  categoryId = receivedApplication.getCategory().getName();
+        receivedApplication.setCategory(categoryService.findCategory(Long.valueOf(categoryId)));
+        application = applicationService.updateApplication(receivedApplication);
+        ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application);
+        return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
     }
 
     // Publish Application
