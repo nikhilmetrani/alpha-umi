@@ -10,6 +10,7 @@ import io._29cu.usmserver.core.model.entities.ReviewReply;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.repositories.ReviewReplyRepository;
 import io._29cu.usmserver.core.service.ReviewReplyService;
+import io._29cu.usmserver.core.service.exception.ReviewReplyDoesNotExistException;
 
 @Component
 public class ReviewReplyServiceImpl implements ReviewReplyService {
@@ -27,8 +28,12 @@ public class ReviewReplyServiceImpl implements ReviewReplyService {
 	}
 
 	@Override
-	public void removeReviewReply(Long reviewReplyId) {
+	public void removeReviewReply(Long reviewReplyId) throws ReviewReplyDoesNotExistException {
+		if(reviewReplyRepository.exists(reviewReplyId)){
 		reviewReplyRepository.delete(reviewReplyId);
+		}else{
+			throw new ReviewReplyDoesNotExistException("Review Reply Does not exist");
+		}
 	}
 
 	@Override

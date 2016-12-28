@@ -27,6 +27,7 @@ import io._29cu.usmserver.core.model.enumerations.AuthorityName;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
 import io._29cu.usmserver.core.repositories.ReviewRepository;
 import io._29cu.usmserver.core.repositories.UserRepository;
+import io._29cu.usmserver.core.service.exception.ReviewReplyDoesNotExistException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -146,15 +147,34 @@ public class ReviewReplyServiceTests {
 	
 	@Test
 	public void testRemoveReviewReply(){
-		reviewReplyService.removeReviewReply(reviewReply1.getId());
+		Exception exception = null;
+		try {
+			reviewReplyService.removeReviewReply(reviewReply1.getId());
+		} catch (ReviewReplyDoesNotExistException e) {
+			exception = e;
+		} finally {
+			assertNull("ReviewReplyDoesNotExistException is thrown", exception);
+		}
 		ReviewReply findReviewReply = reviewReplyService.findReviewReply(reviewReply1.getId());
 		assertNull(findReviewReply);
 		reviewReply1 = reviewReplyService.createReviewReply(reviewReply1, review, consumer);
 	}
 	
+	@Test
+	public void testRemoveReviewReplyWithWrongId(){
+		Exception exception = null;
+		try {
+			reviewReplyService.removeReviewReply(22222l);
+		} catch (ReviewReplyDoesNotExistException e) {
+			exception = e;
+		} finally {
+			assertNotNull("ReviewReplyDoesNotExistException is Not thrown", exception);
+		}
+	}
+	
 	
 	@After
-	public void tearDown() {
+	public void tearDown() throws ReviewReplyDoesNotExistException {
 		reviewReplyService.removeReviewReply(reviewReply1.getId());
 		reviewReplyService.removeReviewReply(reviewReply2.getId());
 		reviewReplyService.removeReviewReply(reviewReply3.getId());

@@ -5,7 +5,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -24,7 +23,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import io._29cu.usmserver.core.model.entities.Application;
@@ -32,11 +30,10 @@ import io._29cu.usmserver.core.model.entities.Review;
 import io._29cu.usmserver.core.model.entities.ReviewReply;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
-import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.ReviewReplyService;
 import io._29cu.usmserver.core.service.ReviewService;
 import io._29cu.usmserver.core.service.UserService;
-import io._29cu.usmserver.core.service.exception.ReviewDoesNotExistException;
+import io._29cu.usmserver.core.service.exception.ReviewReplyDoesNotExistException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -109,7 +106,7 @@ public class ReviewReplyControllerTests {
 		String content = " {'rid':'222','reviewId':'22','developer':null,'description':'Review Reply Description','creationDate':1482925588809,'createBy':'Test Owner'}";
 		
 	    mockMvc
-				.perform(post("/api/0/consumer/review/222/reviewReply/create").content(
+				.perform(post("/api/0/consumer/review/22/reviewReply/create").content(
 						content.replaceAll("'", "\""))
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.description", equalTo((reviewReply.getDescription()))))
@@ -128,7 +125,7 @@ public class ReviewReplyControllerTests {
 		String content = " {'rid':'222','reviewId':'22','developer':null,'description':'Review Reply Description','creationDate':1482925588809,'createBy':'Test Owner'}";
 		
 	    mockMvc
-				.perform(post("/api/0/consumer/review/222/reviewReply/create").content(
+				.perform(post("/api/0/consumer/review/22/reviewReply/create").content(
 						content.replaceAll("'", "\""))
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isForbidden())
@@ -143,10 +140,39 @@ public class ReviewReplyControllerTests {
 		String content = " {'rid':'222','reviewId':'22','developer':null,'description':'Review Reply Description','creationDate':1482925588809,'createBy':'Test Owner'}";
 		
 	    mockMvc
-				.perform(post("/api/0/consumer/review/222/reviewReply/create").content(
+				.perform(post("/api/0/consumer/review/22/reviewReply/create").content(
 						content.replaceAll("'", "\""))
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
 				.andReturn();
+	}
+	
+	@Test
+	public void testRemoveReviewReply() throws Exception {
+		when(userService.findAuthenticatedUser()).thenReturn(consumer);
+        mockMvc.perform(delete("/api/0/consumer/review/22/reviewReply/remove/222")
+                .content("{'rid':'222'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());		
+	}
+	
+	@Test
+	public void testRemoveReviewReplyWhenUserNotAuthenticated() throws Exception {
+		when(userService.findAuthenticatedUser()).thenReturn(null);
+        mockMvc.perform(delete("/api/0/consumer/review/22/reviewReply/remove/222")
+                .content("{'rid':'222'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isForbidden());		
+	}
+	
+	
+	@Test
+	public void testRemoveReviewReplyWithReviewReplyDoesNotExistException() throws Exception {
+		when(userService.findAuthenticatedUser()).thenReturn(consumer);
+		Mockito.doThrow(new ReviewReplyDoesNotExistException("Review Reply does not exist")).when(reviewReplyService).removeReviewReply(any(Long.class));
+        mockMvc.perform(delete("/api/0/consumer/review/22/reviewReply/remove/222")
+                .content("{'rid':'222'}".replaceAll("'", "\""))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());		
 	}
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import io._29cu.usmserver.core.model.entities.Review;
 import io._29cu.usmserver.core.model.entities.ReviewReply;
 import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.service.exception.ReviewReplyDoesNotExistException;
 
 @Component
 public interface ReviewReplyService {
@@ -15,7 +16,7 @@ public interface ReviewReplyService {
 	
 	public ReviewReply createReviewReply(ReviewReply reviewReply, Review review, User user);
 	
-	public void removeReviewReply(Long reviewReplyId);
+	public void removeReviewReply(Long reviewReplyId) throws ReviewReplyDoesNotExistException;
 	
 	public ReviewReply findReviewReply(Long reviewReplyId);
 
