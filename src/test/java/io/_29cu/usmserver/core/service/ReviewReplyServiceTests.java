@@ -102,31 +102,31 @@ public class ReviewReplyServiceTests {
 		reviewReply1.setDescription("reply1");
 		reviewReply1.setDeveloper(developer);
 		reviewReply1.setReview(review);
-		reviewReply1 = reviewReplyService.createReviewReply(reviewReply1);
+		reviewReply1 = reviewReplyService.createReviewReply(reviewReply1, review, consumer);
 		
 		reviewReply2 = new ReviewReply();
 		reviewReply2.setDescription("reply2");
 		reviewReply2.setDeveloper(developer);
 		reviewReply2.setReview(review);
-		reviewReply2 = reviewReplyService.createReviewReply(reviewReply2);
+		reviewReply2 = reviewReplyService.createReviewReply(reviewReply2, review, consumer);
 		
 		reviewReply3 = new ReviewReply();
 		reviewReply3.setDescription("reply3");
 		reviewReply3.setDeveloper(developer);
 		reviewReply3.setReview(review);
-		reviewReply3 = reviewReplyService.createReviewReply(reviewReply3);
+		reviewReply3 = reviewReplyService.createReviewReply(reviewReply3, review, consumer);
 		
 		reviewReply4 = new ReviewReply();
 		reviewReply4.setDescription("reply4");
 		reviewReply4.setDeveloper(consumer);
 		reviewReply4.setReview(review);
-		reviewReply4 = reviewReplyService.createReviewReply(reviewReply4);
+		reviewReply4 = reviewReplyService.createReviewReply(reviewReply4, review, consumer);
 		
 		reviewReply5 = new ReviewReply();
 		reviewReply5.setDescription("reply5");
 		reviewReply5.setDeveloper(consumer);
 		reviewReply5.setReview(review);
-		reviewReply5 = reviewReplyService.createReviewReply(reviewReply5);
+		reviewReply5 = reviewReplyService.createReviewReply(reviewReply5, review, consumer);
 	}
 	
 	@Test
@@ -138,7 +138,7 @@ public class ReviewReplyServiceTests {
 	
 	@Test
 	public void testCreateReviewReply(){
-		reviewReply1 = reviewReplyService.createReviewReply(reviewReply1);
+		reviewReply1 = reviewReplyService.createReviewReply(reviewReply1, review, developer);
 		assertEquals(review.getId(),reviewReply1.getReview().getId());
 		assertEquals(developer.getId(),reviewReply1.getDeveloper().getId());
 		assertEquals("reply1",reviewReply1.getDescription());
@@ -149,7 +149,7 @@ public class ReviewReplyServiceTests {
 		reviewReplyService.removeReviewReply(reviewReply1.getId());
 		ReviewReply findReviewReply = reviewReplyService.findReviewReply(reviewReply1.getId());
 		assertNull(findReviewReply);
-		reviewReply1 = reviewReplyService.createReviewReply(reviewReply1);
+		reviewReply1 = reviewReplyService.createReviewReply(reviewReply1, review, consumer);
 	}
 	
 	

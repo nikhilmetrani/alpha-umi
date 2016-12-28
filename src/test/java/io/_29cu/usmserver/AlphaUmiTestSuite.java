@@ -28,7 +28,9 @@ import io._29cu.usmserver.controllers.rest.ConsumerProfileControllerTests;
 import io._29cu.usmserver.controllers.rest.DeveloperApplicationsControllerTests;
 import io._29cu.usmserver.controllers.rest.DeveloperProfileControllerTests;
 import io._29cu.usmserver.controllers.rest.EmployeeProfileControllerTests;
+import io._29cu.usmserver.controllers.rest.RatingControllerTests;
 import io._29cu.usmserver.controllers.rest.ReviewControllerTests;
+import io._29cu.usmserver.controllers.rest.ReviewReplyControllerTests;
 import io._29cu.usmserver.controllers.rest.StoreControllerTests;
 import io._29cu.usmserver.controllers.rest.SubscriptionControllerTests;
 import io._29cu.usmserver.controllers.rest.UserControllerTests;
@@ -81,7 +83,9 @@ import io._29cu.usmserver.core.service.utilities.ApplicationListTests;
     SubscriptionServiceTests.class,
     UserServiceTests.class,
     ApplicationListTests.class,
-    ReviewControllerTests.class
+    ReviewControllerTests.class,
+    RatingControllerTests.class,
+    ReviewReplyControllerTests.class
 })
 @ActiveProfiles("test")
 public class AlphaUmiTestSuite {
