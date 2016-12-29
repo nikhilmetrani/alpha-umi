@@ -83,11 +83,14 @@ public class UserControllerTests {
     }
     
     @Test
-    public void  testCreateUser() throws Exception {
+    public void  testCreateUserForBadRequest() throws Exception {
     	when(userService.createUser(any(User.class))).thenReturn(null);
         mockMvc.perform(post("/api/1/signup"))
                 .andExpect(status().isBadRequest());
+    }
 
+    @Test
+    public void  testCreateUser() throws Exception {
         when(userService.createUser(any(User.class))).thenReturn(user);
         mockMvc.perform(post("/api/1/signup")
                 .contentType(MediaType.APPLICATION_JSON)
