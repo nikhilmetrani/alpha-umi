@@ -191,8 +191,8 @@ public class DeveloperApplicationsController {
 	    Application receivedApplication = applicationResource.toEntity();
 	    receivedApplication.setDeveloper(user);
 	    receivedApplication.setId(appId);
-        String  categoryId = receivedApplication.getCategory().getName();
-        receivedApplication.setCategory(categoryService.findCategory(Long.valueOf(categoryId)));
+        String  categoryName = receivedApplication.getCategory().getName();
+        receivedApplication.setCategory(categoryService.findCategoryByName(categoryName));
 	    application = applicationService.updateApplication(receivedApplication);
 	    ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application);
 	    return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
@@ -216,8 +216,8 @@ public class DeveloperApplicationsController {
         receivedApplication.setDeveloper(user);
         receivedApplication.setId(appId);
         receivedApplication.setState(AppState.Active);
-        String  categoryId = receivedApplication.getCategory().getName();
-        receivedApplication.setCategory(categoryService.findCategory(Long.valueOf(categoryId)));
+        String  categoryName = receivedApplication.getCategory().getName();
+        receivedApplication.setCategory(categoryService.findCategoryByName(categoryName));
         application = applicationService.updateApplication(receivedApplication);
         ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application);
         return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
