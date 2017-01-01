@@ -144,18 +144,25 @@ public class ApplicationBundleControllerTests {
     }
 
     @Test
-    public void testGetApplicationBundleList() throws Exception {
+    public void testGetApplicationBundleListForForbidden() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
 
         mockMvc.perform(get("/api/0/developer/applicationBundles"))
                 .andExpect(status().isForbidden());
+    }
 
+    @Test
+    public void testGetApplicationBundleListForBadRequest() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationBundleService.findApplicationBundlesByDeveloper(developer.getId())).thenReturn(null);
 
         mockMvc.perform(get("/api/0/developer/applicationBundles"))
                 .andExpect(status().isBadRequest());
+    }
 
+    @Test
+    public void testGetApplicationBundleList() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
     	when(applicationBundleService.findApplicationBundlesByDeveloper(developer.getId())).thenReturn(applicationBundleList);
 
         mockMvc.perform(get("/api/0/developer/applicationBundles"))
@@ -163,19 +170,15 @@ public class ApplicationBundleControllerTests {
     }
 
     @Test
-    public void testGetApplicationBundle() throws Exception {
+    public void testGetApplicationBundleForForbidden() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(get("/api/0/developer/applicationBundles/" + uuid))
                 .andExpect(status().isForbidden());
+    }
 
-
-        when(userService.findAuthenticatedUser()).thenReturn(developer);
-        when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), uuid)).thenReturn(applicationBundle);
-
-        mockMvc.perform(get("/api/0/developer/applicationBundles/" + uuid))
-		        .andExpect(status().isOk());
-
+    @Test
+    public void testGetApplicationBundleForBadREquest() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), uuid)).thenReturn(null);
 
@@ -184,14 +187,26 @@ public class ApplicationBundleControllerTests {
     }
 
     @Test
-    public void  testCreateApplicationBundle() throws Exception {
+    public void testGetApplicationBundle() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), uuid)).thenReturn(applicationBundle);
+
+        mockMvc.perform(get("/api/0/developer/applicationBundles/" + uuid))
+		        .andExpect(status().isOk());
+    }
+
+    @Test
+    public void  testCreateApplicationBundleForForbidden() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(post("/api/0/developer/applicationBundles/create")
                 .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': 'Productivity'}, 'state': 'Staging', 'description':'test description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
+    }
 
+    @Test
+    public void  testCreateApplicationBundle() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationBundleService.createApplicationBundle(any(ApplicationBundle.class))).thenReturn(applicationBundle);
 
@@ -212,13 +227,16 @@ public class ApplicationBundleControllerTests {
     }
 
     @Test
-    public void  testCheckApplicationBundleNameExistsForDeveloper() throws Exception {
+    public void  testCheckApplicationBundleNameExistsForDeveloperForForbidden() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(get("/api/0/developer/applicationBundles/create")
                 .param("name", "Dreamweaver"))
                 .andExpect(status().isForbidden());
+    }
 
+    @Test
+    public void  testCheckApplicationBundleNameExistsForDeveloper() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationBundleService.findApplicationBundleByDeveloperAndName(developer.getId(), "Dreamweaver")).thenReturn(applicationBundle);
 
@@ -238,14 +256,17 @@ public class ApplicationBundleControllerTests {
     }
 
     @Test
-    public void testUpdateApplicationBundle() throws Exception {
+    public void testUpdateApplicationBundleForForbidden() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(post("/api/0/developer/applicationBundles/"+ uuid +"/update")
                 .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
+    }
 
+    @Test
+    public void testUpdateApplicationBundleForPreConditionFailed() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
     	when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), uuid)).thenReturn(null);
     	
@@ -253,7 +274,10 @@ public class ApplicationBundleControllerTests {
                 .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': 'Lifestyle'}, 'state': 'Staging', 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isPreconditionFailed());
+    }
 
+    @Test
+    public void testUpdateApplicationBundle() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), uuid)).thenReturn(applicationBundle);
 	    when(applicationBundleService.updateApplicationBundle(any(ApplicationBundle.class))).thenReturn(updatedApplicationBundle);

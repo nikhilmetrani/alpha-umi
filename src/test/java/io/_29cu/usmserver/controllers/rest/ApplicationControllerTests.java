@@ -109,12 +109,15 @@ public class ApplicationControllerTests {
     }
 
     @Test
-    public void  testGetApplicationsByDeveloper() throws Exception {
+    public void  testGetApplicationsByDeveloperForNotFound() throws Exception {
         when(applicationService.findApplicationsByDeveloper(1l)).thenReturn(null);
 
         mockMvc.perform(get("/api/1/store/application/developer/1"))
                 .andExpect(status().isNotFound());
+    }
 
+    @Test
+    public void  testGetApplicationsByDeveloper() throws Exception {
     	when(applicationService.findApplicationsByDeveloper(1l)).thenReturn(applicationList);
 
         mockMvc.perform(get("/api/1/store/application/developer/1"))

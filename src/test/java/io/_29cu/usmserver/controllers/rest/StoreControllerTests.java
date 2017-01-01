@@ -249,7 +249,10 @@ public class StoreControllerTests {
 
         mockMvc.perform(get("/api/1/store/search?keyword=tool"))
                 .andExpect(status().isBadRequest());
+    }
 
+    @Test
+    public void testSearchApplicationForBadRequestWithEmptyParam() throws Exception {
         mockMvc.perform(get("/api/1/store/search?keyword="))
                 .andExpect(status().isBadRequest());
     }
@@ -320,11 +323,14 @@ public class StoreControllerTests {
     }
 
     @Test
-    public void testSearchApplicationByCateogryForBadRequest() throws Exception {
-        when(applicationService.findApplicationsByCategoryAndKeyword(1l, "tool")).thenReturn(null);
-
+    public void testSearchApplicationByCateogryForBadRequestWithEmptyParam() throws Exception {
         mockMvc.perform(get("/api/1/store/search?keyword="))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testSearchApplicationByCateogryForBadRequest() throws Exception {
+        when(applicationService.findApplicationsByCategoryAndKeyword(1l, "tool")).thenReturn(null);
 
         mockMvc.perform(get("/api/1/store/search/category/1?keyword=tool"))
                 .andExpect(status().isBadRequest());

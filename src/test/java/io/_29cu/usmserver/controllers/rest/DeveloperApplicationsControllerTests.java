@@ -219,19 +219,15 @@ public class DeveloperApplicationsControllerTests {
     }
 
     @Test
-    public void  testGetApplication() throws Exception {
+    public void  testGetApplicationForForbidden() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(get("/api/0/developer/applications/" + uuid))
                 .andExpect(status().isForbidden());
+    }
 
-        when(userService.findAuthenticatedUser()).thenReturn(developer);
-        when(userService.findAuthenticatedUser()).thenReturn(developer);
-        when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
-
-        mockMvc.perform(get("/api/0/developer/applications/" + uuid))
-		        .andExpect(status().isOk());
-
+    @Test
+    public void  testGetApplicationForBadRequest() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(null);
 
@@ -240,14 +236,26 @@ public class DeveloperApplicationsControllerTests {
     }
 
     @Test
-    public void  testCreateDeveloperApplication() throws Exception {
+    public void  testGetApplication() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
+
+        mockMvc.perform(get("/api/0/developer/applications/" + uuid))
+		        .andExpect(status().isOk());
+    }
+
+    @Test
+    public void  testCreateDeveloperApplicationForForbidden() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(post("/api/0/developer/applications/create")
                 .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': '1'}, 'description':'test description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
+    }
 
+    @Test
+    public void  testCreateDeveloperApplication() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(categoryService.findCategoryByName("Productivity")).thenReturn(cat1);
         when(applicationService.createApplication(any(Application.class))).thenReturn(application);
@@ -274,14 +282,17 @@ public class DeveloperApplicationsControllerTests {
     }
 
     @Test
-    public void  testCreateAndPublishDeveloperApplication() throws Exception {
+    public void  testCreateAndPublishDeveloperApplicationForForbidden() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(post("/api/0/developer/applications/create")
                 .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': '1'}, 'description':'test description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
+    }
 
+    @Test
+    public void  testCreateAndPublishDeveloperApplication() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(categoryService.findCategoryByName("Productivity")).thenReturn(cat1);
         application.setState(AppState.Active);
@@ -307,13 +318,16 @@ public class DeveloperApplicationsControllerTests {
     }
 
     @Test
-    public void  testCheckApplicationNameExistsForDeveloper() throws Exception {
+    public void  testCheckApplicationNameExistsForDeveloperForForbidden() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(get("/api/0/developer/applications/create")
                 .param("name", "Dreamweaver"))
                 .andExpect(status().isForbidden());
+    }
 
+    @Test
+    public void  testCheckApplicationNameExistsForDeveloper() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppName(developer.getId(), "Dreamweaver")).thenReturn(application);
 
@@ -333,14 +347,17 @@ public class DeveloperApplicationsControllerTests {
     }
 
     @Test
-    public void testUpdateDeveloperApplication() throws Exception {
+    public void testUpdateDeveloperApplicationForForbidden() throws Exception {
     	when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(post("/api/0/developer/applications/"+ uuid +"/update")
                 .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': '3'}, 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
+    }
 
+    @Test
+    public void testUpdateDeveloperApplicationForPreConditionFailed() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
     	when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(null);
     	
@@ -348,7 +365,11 @@ public class DeveloperApplicationsControllerTests {
                 .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': '3'}, 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isPreconditionFailed());
+    }
 
+
+    @Test
+    public void testUpdateDeveloperApplication() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
 	    when(applicationService.updateApplication(any(Application.class))).thenReturn(updatedApplication);
@@ -373,32 +394,43 @@ public class DeveloperApplicationsControllerTests {
 
 
     @Test
-    public void  testPublishDeveloperApplication() throws Exception {
+    public void  testPublishDeveloperApplicationForForbidden() throws Exception {
     	when(userService.findAuthenticatedUser()).thenReturn(null);
     	
         mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/publish"))
                 .andExpect(status().isForbidden());
+    }
 
+    @Test
+    public void  testPublishDeveloperApplicationForPreConditionFailed() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), "22")).thenReturn(null);
         mockMvc.perform(post("/api/0/developer/applications/22/publish"))
                 .andExpect(status().isPreconditionFailed());
-        
+    }
+
+    @Test
+    public void  testPublishDeveloperApplicationForBlockedState() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
-
         when(applicationHistoryService.createApplicationHistory(any(ApplicationHistory.class))).thenReturn(applicationHistory);
-
         when(applicationService.updateApplication(any(Application.class))).thenReturn(activeApplication);
+        application.setState(AppState.Blocked);
+        mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/publish"))
+                .andExpect(status().isPreconditionFailed());
+    }
 
+    @Test
+    public void  testPublishDeveloperApplication() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
+        when(applicationHistoryService.createApplicationHistory(any(ApplicationHistory.class))).thenReturn(applicationHistory);
+        when(applicationService.updateApplication(any(Application.class))).thenReturn(activeApplication);
         mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/publish"))
                 .andExpect(jsonPath("$.state",
                         equalTo(AppState.Active.getState())))
                 .andExpect(status().isOk());
-        
-        application.setState(AppState.Blocked);
-        mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/publish"))
-                .andExpect(status().isPreconditionFailed());
     }
 
     @Test
@@ -412,27 +444,37 @@ public class DeveloperApplicationsControllerTests {
     }
 
     @Test
-    public void testRecallDeveloperApplication() throws Exception {
+    public void testRecallDeveloperApplicationForForbidden() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
 
         mockMvc.perform(post("/api/0/developer/applications/"+ uuid +"/recall")
                 .content("")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
+    }
 
+    @Test
+    public void testRecallDeveloperApplicationForPreConditionFailed() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(null);
 
         mockMvc.perform(post("/api/0/developer/applications/22/recall")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isPreconditionFailed());
+    }
 
+    @Test
+    public void testRecallDeveloperApplicationForRecallFailed() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(application);
         mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/recall")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isPreconditionFailed());
+    }
 
+    @Test
+    public void testRecallDeveloperApplication() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(activeApplication);
         when(applicationService.updateApplication(any(Application.class))).thenReturn(recalledApplication);
 
