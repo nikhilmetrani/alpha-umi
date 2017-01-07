@@ -52,15 +52,13 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
     @Override
     public ApplicationUpdate createApplicationUpdateByDeveloper(long developerId, ApplicationUpdate newAppUpdate) {
         if(newAppUpdate != null){
-            // appToBePublished - application for which update to be Published, this excludes all the staging applications
-            // fetches all the existing applications(existingAppList) by the developer
+            // fetches the existing Active/Recalled application by the developer. If application state is something else, then throws execption
             Application targetApp = applicationRepository.findOne(newAppUpdate.getTarget().getId());
-            if (null == targetApp || targetApp.getState() != AppState.Active)
-                return null; // Throw exception instead.
-            newAppUpdate.setTarget(targetApp);
-
+            if (null == targetApp || targetApp.getState() == AppState.Active || targetApp.getState() == AppState.Recalled)
+                newAppUpdate.setTarget(targetApp);
+            else
+                return null;
             return createApplicationUpdate(newAppUpdate);
-
         }
         return null;
     }
@@ -69,8 +67,7 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
     @Override
     public ApplicationUpdate modifyApplicationUpdateByDeveloper(long developerId, ApplicationUpdate appUpdate) {
         if(appUpdate != null){
-            // appToBePublished - application for which update to be Published, this is the application in staging area only
-            // fetches all the existing applications(existingAppList) by the developer
+            // fetches the existing Active/Recalled application by the developer. If application state is something else, then throws execption
             Application targetApp = applicationRepository.findOne(appUpdate.getTarget().getId());
             if (null == targetApp || targetApp.getState() != AppState.Staging)
                 return null; // Throw exception instead.
