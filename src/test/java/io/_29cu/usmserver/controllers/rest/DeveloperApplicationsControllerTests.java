@@ -324,7 +324,7 @@ public class DeveloperApplicationsControllerTests {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppName(developer.getId(), "Dreamweaver")).thenReturn(application);
 
-        mockMvc.perform(get("/api/0/developer/applications/create")
+        mockMvc.perform(get("/api/0/developer/applications/check")
         		.param("name", "Dreamweaver"))
 		        .andExpect(status().isOk());
     }
@@ -334,7 +334,7 @@ public class DeveloperApplicationsControllerTests {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppName(developer.getId(), "Dreams")).thenReturn(null);
 
-        mockMvc.perform(get("/api/0/developer/applications/create")
+        mockMvc.perform(get("/api/0/developer/applications/check")
         		.param("name", "Dreams"))
                 .andExpect(status().isNoContent());
     }

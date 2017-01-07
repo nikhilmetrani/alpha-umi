@@ -113,7 +113,7 @@ public class DeveloperApplicationsController {
     }
 
     // Create Application
-    @RequestMapping(path = "/applications/create", method = RequestMethod.GET)
+    @RequestMapping(path = "/applications/check", method = RequestMethod.GET)
     public ResponseEntity<ApplicationResource> checkApplicationNameExistsForDeveloper(
             @RequestParam String name
     ) {
