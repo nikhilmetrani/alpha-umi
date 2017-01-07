@@ -16,22 +16,26 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.common.exceptions.StorageFileNotFoundException;
 import io._29cu.usmserver.controllers.rest.resources.DeveloperProfileResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.DeveloperProfileResourceAssembler;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.entities.DeveloperProfile;
 import io._29cu.usmserver.core.service.DeveloperProfileService;
+import io._29cu.usmserver.core.service.StorageService;
 import io._29cu.usmserver.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 @RequestMapping("/api/0/developer")
@@ -40,6 +44,8 @@ public class DeveloperProfileController {
     private UserService userService;
     @Autowired
     private DeveloperProfileService developerProfileService;
+    @Autowired
+    private StorageService storageService;
 
     // userId path variable imposes a security risk. Need to remove it.
     @RequestMapping(path = "/profile", method = RequestMethod.GET)
@@ -82,5 +88,25 @@ public class DeveloperProfileController {
         } catch (Exception e) {
             return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @RequestMapping(path = "/profile/image", method = RequestMethod.POST)
+    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file,
+                                                   RedirectAttributes redirectAttributes) {
+        // Let's get the user from principal and validate the userId against it.
+        User user = userService.findAuthenticatedUser();
+        if (user == null)
+            return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+
+        Path generatedFile = storageService.storeProfileImage(file, user.getId());
+        String response = "{'originalName': '" + file.getOriginalFilename() + "', 'generatedName': '" + generatedFile.getFileName() + "'}";
+        response = response.replace("'", "\"");
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(response, HttpStatus.OK);
+        return responseEntity;
+    }
+
+    @ExceptionHandler(StorageFileNotFoundException.class)
+    public ResponseEntity handleStorageFileNotFound(StorageFileNotFoundException exc) {
+        return ResponseEntity.notFound().build();
     }
 }

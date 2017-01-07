@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
@@ -37,6 +39,8 @@ import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListR
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Calendar;
 import java.util.List;
@@ -55,6 +59,8 @@ public class DeveloperApplicationsController {
     private ApplicationUpdateService applicationUpdateService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private StorageService storageService;
 
     // Skeleton methods
     // Add similar methods for create, update and publish updates
@@ -91,6 +97,25 @@ public class DeveloperApplicationsController {
             return new ResponseEntity<ApplicationResource>(applicationResource, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(path = "/applications/{appId}/image", method = RequestMethod.POST)
+    public ResponseEntity<String> handleFileUpload(
+            @PathVariable String appId,
+            @RequestParam("file") MultipartFile file,
+            RedirectAttributes redirectAttributes) {
+        User user = userService.findAuthenticatedUser();
+        if (user == null)
+            return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+        try {
+            Path generatedFile = storageService.storeApplicationLogo(file, user.getId(), appId);
+            String response = "{'originalName': '" + file.getOriginalFilename() + "', 'generatedName': '" + generatedFile.getFileName() + "'}";
+            response = response.replace("'", "\"");
+            ResponseEntity<String> responseEntity = new ResponseEntity<String>(response, HttpStatus.OK);
+            return responseEntity;
+        } catch (Exception ex) {
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }
     }
 

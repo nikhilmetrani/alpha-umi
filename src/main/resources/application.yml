@@ -69,6 +69,10 @@ spring:
   jackson:
     serialization:
       INDENT_OUTPUT: true
+  http:
+    multipart:
+      max-file-size: 1Mb
+      max-request-size: 10Mb
 
 # config context path to "/" by setting an empty string
 server:
