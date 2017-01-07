@@ -76,29 +76,6 @@ public class DeveloperApplicationsController {
         }
     }
 
-    @RequestMapping(path = "/applications/{appId}/list", method = RequestMethod.GET)
-    public ResponseEntity<ApplicationListResource> getApplicationList(
-            @PathVariable String appId
-    ){
-        // Let's get the user from principal and validate the userId against it.
-        User user = userService.findAuthenticatedUser();
-        if (user == null)
-            return new ResponseEntity<ApplicationListResource>(HttpStatus.FORBIDDEN);
-        try {
-            Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
-            List<Application> appList= new ArrayList<Application>();
-            appList.add(application);
-            ApplicationList applicationList = new ApplicationList();
-            applicationList.setApplications(appList);
-
-
-            ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(applicationList);
-            return new ResponseEntity<ApplicationListResource>(appListResource, HttpStatus.OK);
-        } catch (Exception ex) {
-            return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
     // Get all applications
     @RequestMapping(path = "/applications/{appId}", method = RequestMethod.GET)
     public ResponseEntity<ApplicationResource> getApplication(

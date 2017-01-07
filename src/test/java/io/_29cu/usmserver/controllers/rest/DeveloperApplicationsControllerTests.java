@@ -209,14 +209,7 @@ public class DeveloperApplicationsControllerTests {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    public void testGetApplicationListIsOk() throws Exception {
-        when(userService.findAuthenticatedUser()).thenReturn(developer);
-        when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(),application.getId())).thenReturn(application);
 
-        mockMvc.perform(get("/api/0/developer/applications/"+uuid+"/list"))
-                .andExpect(status().isOk());
-    }
 
     @Test
     public void  testGetApplicationForForbidden() throws Exception {
