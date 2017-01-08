@@ -17,6 +17,8 @@
 package io._29cu.usmserver.controllers.rest;
 
 import java.util.Date;
+
+import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.controllers.rest.resources.SubscriptionResource;
@@ -96,5 +98,22 @@ public class SubscriptionController {
         }
         ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(appList);
         return new ResponseEntity<ApplicationListResource>(appListResource, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/applications/{appId}/checkAppIsSubscibled", method = RequestMethod.GET)
+    public ResponseEntity<SubscriptionResource> FindSubscriptionByUserIdAndApplicationId(
+            @PathVariable String appId
+    ) {
+        // Let's get the user from principal and validate the userId against it.
+        User user = userService.findAuthenticatedUser();
+        if (user == null)
+            return new ResponseEntity<SubscriptionResource>(HttpStatus.FORBIDDEN);
+
+        Subscription subscription = subscriptionService.findSubscriptionByUserIdAndApplicationId(user.getId(),appId);
+        if (null == subscription) { //We can't find the subscription in our database for the user.
+            return new ResponseEntity<SubscriptionResource>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<SubscriptionResource>(HttpStatus.OK);
+        }
     }
 }

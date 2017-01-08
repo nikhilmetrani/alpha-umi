@@ -88,4 +88,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		appList.setApplications(AppHelper.getInstance().convertIterableToList(subscriptionRepository.getSubscribedApplications(userId)));
 		return appList;
     }
+
+
 }
