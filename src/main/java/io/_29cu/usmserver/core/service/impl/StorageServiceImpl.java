@@ -86,7 +86,7 @@ public class StorageServiceImpl implements StorageService {
         }
         String extension = getFileExtension(file.getOriginalFilename());
         Path destinationPath = createAppLogosDirectory(userId).resolve(appId + "." + extension);
-        Path backUpPath = createProfileDirectory(userId).resolve(appId + "." + extension + ".bkp");
+        Path backUpPath = createAppLogosDirectory(userId).resolve(appId + "." + extension + ".bkp");
         try {
             if (Files.exists(destinationPath)) {
                 Files.move(destinationPath, backUpPath, StandardCopyOption.REPLACE_EXISTING);
@@ -154,6 +154,7 @@ public class StorageServiceImpl implements StorageService {
             Files.createDirectory(profileImageLocation);
             Files.createDirectory(setupsLocation);
             Files.createDirectory(screenshotsLocation);
+            Files.createDirectory(appLogoLocation);
         } catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
         }
