@@ -16,14 +16,13 @@
 
 package io._29cu.usmserver.core.model.entities;
 
-import io._29cu.usmserver.core.model.enumerations.OperatingSystem;
-import io._29cu.usmserver.core.model.enumerations.Platform;
-import org.hibernate.annotations.NaturalId;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+
+import io._29cu.usmserver.core.model.enumerations.OperatingSystem;
+import io._29cu.usmserver.core.model.enumerations.Platform;
 
 @Entity
 public class Installer {
@@ -34,18 +33,13 @@ public class Installer {
     private OperatingSystem os;
     private String downloadUrl;
     private String expressInstallCommand;
-    @OneToOne
-    @NaturalId
-    private Application application;
 
-    public Application getApplication() {
-        return application;
-    }
+	@ManyToOne
+	Application application;
 
-    public void setApplication(Application application) {
-        this.application = application;
-    }
-
+	@ManyToOne
+	ApplicationUpdate applicationUpdate;
+	
     public Long getId() {
         return id;
     }
@@ -85,4 +79,26 @@ public class Installer {
     public void setExpressInstallCommand(String expressInstallCommand) {
         this.expressInstallCommand = expressInstallCommand;
     }
+    
+    public String toString(){
+    	return "{ \"id\":\""+ this.getId() + "\", \"platform\":\""+ this.getPlatform() 
+    	+ "\", \"os\":\"" + this.getOs() + "\", \"downloadUrl\":\"" + this.getDownloadUrl() 
+    	+ "\", \"expressInstallCommand\":\"" + this.getExpressInstallCommand() + "\" }";
+    }
+
+	public Application getApplication() {
+		return application;
+	}
+
+	public void setApplication(Application application) {
+		this.application = application;
+	}
+
+	public ApplicationUpdate getApplicationUpdate() {
+		return applicationUpdate;
+	}
+
+	public void setApplicationUpdate(ApplicationUpdate applicationUpdate) {
+		this.applicationUpdate = applicationUpdate;
+	}
 }

@@ -23,11 +23,13 @@ import org.springframework.stereotype.Component;
 
 import io._29cu.usmserver.common.utilities.AppHelper;
 import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.Installer;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
 import io._29cu.usmserver.core.repositories.CategoryRepository;
 import io._29cu.usmserver.core.repositories.UserRepository;
 import io._29cu.usmserver.core.service.ApplicationService;
+import io._29cu.usmserver.core.service.InstallerService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import io._29cu.usmserver.core.service.utilities.DummyData;
 
@@ -42,6 +44,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	@Autowired
 	CategoryRepository categoryRepository;
+
+    @Autowired
+    InstallerService installerService;
 
 	@Override
 	public ApplicationList getAllApplications() {
@@ -60,12 +65,40 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	@Override
 	public Application createApplication(Application application) {
-		return applicationRepository.save(application);
+		Application savedApplication =  applicationRepository.save(application);
+		List<Installer> oldInstallers = installerService.findAllInstallersByApplicationId(savedApplication.getId());
+    	if(oldInstallers != null) {
+			for(Installer installer : oldInstallers) {
+				installerService.deleteInstaller(installer.getId());
+			}
+    	}
+		List<Installer> installers = application.getInstallers();
+		if(installers != null) {
+			for(Installer installer : installers) {
+				installer.setApplication(savedApplication);
+				installerService.createInstaller(installer);
+			}
+		}
+		return savedApplication;
 	}
 
 	@Override
 	public Application updateApplication(Application application) {
-		return applicationRepository.save(application);
+		Application savedApplication =   applicationRepository.save(application);
+		List<Installer> oldInstallers = installerService.findAllInstallersByApplicationId(savedApplication.getId());
+    	if(oldInstallers != null) {
+			for(Installer installer : oldInstallers) {
+				installerService.deleteInstaller(installer.getId());
+			}
+    	}
+		List<Installer> installers = application.getInstallers();
+		if(installers != null) {
+			for(Installer installer : installers) {
+				installer.setApplication(savedApplication);
+				installerService.createInstaller(installer);
+			}
+		}
+		return savedApplication;
 	}
 
 	@Override

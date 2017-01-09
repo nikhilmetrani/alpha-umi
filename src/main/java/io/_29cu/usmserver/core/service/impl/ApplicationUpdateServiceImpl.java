@@ -16,17 +16,19 @@
 
 package io._29cu.usmserver.core.service.impl;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.enumerations.AppState;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
+import io._29cu.usmserver.core.model.entities.Installer;
+import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
 import io._29cu.usmserver.core.repositories.ApplicationUpdateRepository;
 import io._29cu.usmserver.core.service.ApplicationUpdateService;
-
-import java.util.List;
+import io._29cu.usmserver.core.service.InstallerService;
 
 @Component
 public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
@@ -36,6 +38,9 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
     @Autowired
     ApplicationUpdateRepository applicationUpdateRepository;
 
+    @Autowired
+    InstallerService installerService;
+
     @Override
     public ApplicationUpdate findByApplication(String applicationId) {
     	return applicationUpdateRepository.findByApplication(applicationId);
@@ -44,7 +49,20 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
     @Override
     public ApplicationUpdate createApplicationUpdate(ApplicationUpdate applicationUpdate) {
         //Application application = applicationRepository.save(applicationUpdate.getTarget());
-    	applicationUpdate = applicationUpdateRepository.save(applicationUpdate);
+    	ApplicationUpdate savedApplicationUpdate = applicationUpdateRepository.save(applicationUpdate);
+    	List<Installer> oldInstallers = installerService.findAllInstallersByApplicationUpdateId(applicationUpdate.getId());
+    	if(oldInstallers != null) {
+			for(Installer installer : oldInstallers) {
+				installerService.deleteInstaller(installer.getId());
+			}
+    	}
+    	List<Installer> installers = applicationUpdate.getInstallers();
+		if(installers != null) {
+			for(Installer installer : installers) {
+				installer.setApplicationUpdate(savedApplicationUpdate);
+				installerService.updateInstaller(installer);
+			}
+		}
     	return applicationUpdate;
     }
 

@@ -14,35 +14,20 @@
  * limitations under the License.
  **/
 
-package io._29cu.usmserver.core.model.entities;
+package io._29cu.usmserver.core.service;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import org.springframework.stereotype.Component;
 
-@Entity
-public class ApplicationUpdate extends ApplicationBase {
-    @OneToOne
-    private Application target;
+import io._29cu.usmserver.core.model.entities.Installer;
 
-    @OneToMany(mappedBy="applicationUpdate")
-    private List<Installer> installers;
-
-    public Application getTarget() {
-        return target;
-    }
-
-    public void setTarget(Application target) {
-        this.target = target;
-    }
-
-	public List<Installer> getInstallers() {
-		return installers;
-	}
-
-	public void setInstallers(List<Installer> installers) {
-		this.installers = installers;
-	}
+@Component
+public interface InstallerService {
+    public Installer createInstaller(Installer installer);
+    public Installer updateInstaller(Installer installer);
+    public List<Installer> findAllInstallersByApplicationId(String applicationId);
+    public List<Installer> findAllInstallersByApplicationUpdateId(String applicationUpdateId);
+    public Installer findInstallerByApplicationId(long installerId, String applicationId);
+    public void deleteInstaller(long installerId);
 }

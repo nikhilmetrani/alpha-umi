@@ -16,13 +16,19 @@
 
 package io._29cu.usmserver.controllers.rest.resources.assemblers;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.controllers.rest.ApplicationController;
-import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
-
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+
+import io._29cu.usmserver.controllers.rest.ApplicationController;
+import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
+import io._29cu.usmserver.controllers.rest.resources.InstallerResource;
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.Installer;
 
 public class ApplicationResourceAssembler extends ResourceAssemblerSupport<Application, ApplicationResource> {
     public ApplicationResourceAssembler() {
@@ -39,6 +45,13 @@ public class ApplicationResourceAssembler extends ResourceAssemblerSupport<Appli
         applicationResource.setState(application.getState());
         applicationResource.setDescription(application.getDescription());
         applicationResource.setWhatsNew(application.getWhatsNew());
+        List<InstallerResource> installers = new ArrayList<InstallerResource>();
+        if(application.getInstallers() != null) {
+	        for(Installer installer : application.getInstallers()) {
+	        	installers.add(new InstallerResourceAssembler().toResource(installer));
+	        }
+        }
+        applicationResource.setInstallers(installers);
         applicationResource.add(linkTo(methodOn(ApplicationController.class).getApplication(application.getId())).withSelfRel());
         if(application.getDeveloper() != null)
             applicationResource.add(linkTo(ApplicationController.class).slash("developer/" + application.getDeveloper().getId()).withRel("developerApps"));

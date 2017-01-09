@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -49,8 +50,11 @@ import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.ApplicationHistory;
 import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
 import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.model.entities.Installer;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
+import io._29cu.usmserver.core.model.enumerations.OperatingSystem;
+import io._29cu.usmserver.core.model.enumerations.Platform;
 import io._29cu.usmserver.core.service.ApplicationHistoryService;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.ApplicationUpdateService;
@@ -93,6 +97,7 @@ public class DeveloperApplicationsControllerTests {
     private ApplicationHistory applicationHistory;
     private Category cat1, cat2;
     private String uuid;
+    private Installer installer1, installer2;
 
     @Before
     public void setup() throws Exception {
@@ -120,6 +125,25 @@ public class DeveloperApplicationsControllerTests {
         application.setVersion("1.0");
         application.setDeveloper(developer);
         application.setDescription("test description");
+
+        installer1 = new Installer();
+        installer1.setId(1L);
+        installer1.setPlatform(Platform.x64);
+        installer1.setOs(OperatingSystem.Linux);
+        installer1.setDownloadUrl("http://www.unix.download.com");
+        installer1.setExpressInstallCommand("install");
+
+        installer2 = new Installer();
+        installer2.setId(2L);
+        installer2.setPlatform(Platform.x64);
+        installer2.setOs(OperatingSystem.Windows);
+        installer2.setDownloadUrl("http://www.windows.download.com");
+        installer2.setExpressInstallCommand("install");
+        
+        List<Installer> installers = new ArrayList<>();
+        installers.add(installer1);
+        installers.add(installer2);
+        application.setInstallers(installers);
         
         applicationUpdate = new ApplicationUpdate();
         applicationUpdate.setId(uuid);
@@ -145,6 +169,7 @@ public class DeveloperApplicationsControllerTests {
 	    updatedApplication.setVersion("1.1");
 	    updatedApplication.setDeveloper(developer);
 	    updatedApplication.setDescription("PhotoShop Description");
+	    updatedApplication.setInstallers(installers);
 
         recalledApplication = new Application();
         recalledApplication.setId(uuid);
@@ -255,7 +280,8 @@ public class DeveloperApplicationsControllerTests {
         assertTrue("AppState is not in Staging", application.getState()==AppState.Staging);
 
         mockMvc.perform(post("/api/0/developer/applications/create")
-                .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': '1'}, 'description':'test description'}".replaceAll("'",  "\""))
+                //.content("{\"name\":\"dreamweaver\", \"version\":\"1.0\", \"category\": { \"name\": \"1\"}, \"description\":\"test description\", \"installers\":[{\"platform\": \"x64\" , \"os\": \"Linux\" , \"downloadUrl\":\"http://unix.download.com\", \"expressInstallCommand\":\"install\" }, {\"platform\": \"x64\" , \"os\": \"Windows\" , \"downloadUrl\":\"http://windows.download.com\", \"expressInstallCommand\":\"install\"}] }")
+                .content("{'name':'dreamweaver', 'version':'1.0', 'category': { 'name': '1'}, 'description':'test description', 'installers':[{'rid':'1', 'platform': 'x64', 'os':  'Linux', 'downloadUrl':'http://unix.download.com', 'expressInstallCommand':'install' }, {'rid':'2', 'platform': 'x64', 'os':  'Windows', 'downloadUrl':'http://windows.download.com', 'expressInstallCommand':'install'}] }".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name",
                         equalTo(application.getName())))
@@ -293,7 +319,7 @@ public class DeveloperApplicationsControllerTests {
         assertTrue("AppState is not in Staging", application.getState()==AppState.Active);
 
         mockMvc.perform(post("/api/0/developer/applications/create")
-                .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': '1'}, 'description':'test description'}".replaceAll("'",  "\""))
+                .content("{'name':'dreamweaver','downloadUrl':'https://test.com', 'version':'1.0', 'category': { 'name': '1'}, 'description':'test description', 'installers':[{'rid':'1', 'platform': 'x64', 'os':  'Linux', 'downloadUrl':'http://unix.download.com', 'expressInstallCommand':'install' }, {'rid':'2', 'platform': 'x64', 'os':  'Windows', 'downloadUrl':'http://windows.download.com', 'expressInstallCommand':'install'}]}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name",
                         equalTo(application.getName())))
@@ -368,7 +394,7 @@ public class DeveloperApplicationsControllerTests {
 	    when(applicationService.updateApplication(any(Application.class))).thenReturn(updatedApplication);
 
 	    mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/update")
-                .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': '3'}, 'description':'PhotoShop Description'}".replaceAll("'",  "\""))
+                .content("{'name':'PhotoShop','downloadUrl':'https://test.com/photoshop', 'version':'1.1', 'category': { 'name': '3'}, 'description':'PhotoShop Description', 'installers':[{'rid':'1', 'platform': 'x64', 'os':  'Linux', 'downloadUrl':'http://unix.download.com', 'expressInstallCommand':'install' }, {'rid':'2', 'platform': 'x64', 'os':  'Windows', 'downloadUrl':'http://windows.download.com', 'expressInstallCommand':'install'}]}".replaceAll("'",  "\""))
                 .contentType(MediaType.APPLICATION_JSON))
 		        .andExpect(jsonPath("$.name",
 				        equalTo(updatedApplication.getName())))

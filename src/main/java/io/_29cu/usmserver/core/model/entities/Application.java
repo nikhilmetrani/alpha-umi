@@ -47,6 +47,8 @@ public class Application extends ApplicationBase{
     @Temporal(TemporalType.DATE)
     private Date applicationPublishDate;
 
+    @OneToMany(mappedBy="application")
+    private List<Installer> installers;
 
     public List<Rate> getRatings() {
 		return ratings;
@@ -92,5 +94,13 @@ public class Application extends ApplicationBase{
     public void setApplicationPublishDate(Date applicationPublishDate) {
         this.applicationPublishDate = applicationPublishDate;
     }
+
+	public List<Installer> getInstallers() {
+		return installers;
+	}
+
+	public void setInstallers(List<Installer> installers) {
+		this.installers = installers;
+	}
 
 }

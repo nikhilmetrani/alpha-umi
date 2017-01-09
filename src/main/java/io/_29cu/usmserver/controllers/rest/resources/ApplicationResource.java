@@ -16,9 +16,13 @@
 
 package io._29cu.usmserver.controllers.rest.resources;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.model.entities.Installer;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 
 public class ApplicationResource extends EntityResourceBase<Application> {
@@ -32,6 +36,7 @@ public class ApplicationResource extends EntityResourceBase<Application> {
     private String version;
     private String description;
     private String whatsNew;
+    private List<InstallerResource> installers;
    
 	public AppState getState() {
         return state;
@@ -105,6 +110,14 @@ public class ApplicationResource extends EntityResourceBase<Application> {
         this.whatsNew = whatsNew;
     }
 
+	public List<InstallerResource> getInstallers() {
+		return installers;
+	}
+
+	public void setInstallers(List<InstallerResource> installers) {
+		this.installers = installers;
+	}
+
     @Override
     public Application toEntity() {
         Application application = new Application();
@@ -116,6 +129,13 @@ public class ApplicationResource extends EntityResourceBase<Application> {
         application.setCategory(category);
         application.setDescription(description);
         application.setWhatsNew(whatsNew);
+        List<Installer> installerObjects = new ArrayList<Installer>();
+        if(installers != null) {
+	        for(InstallerResource installerResource : installers) {
+	        	installerObjects.add(installerResource.toEntity());
+	        }
+        }
+        application.setInstallers(installerObjects);
         return application;
     }
 }
