@@ -27,10 +27,10 @@ public class Subscription {
     @GeneratedValue
     private Long id;
     @ManyToOne
-    @NaturalId
+    //@NaturalId
     private Application application;
     @ManyToOne
-    @NaturalId
+    //@NaturalId
     private User user;
 
     @Column(name = "dateSubscribed")
