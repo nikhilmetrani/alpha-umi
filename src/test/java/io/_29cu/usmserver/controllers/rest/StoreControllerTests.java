@@ -517,5 +517,21 @@ public class StoreControllerTests {
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
     }
+
+    @Test
+    public void  testGetStoreApplicationForNonExistingId() throws Exception {
+        when(applicationService.findApplication(uuid)).thenReturn(null);
+
+        mockMvc.perform(get("/api/1/store/applications/22"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void  testGetApplication() throws Exception {
+        when(applicationService.findApplication(uuid)).thenReturn(appList.getApplications().get(0));
+
+        mockMvc.perform(get("/api/1/store/applications/" + uuid))
+                .andExpect(status().isOk());
+    }
     
 }

@@ -18,6 +18,9 @@ package io._29cu.usmserver.controllers.rest;
 
 import java.net.URI;
 
+import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
+import io._29cu.usmserver.core.model.entities.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -72,7 +75,7 @@ public class StoreController {
 	}
 
 	@RequestMapping(value = "/{category}", method = RequestMethod.GET)
-	public ResponseEntity<ApplicationListResource> getApplication(@PathVariable String category) {
+	public ResponseEntity<ApplicationListResource> getApplications(@PathVariable String category) {
 		try {
 			ApplicationList appList = applicationService.findApplicationsByCategoryAndState(category,
 					AppState.Active);
@@ -194,6 +197,19 @@ public class StoreController {
 			return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
 			return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@RequestMapping(path = "/applications/{appId}", method = RequestMethod.GET)
+	public ResponseEntity<ApplicationResource> getApplication(
+			@PathVariable String appId
+	){
+		try {
+			Application application = applicationService.findApplication(appId);
+			ApplicationResource applicationResource = new ApplicationResourceAssembler().toResource(application);
+			return new ResponseEntity<ApplicationResource>(applicationResource, HttpStatus.OK);
+		} catch (Exception ex) {
+			return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
 		}
 	}
 }

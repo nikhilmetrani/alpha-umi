@@ -73,7 +73,7 @@ public class ApplicationUpdateServiceTests {
     @Rollback(false)
     public void setup() {
         developer = new User();
-        developer.setId(1l);
+        developer.setId(99l);
         developer.setUsername("developer");
         developer.setEmail("developer@email.com");
         Authority authority = new Authority();
