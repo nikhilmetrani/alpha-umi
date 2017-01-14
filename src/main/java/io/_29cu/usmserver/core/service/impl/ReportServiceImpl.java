@@ -46,6 +46,11 @@ public class ReportServiceImpl implements ReportService{
     @Autowired
     ApplicationRepository applicationRepository;
 
+	@Override
+	public Application createApplication(Application application) {
+		return applicationRepository.save(application);
+	}
+
     @Override
     public ApplicationList findApplicationsByUserNameAndState(String username,Date startDate, Date endDate) {
         List<Application> finalApplicationList = null;

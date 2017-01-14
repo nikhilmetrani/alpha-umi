@@ -24,6 +24,7 @@ import java.util.Date;
 
 @Component
 public interface ReportService {
+    public Application createApplication(Application application);
     public ApplicationList findApplicationsByUserNameAndState(String username, Date startDate, Date endDate);
     public int findSubscribedUsersPerApplication(String applicationId,Date startDate, Date endDate);
     public int findSubscribedActiveUsersPerApplication(String applicationId,Date startDate, Date endDate);
