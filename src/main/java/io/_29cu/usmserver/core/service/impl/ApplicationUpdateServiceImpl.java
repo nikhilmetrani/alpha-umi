@@ -63,9 +63,8 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
 				installerService.updateInstaller(installer);
 			}
 		}
-    	return applicationUpdate;
+    	return savedApplicationUpdate;
     }
-
 
     @Override
     public ApplicationUpdate createApplicationUpdateByDeveloper(long developerId, ApplicationUpdate newAppUpdate) {

@@ -27,7 +27,7 @@ import io._29cu.usmserver.core.model.entities.Installer;
 
 
 @Component
-public interface InstallerRepository extends CrudRepository<Installer, String> {
+public interface InstallerRepository extends CrudRepository<Installer, Long> {
 	@Query("select i from Installer i where i.application.id = :applicationId")
     List<Installer> findAllInstallersByApplicationId(@Param("applicationId") String applicationId);
 

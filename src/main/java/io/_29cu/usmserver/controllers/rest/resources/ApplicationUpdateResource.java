@@ -16,8 +16,12 @@
 
 package io._29cu.usmserver.controllers.rest.resources;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
+import io._29cu.usmserver.core.model.entities.Installer;
 
 public class ApplicationUpdateResource extends EntityResourceBase<ApplicationUpdate> {
 
@@ -27,6 +31,7 @@ public class ApplicationUpdateResource extends EntityResourceBase<ApplicationUpd
     private String description;
     private String whatsNew;
     private Application target;
+    private List<InstallerResource> installers;
 
 	public String getRid() {
 		return rid;
@@ -72,6 +77,13 @@ public class ApplicationUpdateResource extends EntityResourceBase<ApplicationUpd
 
     public void setTarget(Application target) { this.target = target; }
 
+	public List<InstallerResource> getInstallers() {
+		return installers;
+	}
+
+	public void setInstallers(List<InstallerResource> installers) {
+		this.installers = installers;
+	}
 
     @Override
     public ApplicationUpdate toEntity() {
@@ -81,6 +93,13 @@ public class ApplicationUpdateResource extends EntityResourceBase<ApplicationUpd
         applicationUpdate.setVersion(this.getVersion());
         applicationUpdate.setDescription(this.getDescription());
         applicationUpdate.setWhatsNew(this.getWhatsNew());
+        List<Installer> installerObjects = new ArrayList<Installer>();
+        if(installers != null) {
+	        for(InstallerResource installerResource : installers) {
+	        	installerObjects.add(installerResource.toEntity());
+	        }
+        }
+        applicationUpdate.setInstallers(installerObjects);
         return applicationUpdate;
     }
 }

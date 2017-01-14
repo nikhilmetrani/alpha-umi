@@ -29,5 +29,5 @@ public interface InstallerService {
     public List<Installer> findAllInstallersByApplicationId(String applicationId);
     public List<Installer> findAllInstallersByApplicationUpdateId(String applicationUpdateId);
     public Installer findInstallerByApplicationId(long installerId, String applicationId);
-    public void deleteInstaller(long installerId);
+    public void deleteInstaller(Long installerId);
 }

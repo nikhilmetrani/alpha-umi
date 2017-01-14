@@ -16,11 +16,16 @@
 
 package io._29cu.usmserver.controllers.rest.resources.assemblers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
 import io._29cu.usmserver.controllers.rest.DeveloperApplicationsController;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationUpdateResource;
+import io._29cu.usmserver.controllers.rest.resources.InstallerResource;
 import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
+import io._29cu.usmserver.core.model.entities.Installer;
 
 public class ApplicationUpdateResourceAssembler extends ResourceAssemblerSupport<ApplicationUpdate, ApplicationUpdateResource> {
     public ApplicationUpdateResourceAssembler() {
@@ -35,6 +40,13 @@ public class ApplicationUpdateResourceAssembler extends ResourceAssemblerSupport
         applicationUpdateResource.setDescription(applicationUpdate.getDescription());
         applicationUpdateResource.setWhatsNew(applicationUpdate.getWhatsNew());
         applicationUpdateResource.setTarget(applicationUpdate.getTarget());
+        List<InstallerResource> installers = new ArrayList<InstallerResource>();
+        if(applicationUpdate.getInstallers() != null) {
+	        for(Installer installer : applicationUpdate.getInstallers()) {
+	        	installers.add(new InstallerResourceAssembler().toResource(installer));
+	        }
+        }
+        applicationUpdateResource.setInstallers(installers);
         return applicationUpdateResource;
     }
 }

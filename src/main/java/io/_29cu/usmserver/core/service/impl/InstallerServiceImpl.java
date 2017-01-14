@@ -61,7 +61,7 @@ public class InstallerServiceImpl implements InstallerService {
 	}
 
 	@Override
-	public void deleteInstaller(long installerId) {
-		installerRepository.delete(String.valueOf(installerId));
+	public void deleteInstaller(Long installerId) {
+		installerRepository.delete(installerId);
 	}
 }
