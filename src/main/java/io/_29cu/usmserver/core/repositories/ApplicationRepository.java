@@ -76,7 +76,7 @@ public interface ApplicationRepository extends CrudRepository<Application, Strin
     		")")
     List<Application> findApplicationsByCategoryAndKeyword(@Param("categoryId") Long categoryId, @Param("keyword") String keyword);
 
-    @Query("select u from Application u where LOWER(u.developer.username) = LOWER(:username) and u.state = 1 and u.applicationPublishDate <= :applicationPublishDate")
-    List<Application> findApplicationsByUserNameAndState(@Param("username") String username, @Param("applicationPublishDate") Date applicationPublishDate);
+    @Query("select u from Application u where LOWER(u.developer.username) = LOWER(:username) and u.state = 1 and u.applicationPublishDate >= :startDate and u.applicationPublishDate <= :endDate")
+    List<Application> findApplicationsByUserNameAndState(@Param("username") String username, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
 }

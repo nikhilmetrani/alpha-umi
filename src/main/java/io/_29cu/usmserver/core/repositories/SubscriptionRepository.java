@@ -32,14 +32,14 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Lon
     @Query("select s.application from Subscription s where s.user.id = :userId and s.active = 1")
     List<Application> getSubscribedApplications(@Param("userId") long userId);
 
-    @Query("select s from Subscription s where s.application.name = :applicationId and s.dateSubscribed <= :subscriptionDate")
-    List<Subscription> findSubscribedUsersPerApplication(@Param("applicationId") String applicationName,@Param("subscriptionDate") Date subscriptionDate);
+    @Query("select s from Subscription s where s.application.id = :applicationId and s.dateSubscribed >= :startDate and s.dateSubscribed <= :endDate")
+    List<Subscription> findSubscribedUsersPerApplication(@Param("applicationId") String applicationId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    @Query("select s from Subscription s where s.application.name = :applicationId and s.dateSubscribed <= :subscriptionDate and s.active = 1")
-    List<Subscription> findSubscribedActiveUsersPerApplication(@Param("applicationId") String applicationName,@Param("subscriptionDate") Date subscriptionDate);
+    @Query("select s from Subscription s where s.application.id = :applicationId and s.dateSubscribed >= :startDate and s.dateSubscribed <= :endDate and s.active = 1")
+    List<Subscription> findSubscribedActiveUsersPerApplication(@Param("applicationId") String applicationId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    @Query("select s from Subscription s where s.application.name = :applicationId and s.dateUnsubscribed <= :unsubscriptionDate")
-    List<Subscription> findTerminatedSubscriptionsPerApplication(@Param("applicationId") String applicationName,@Param("unsubscriptionDate") Date unsubscriptionDate);
+    @Query("select s from Subscription s where s.application.id = :applicationId and s.dateUnsubscribed >= :startDate and s.dateUnsubscribed <= :endDate")
+    List<Subscription> findTerminatedSubscriptionsPerApplication(@Param("applicationId") String applicationId,@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     @Query("select a from Subscription a where a.user.id = :userId and a.application.id = :applicationId")
     Subscription findSubscription(@Param("userId") Long userId, @Param("applicationId") String applicationId);

@@ -46,23 +46,17 @@ public class ReportServiceImpl implements ReportService{
     @Autowired
     ApplicationRepository applicationRepository;
 
-
-
     @Override
-    public Application createApplication(Application application) {
-        return applicationRepository.save(application);
-    }
-
-    @Override
-    public ApplicationList findApplicationsByUserNameAndState(String username,Date toApplicationPublishDate) {
+    public ApplicationList findApplicationsByUserNameAndState(String username,Date startDate, Date endDate) {
         List<Application> finalApplicationList = null;
         ApplicationList applicationList = null;
-        List<Application> appList = applicationRepository.findApplicationsByUserNameAndState(username,toApplicationPublishDate);
-        Date fromApplicationPublishDate = ReportUtils.findDateRange(toApplicationPublishDate);
+        List<Application> appList = applicationRepository.findApplicationsByUserNameAndState(username,startDate, endDate);
         if(appList != null && !appList.isEmpty()){
             finalApplicationList = new ArrayList<Application>();
+            long publishDate;
             for(Application application : appList){
-                if(application.getApplicationPublishDate().getTime() >= fromApplicationPublishDate.getTime()){
+                publishDate = application.getApplicationPublishDate().getTime();
+                if(publishDate >= startDate.getTime() && publishDate <= endDate.getTime()){
                     finalApplicationList.add(application);
                 }
             }
@@ -73,13 +67,14 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public int findSubscribedUsersPerApplication(String applicationName,Date toSubscriptionDate) {
+    public int findSubscribedUsersPerApplication(String applicationId, Date startDate, Date endDate) {
         List<String> subscribedUserList = new ArrayList<String>();
-        List<Subscription> subscriptionList = subscriptionRepository.findSubscribedUsersPerApplication(applicationName,toSubscriptionDate);
-        Date fromApplicationPublishDate = ReportUtils.findDateRange(toSubscriptionDate);
+        List<Subscription> subscriptionList = subscriptionRepository.findSubscribedUsersPerApplication(applicationId, startDate, endDate);
         if(subscriptionList != null && !subscriptionList.isEmpty()){
+	        long subscribeDate;
             for(Subscription subscription : subscriptionList){
-                if(subscription.getDateSubscribed().getTime() >= fromApplicationPublishDate.getTime()){
+	            subscribeDate = subscription.getDateSubscribed().getTime();
+                if(subscribeDate >= startDate.getTime() && subscribeDate <= endDate.getTime()){
                     subscribedUserList.add(subscription.getUser().getUsername());
                 }
             }
@@ -88,13 +83,14 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public int findSubscribedActiveUsersPerApplication(String applicationName,Date toSubscriptionDate) {
+    public int findSubscribedActiveUsersPerApplication(String applicationId, Date startDate, Date endDate) {
         List<String> subscribedActiveUserList = new ArrayList<String>();
-        List<Subscription> subscriptionList = subscriptionRepository.findSubscribedActiveUsersPerApplication(applicationName,toSubscriptionDate);
-        Date fromApplicationPublishDate = ReportUtils.findDateRange(toSubscriptionDate);
+        List<Subscription> subscriptionList = subscriptionRepository.findSubscribedActiveUsersPerApplication(applicationId, startDate, endDate);
         if(subscriptionList != null && !subscriptionList.isEmpty()){
+	        long subscribeDate;
             for(Subscription subscription : subscriptionList){
-                if(subscription.getDateSubscribed().getTime() >= fromApplicationPublishDate.getTime()){
+	            subscribeDate = subscription.getDateSubscribed().getTime();
+                if(subscribeDate >= startDate.getTime() && subscribeDate <= endDate.getTime()){
                     subscribedActiveUserList.add(subscription.getUser().getUsername());
                 }
             }
@@ -102,17 +98,18 @@ public class ReportServiceImpl implements ReportService{
         return  subscribedActiveUserList.size();
     }
 
-    public int findTerminatedSubscriptionsPerApplication(String applicationName,Date toSubscriptionDate) {
+    public int findTerminatedSubscriptionsPerApplication(String applicationId, Date startDate, Date endDate) {
         List<String> terminatedApplicationList = new ArrayList<String>();
-        List<Subscription> subscriptionList = subscriptionRepository.findTerminatedSubscriptionsPerApplication(applicationName,toSubscriptionDate);
-        Date fromApplicationPublishDate = ReportUtils.findDateRange(toSubscriptionDate);
-        if(subscriptionList != null && !subscriptionList.isEmpty()){
-            for(Subscription subscription : subscriptionList){
-                if(subscription.getDateUnsubscribed().getTime() >= fromApplicationPublishDate.getTime()){
-                    terminatedApplicationList.add(subscription.getApplication().getName());
-                }
-            }
-        }
+        List<Subscription> subscriptionList = subscriptionRepository.findTerminatedSubscriptionsPerApplication(applicationId, startDate, endDate);
+	    if(subscriptionList != null && !subscriptionList.isEmpty()){
+		    long subscribeDate;
+		    for(Subscription subscription : subscriptionList){
+			    subscribeDate = subscription.getDateSubscribed().getTime();
+			    if(subscribeDate >= startDate.getTime() && subscribeDate <= endDate.getTime()){
+				    terminatedApplicationList.add(subscription.getUser().getUsername());
+			    }
+		    }
+	    }
         return  terminatedApplicationList.size();
     }
 
