@@ -57,3 +57,16 @@ INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`appli
 INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('8','Dev 4 App 2','Dev4App2','1.0','nothing',NULL,1,2,104);
 INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('9','Dev 4 App 3','Dev4App3','1.0','nothing',NULL,1,2,104);
 INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('10','Dev 5 App 1','Dev5App1','1.0','nothing',NULL,1,1,105);
+
+
+--To create 5 Active Featured applications
+--And, create 4 Inactive Featured applications
+INSERT INTO `featuredapplication` (`id`,`createBy`,`creationDate`,`lastUpdateBy`,`lastUpdateDate`,`featureAppState`,`unFeatureDate`,`application_id`) VALUES (101,'maintainer','2017-01-14 08:04:28','maintainer','2017-01-14 08:04:28',0,NULL,'1');
+INSERT INTO `featuredapplication` (`id`,`createBy`,`creationDate`,`lastUpdateBy`,`lastUpdateDate`,`featureAppState`,`unFeatureDate`,`application_id`) VALUES (102,'maintainer','2017-01-14 08:04:29','maintainer','2017-01-14 08:04:29',0,NULL,'2');
+INSERT INTO `featuredapplication` (`id`,`createBy`,`creationDate`,`lastUpdateBy`,`lastUpdateDate`,`featureAppState`,`unFeatureDate`,`application_id`) VALUES (103,'maintainer','2017-01-14 08:04:29','maintainer','2017-01-14 08:04:29',0,NULL,'3');
+INSERT INTO `featuredapplication` (`id`,`createBy`,`creationDate`,`lastUpdateBy`,`lastUpdateDate`,`featureAppState`,`unFeatureDate`,`application_id`) VALUES (104,'maintainer','2017-01-14 08:04:29','maintainer','2017-01-14 08:04:29',0,NULL,'4');
+INSERT INTO `featuredapplication` (`id`,`createBy`,`creationDate`,`lastUpdateBy`,`lastUpdateDate`,`featureAppState`,`unFeatureDate`,`application_id`) VALUES (105,'maintainer','2017-01-14 08:04:29','maintainer','2017-01-14 08:04:29',0,NULL,'5');
+INSERT INTO `featuredapplication` (`id`,`createBy`,`creationDate`,`lastUpdateBy`,`lastUpdateDate`,`featureAppState`,`unFeatureDate`,`application_id`) VALUES (106,'maintainer','2017-01-14 08:04:28','maintainer','2017-01-14 08:04:28',1,NULL,'6');
+INSERT INTO `featuredapplication` (`id`,`createBy`,`creationDate`,`lastUpdateBy`,`lastUpdateDate`,`featureAppState`,`unFeatureDate`,`application_id`) VALUES (107,'maintainer','2017-01-14 08:04:29','maintainer','2017-01-14 08:04:29',1,NULL,'7');
+INSERT INTO `featuredapplication` (`id`,`createBy`,`creationDate`,`lastUpdateBy`,`lastUpdateDate`,`featureAppState`,`unFeatureDate`,`application_id`) VALUES (108,'maintainer','2017-01-14 08:04:29','maintainer','2017-01-14 08:04:29',1,NULL,'8');
+INSERT INTO `featuredapplication` (`id`,`createBy`,`creationDate`,`lastUpdateBy`,`lastUpdateDate`,`featureAppState`,`unFeatureDate`,`application_id`) VALUES (109,'maintainer','2017-01-14 08:04:29','maintainer','2017-01-14 08:04:29',1,NULL,'9');
