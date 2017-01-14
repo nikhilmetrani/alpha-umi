@@ -85,7 +85,7 @@ public class SubscriptionController {
         return new ResponseEntity<SubscriptionResource>(updatedSubscriptionResource, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/subscription/myapps", method = RequestMethod.GET)
+    @RequestMapping(path = "/subscriptions", method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> getSubscribedApplications() {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
@@ -93,9 +93,7 @@ public class SubscriptionController {
             return new ResponseEntity<ApplicationListResource>(HttpStatus.FORBIDDEN);
 
         ApplicationList appList = subscriptionService.getSubscribedApplications(user.getId());
-        if(appList == null || appList.getItems().isEmpty()) {
-        	return new ResponseEntity<ApplicationListResource>(HttpStatus.NOT_FOUND);
-        }
+        // It's assumed that appList will never be null
         ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(appList);
         return new ResponseEntity<ApplicationListResource>(appListResource, HttpStatus.OK);
     }

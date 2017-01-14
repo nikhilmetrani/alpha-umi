@@ -138,10 +138,6 @@ public class SubscriptionControllerTests {
         unsubscription.setActive(false);
         unsubscription.setUser(user);
 
-
-
-
-
         // Let's mock the security context
         authenticationMocked = Mockito.mock(Authentication.class);
         securityContextMocked = Mockito.mock(SecurityContext.class);
@@ -211,7 +207,7 @@ public class SubscriptionControllerTests {
         when(userService.findAuthenticatedUser()).thenReturn(user);
         when(subscriptionService.getSubscribedApplications(user.getId())).thenReturn(appList);
 
-        mockMvc.perform(get("/api/0/store/subscription/myapps"))
+        mockMvc.perform(get("/api/0/store/subscriptions"))
                 .andExpect(status().isOk());
     }
 
@@ -219,16 +215,7 @@ public class SubscriptionControllerTests {
     public void  testGetSubscribedApplicationsForForbidden() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
 
-        mockMvc.perform(get("/api/0/store/subscription/myapps"))
+        mockMvc.perform(get("/api/0/store/subscriptions"))
                 .andExpect(status().isForbidden());
-    }
-
-    @Test
-    public void  testGetSubscribedApplicationsForNotFound() throws Exception {
-        when(userService.findAuthenticatedUser()).thenReturn(user);
-        when(subscriptionService.getSubscribedApplications(user.getId())).thenReturn(null);
-
-        mockMvc.perform(get("/api/0/store/subscription/myapps"))
-                .andExpect(status().isNotFound());
     }
 }
