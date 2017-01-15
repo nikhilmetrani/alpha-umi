@@ -6,7 +6,6 @@ package io._29cu.usmserver.controllers.rest;
 import io._29cu.usmserver.controllers.rest.resources.ConsumerProfileResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ConsumerProfileResourceAssembler;
 import io._29cu.usmserver.core.model.entities.User;
-import io._29cu.usmserver.core.model.entities.ConsumerProfile;
 import io._29cu.usmserver.core.service.ConsumerProfileService;
 import io._29cu.usmserver.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +35,9 @@ public class ConsumerProfileController {
         if (user == null)
             return new ResponseEntity<ConsumerProfileResource>(HttpStatus.FORBIDDEN);
         try {
-            ConsumerProfile consumerProfile = consumerProfileService.findProfileByUserId(user.getId());
+            User consumerProfile = consumerProfileService.findProfileByUserId(user.getId());
             if (null == consumerProfile) {
-                consumerProfile = new ConsumerProfile(); //Create an empty profile object
-                consumerProfile.setConsumer(user);
+                consumerProfile = new User();           //Create an empty profile object
             }
             ConsumerProfileResource consumerProfileResource = new ConsumerProfileResourceAssembler().toResource(consumerProfile);
             HttpHeaders headers = new HttpHeaders();
@@ -59,9 +57,8 @@ public class ConsumerProfileController {
         if (user == null)
             return new ResponseEntity<ConsumerProfileResource>(HttpStatus.FORBIDDEN);
         try {
-            ConsumerProfile receivedProfile = consumerProfileResource.toEntity();
-            receivedProfile.setConsumer(user);
-            ConsumerProfile createdProfile = consumerProfileService.createProfile(receivedProfile);
+            User receivedProfile = consumerProfileResource.toEntity();
+            User createdProfile = consumerProfileService.createProfile(receivedProfile);
             ConsumerProfileResource createdProfileResource = new ConsumerProfileResourceAssembler().toResource(createdProfile);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(createdProfileResource.getLink("self").getHref()));

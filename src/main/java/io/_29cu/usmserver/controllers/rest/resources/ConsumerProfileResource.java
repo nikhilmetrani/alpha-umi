@@ -5,9 +5,10 @@ package io._29cu.usmserver.controllers.rest.resources;
  */
 import java.util.Date;
 
-import io._29cu.usmserver.core.model.entities.ConsumerProfile;
+//import io._29cu.usmserver.core.model.entities.ConsumerProfile;
+import io._29cu.usmserver.core.model.entities.User;
 
-public class ConsumerProfileResource extends EntityResourceBase<ConsumerProfile>  {
+public class ConsumerProfileResource extends EntityResourceBase<User>  {
 
     private Long rid;
     private String email;
@@ -38,12 +39,10 @@ public class ConsumerProfileResource extends EntityResourceBase<ConsumerProfile>
     }
 
     @Override
-    public ConsumerProfile toEntity() {
-        ConsumerProfile consumerProfile = new ConsumerProfile();
+    public User toEntity() {
+        User consumerProfile = new User();
         consumerProfile.setId(getRid());
         consumerProfile.setEmail(getEmail());
-        consumerProfile.setWebsite(getWebsite());
         return consumerProfile;
     }
-
 }
