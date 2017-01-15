@@ -34,81 +34,104 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import io._29cu.usmserver.core.model.entities.Authority;
+import io._29cu.usmserver.core.model.entities.ConsumerProfile;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AuthorityName;
 import io._29cu.usmserver.core.repositories.ConsumerProfileRepository;
+import io._29cu.usmserver.core.repositories.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
 public class ConsumerProfileServiceTests {
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private ConsumerProfileService consumerService;
 
     @Autowired
+    private UserRepository userRepository;
+    
+    @Autowired
     private ConsumerProfileRepository consumerRepository;
-
-    private User profile1, profile2;
+    
+    private User consumer, consumer2;
+    private ConsumerProfile consumerProfile, consumerProfile2;
 
     @Before
     @Transactional
     @Rollback(false)
     public void setup() {
-        // First user
-        profile1 = new User();
-        profile1.setUsername("consumer1");
-        profile1.setEmail("consumer1@usm.com");
+        consumer = new User();
+        consumer.setUsername("consumer");
+        consumer.setEmail("consumer@email.com");
         Authority authority = new Authority();
         authority.setName(AuthorityName.ROLE_CONSUMER);
         List<Authority> authList = new ArrayList<>();
         authList = new ArrayList<>();
         authList.add(authority);
-        profile1.setAuthorities(authList);
-        profile1.setEnabled(true);
-        profile1 = consumerService.createProfile(profile1);
+        consumer.setAuthorities(authList);
+        consumer.setEnabled(true);
+        consumer = userService.createUser(consumer);
+        
+        consumerProfile = new ConsumerProfile();
+        consumerProfile.setConsumer(consumer);
+        consumerProfile.setEmail(consumer.getEmail());
+        consumerProfile.setWebsite("http://www.consumer.com");
+        consumerProfile = consumerService.createProfile(consumerProfile);
 
-        // Second user
-        profile2 = new User();
-        profile2.setUsername("consumer2");
-        profile2.setEmail("consumer2@usm.com");
+        consumer2 = new User();
+        consumer2.setUsername("consumer2");
+        consumer2.setEmail("consumer2@email.com");
         authority = new Authority();
         authority.setName(AuthorityName.ROLE_CONSUMER);
         authList = new ArrayList<>();
+        authList = new ArrayList<>();
         authList.add(authority);
-        profile2.setAuthorities(authList);
-        profile2.setEnabled(true);
-        profile2 = consumerService.createProfile(profile2);
+        consumer2.setAuthorities(authList);
+        consumer2.setEnabled(true);
+        consumer2 = userService.createUser(consumer2);
+        
+        consumerProfile2 = new ConsumerProfile();
+        consumerProfile2.setConsumer(consumer2);
+        consumerProfile2.setEmail(consumer2.getEmail());
+        consumerProfile2.setWebsite("http://www.consumer.com");
     }
 	
     @After
 	public void tearDown() {
-    	consumerRepository.delete(profile1.getId());
-    	if(profile2.getId() != null) {
-    		consumerRepository.delete(profile2.getId());
+    	consumerRepository.delete(consumerProfile.getId());
+    	userRepository.delete(consumer.getId());
+    	if(consumerProfile2.getId() != null) {
+    		consumerRepository.delete(consumerProfile2.getId());
     	}
+   		userRepository.delete(consumer2.getId());
     }
 
     @Test
     @Transactional
     public void testFindProfileByUserId() {
-        User fromDb = consumerService.findProfileByUserId(profile1.getId());
+        ConsumerProfile fromDb = consumerService.findProfileByUserId(consumer.getId());
         assertNotNull("Consumer does not exist", fromDb);
-        assertEquals("Incorrect Consumer has been retrieved", profile1.getEmail(), fromDb.getEmail());
+        assertEquals("Incorrect Consumer has been retrieved", consumerProfile.getEmail(), fromDb.getEmail());
     }
 
     @Test
     @Transactional
     public void testCreateProfile() {
-        User fromDb = consumerService.createProfile(profile2);
+    	ConsumerProfile fromDb = consumerService.createProfile(consumerProfile2);
     	assertNotNull("Consumer not created", fromDb);
-        assertEquals("Invalid Consumer info has been inserted", profile2.getEmail(), fromDb.getEmail());
+        assertEquals("Invalid Consumer info has been inserted", consumerProfile2.getEmail(), fromDb.getEmail());
     }
 
     @Test
     @Transactional
     public void testModifyProfile() {
-        profile2 = consumerService.createProfile(profile1);
-    	User fromDb = consumerService.modifyProfile(profile2);
+    	consumerProfile2 = consumerService.createProfile(consumerProfile2);
+    	consumerProfile2.setWebsite("http://www.consumer2.com");
+    	ConsumerProfile fromDb = consumerService.modifyProfile(consumerProfile2);
         assertNotNull("Consumer does not exist", fromDb);
+        assertEquals("Consumer is not modified", consumerProfile2.getWebsite(), fromDb.getWebsite());
     }
 }

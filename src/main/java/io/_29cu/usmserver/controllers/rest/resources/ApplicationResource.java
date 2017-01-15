@@ -19,10 +19,7 @@ package io._29cu.usmserver.controllers.rest.resources;
 import java.util.ArrayList;
 import java.util.List;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.Category;
-import io._29cu.usmserver.core.model.entities.Installer;
-import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.entities.*;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 
 public class ApplicationResource extends EntityResourceBase<Application> {
@@ -37,6 +34,7 @@ public class ApplicationResource extends EntityResourceBase<Application> {
     private String description;
     private String whatsNew;
     private List<InstallerResource> installers;
+    private List<ReviewResource> reviews;
    
 	public AppState getState() {
         return state;
@@ -118,6 +116,14 @@ public class ApplicationResource extends EntityResourceBase<Application> {
 		this.installers = installers;
 	}
 
+    public List<ReviewResource> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<ReviewResource> reviews) {
+        this.reviews = reviews;
+    }
+
     @Override
     public Application toEntity() {
         Application application = new Application();
@@ -130,12 +136,20 @@ public class ApplicationResource extends EntityResourceBase<Application> {
         application.setDescription(description);
         application.setWhatsNew(whatsNew);
         List<Installer> installerObjects = new ArrayList<Installer>();
+        List<Review> reviewObjects = new ArrayList<Review>();
+
         if(installers != null) {
 	        for(InstallerResource installerResource : installers) {
 	        	installerObjects.add(installerResource.toEntity());
 	        }
         }
         application.setInstallers(installerObjects);
+        if(reviews != null) {
+            for(ReviewResource reviewResource : reviews) {
+                reviewObjects.add(reviewResource.toEntity());
+            }
+        }
+        application.setReviews(reviewObjects);
         return application;
     }
 }

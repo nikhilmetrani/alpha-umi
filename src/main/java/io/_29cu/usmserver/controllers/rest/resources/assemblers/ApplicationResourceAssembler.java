@@ -22,6 +22,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import java.util.ArrayList;
 import java.util.List;
 
+import io._29cu.usmserver.controllers.rest.resources.ReviewResource;
+import io._29cu.usmserver.core.model.entities.Review;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
 import io._29cu.usmserver.controllers.rest.ApplicationController;
@@ -46,12 +48,19 @@ public class ApplicationResourceAssembler extends ResourceAssemblerSupport<Appli
         applicationResource.setDescription(application.getDescription());
         applicationResource.setWhatsNew(application.getWhatsNew());
         List<InstallerResource> installers = new ArrayList<InstallerResource>();
+        List<ReviewResource> reviews = new ArrayList<ReviewResource>();
         if(application.getInstallers() != null) {
 	        for(Installer installer : application.getInstallers()) {
 	        	installers.add(new InstallerResourceAssembler().toResource(installer));
 	        }
         }
         applicationResource.setInstallers(installers);
+        if(application.getReviews() != null) {
+            for(Review review : application.getReviews()) {
+                reviews.add(new ReviewResourceAssembler().toResource(review));
+            }
+        }
+        applicationResource.setReviews(reviews);
         applicationResource.add(linkTo(methodOn(ApplicationController.class).getApplication(application.getId())).withSelfRel());
         if(application.getDeveloper() != null)
             applicationResource.add(linkTo(ApplicationController.class).slash("developer/" + application.getDeveloper().getId()).withRel("developerApps"));
