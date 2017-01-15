@@ -2,6 +2,7 @@ package io._29cu.usmserver.controllers.rest.resources;
 
 import java.util.Date;
 
+import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Review;
 import io._29cu.usmserver.core.model.entities.User;
 
@@ -14,6 +15,7 @@ public class ReviewResource extends EntityResourceBase<Review> {
 	private Boolean featured;
 	private Date creationDate;	
 	private String createBy;
+	private Application application;
 
 	public String getCreateBy() {
 		return createBy;
@@ -79,12 +81,24 @@ public class ReviewResource extends EntityResourceBase<Review> {
 		this.featured = featured;
 	}
 
+	public Application getApplication() {
+		return application;
+	}
+
+	public void setApplication(Application application) {
+		this.application = application;
+	}
+
 	@Override
 	public Review toEntity() {
 		Review review = new Review();
-		review.setDescription(getDescription());
-		review.setTitle(getTitle());
-		review.setFeatured(false);
+		review.setConsumer(consumer);
+		review.setDescription(description);
+		review.setTitle(title);
+		review.setFeatured(featured);
+		review.setApplication(application);
+		review.setCreationDate(creationDate);
+		review.setCreateBy(createBy);
 		return review;
 	}
 
