@@ -21,11 +21,13 @@ import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import io._29cu.usmserver.core.model.entities.Application;
 
+import java.util.Date;
+
 public interface SubscriptionService {
     Subscription subscribeApplication(String applicationId, User user);
     Subscription unsubscribeApplication(String applicationId, User user);
-    public ApplicationList getSubscribedApplications(long userId);
+    ApplicationList getSubscribedApplications(long userId);
     Subscription findSubscriptionByUserIdAndApplicationId(Long userId, String applicationId);
     Subscription subscribeApplication(Subscription subscription);
-
+    ApplicationList getApplicationsBySubscriptions(Date startDate, Date endDate);
 }
