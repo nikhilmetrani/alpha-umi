@@ -84,6 +84,7 @@ public class ReviewControllerTests {
 		review.setApplication(application);
 		review.setConsumer(consumer);
 		review.setCreateBy(consumer.getUsername());
+		review.setFeatured(false);
 
 		authenticationMocked = Mockito.mock(Authentication.class);
 		securityContextMocked = Mockito.mock(SecurityContext.class);

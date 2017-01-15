@@ -95,7 +95,7 @@ public class ReviewResource extends EntityResourceBase<Review> {
 		review.setConsumer(consumer);
 		review.setDescription(description);
 		review.setTitle(title);
-		review.setFeatured(featured);
+		review.setFeatured(false);
 		review.setApplication(application);
 		review.setCreationDate(creationDate);
 		review.setCreateBy(createBy);
