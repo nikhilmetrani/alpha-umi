@@ -85,8 +85,8 @@ public class StorageServiceImpl implements StorageService {
             throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
         }
         String extension = getFileExtension(file.getOriginalFilename());
-        Path destinationPath = createAppLogosDirectory(userId).resolve(appId + "." + extension);
-        Path backUpPath = createAppLogosDirectory(userId).resolve(appId + "." + extension + ".bkp");
+        Path destinationPath = createAppLogosDirectory(userId).resolve(appId);
+        Path backUpPath = createAppLogosDirectory(userId).resolve(appId + ".bkp");
         try {
             if (Files.exists(destinationPath)) {
                 Files.move(destinationPath, backUpPath, StandardCopyOption.REPLACE_EXISTING);
@@ -123,6 +123,12 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public Path load(String filename) {
         return rootLocation.resolve(filename);
+    }
+
+    @Override
+    public Resource loadApplicationLogoAsResource(Long userId, String appId) {
+        Path filePath = Paths.get("appLogos", userId.toString(), appId);
+        return loadAsResource(filePath.toString());
     }
 
     @Override

@@ -20,14 +20,12 @@ import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationUpdat
 import io._29cu.usmserver.core.model.entities.*;
 import io._29cu.usmserver.core.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -101,10 +99,9 @@ public class DeveloperApplicationsController {
     }
 
     @RequestMapping(path = "/applications/{appId}/image", method = RequestMethod.POST)
-    public ResponseEntity<String> handleFileUpload(
+    public ResponseEntity<String> uploadApplicationLogo(
             @PathVariable String appId,
-            @RequestParam("file") MultipartFile file,
-            RedirectAttributes redirectAttributes) {
+            @RequestParam("file") MultipartFile file) {
         User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
@@ -116,6 +113,27 @@ public class DeveloperApplicationsController {
             return responseEntity;
         } catch (Exception ex) {
             return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(path = "/applications/{appId}/image", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<Resource> getApplicationLogo(
+            @PathVariable String appId) {
+        User user = userService.findAuthenticatedUser();
+        if (user == null)
+            return new ResponseEntity<Resource>(HttpStatus.FORBIDDEN);
+
+        try {
+        Resource file = storageService.loadApplicationLogoAsResource(user.getId(), appId);
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+file.getFilename()+"\"")
+                .header(HttpHeaders.CONTENT_TYPE, "image/png")
+                .body(file);
+        } catch (Exception ex) {
+            // Maybe the image is not yet uploaded, so let's just return ok.
+            return new ResponseEntity<Resource>(HttpStatus.OK);
         }
     }
 

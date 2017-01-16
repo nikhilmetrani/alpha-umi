@@ -20,6 +20,8 @@ public interface StorageService {
 
     Path load(String filename);
 
+    Resource loadApplicationLogoAsResource(Long userId, String appId);
+
     Resource loadAsResource(String filename);
 
     void deleteAll();
