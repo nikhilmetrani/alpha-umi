@@ -57,12 +57,12 @@ public class UserController {
 //        return userService.findOne(id).orElseThrow(UserNotFoundException::new);
 //    }
 
-	@RequestMapping(value = "/0/user", method = RequestMethod.GET)
+	@RequestMapping(path = "/0/user", method = RequestMethod.GET)
 	public JwtUser getUser() {
 		return JwtUserFactory.create(userService.findAuthenticatedUser()); //.orElseThrow(UserNotFoundException::new);
 	}
 
-	@RequestMapping(value = "/1/signup", method = RequestMethod.POST)
+	@RequestMapping(path = "/1/signup", method = RequestMethod.POST)
 	public JwtUser createUser(
 			@RequestBody UserResource userResource
 	) {
@@ -72,7 +72,7 @@ public class UserController {
 		return JwtUserFactory.create(createdUser);
 	}
 
-	@RequestMapping(value = "/0/users/changepwd", method = RequestMethod.POST)
+	@RequestMapping(path = "/0/changepwd", method = RequestMethod.POST)
 	public ResponseEntity<Boolean> changePassword(
 			@RequestBody ChangePasswordRequest changePasswordRequest
 	) {
@@ -94,7 +94,7 @@ public class UserController {
 		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/0/admin/users/{userId}/block", method = RequestMethod.POST)
+	@RequestMapping(path = "/0/admin/users/{userId}/block", method = RequestMethod.POST)
 	public ResponseEntity<Boolean> blockUser(
 			@PathVariable("userId") Long userId
 	) {
