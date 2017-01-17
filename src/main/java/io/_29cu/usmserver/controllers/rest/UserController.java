@@ -19,6 +19,7 @@ package io._29cu.usmserver.controllers.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,8 @@ import io._29cu.usmserver.core.service.UserService;
 public class UserController {
 	@Autowired
 	private UserService userService;
+
+	private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 //    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 //    public ResponseEntity<UserResource> getUser(
@@ -83,13 +86,13 @@ public class UserController {
 		}
 
 		// Existing pwd not match
-		if (!user.getPassword().equals(changePasswordRequest.getCurrentPwd())) {
+		if (!(passwordEncoder.matches(changePasswordRequest.getCurrentPwd(), user.getPassword()))) {
 			return new ResponseEntity<Boolean>(HttpStatus.FORBIDDEN);
 		}
 
 		// TODO check and ensure new pwd follow password policy
 
-		user.setPassword(changePasswordRequest.getNewPwd());
+		user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPwd()));
 		Boolean result = userService.updateUser(user);
 		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
 	}
