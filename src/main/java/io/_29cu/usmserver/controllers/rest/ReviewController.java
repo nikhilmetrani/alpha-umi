@@ -19,6 +19,8 @@ import io._29cu.usmserver.core.service.ReviewService;
 import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.exception.ReviewDoesNotExistException;
 
+import java.util.Calendar;
+
 @Controller
 @RequestMapping("/api/0/consumer/{applicationId}/review")
 public class ReviewController {
@@ -39,6 +41,9 @@ public class ReviewController {
             return new ResponseEntity<ReviewResource>(HttpStatus.FORBIDDEN);
 		
         Review review = reviewResource.toEntity();
+        review.setCreationDate(Calendar.getInstance().getTime());
+        review.setConsumer(user);
+        review.setTitle(review.getDescription());
         Application application = applicationService.findApplication(applicationId);
         if(application == null){
         	 return new ResponseEntity<ReviewResource>(HttpStatus.NOT_FOUND);
