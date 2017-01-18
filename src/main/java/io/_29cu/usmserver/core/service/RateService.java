@@ -19,5 +19,7 @@ public interface RateService {
 	public Rate findRating(Long rateId);
 
 	public int countRatingsByApplicationId(String applicationId, Rating rating);
+
+	public Rate checkUserRate(String applicationId, Long userId);
 	
 }

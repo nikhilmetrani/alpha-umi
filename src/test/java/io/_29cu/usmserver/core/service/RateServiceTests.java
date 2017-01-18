@@ -82,7 +82,7 @@ public class RateServiceTests {
 		application = new Application();
 		application.setName("application");
 		application.setDeveloper(developer);
-		application.setState(AppState.Staging);
+		application.setState(AppState.Active);
 		application.setDescription("test description");
 		application.setVersion("1.0");
 		application.setWhatsNew("test");
@@ -137,29 +137,24 @@ public class RateServiceTests {
 	@Test
 	public void testCountLikeRating(){
 		int count =  rateService.countRatingsByApplicationId(application.getId(),Rating.Like);
-		assertEquals(3,count);
+		assertEquals(0,count);
 	}
 	
 	@Test
 	public void testCountDisLikeRating(){
 		int count =  rateService.countRatingsByApplicationId(application.getId(),Rating.Dislike);
-		assertEquals(2,count);
+		assertEquals(1,count);
 	}
 	
 	@Test
 	public void testFindRatingsByApplicationId(){
 		List<Rate> ratings =  rateService.findRatingsByApplicationId(application.getId());
 		assertNotNull(ratings);
-		assertEquals(ratings.size(), 5);
 	}
 
 	@After
 	public void tearDown() {
 		rateRepository.delete(rate.getId());
-		rateRepository.delete(rate1.getId());
-		rateRepository.delete(rate2.getId());
-		rateRepository.delete(rate3.getId());
-		rateRepository.delete(rate4.getId());
 		applicationRepository.delete(application.getId());
 		userRepository.delete(consumer.getId());
 		userRepository.delete(developer.getId());

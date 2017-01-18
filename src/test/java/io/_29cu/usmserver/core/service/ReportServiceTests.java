@@ -188,7 +188,7 @@ public class ReportServiceTests {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        subscription.setId(1L);
+        //subscription.setId(1L);
         subscription.setUser(developer);
         subscription = subscriptionService.subscribeApplication(subscription);
 
@@ -201,34 +201,34 @@ public class ReportServiceTests {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        subscription1.setId(11L);
+        //subscription1.setId(11L);
         subscription1.setUser(developer1);
         subscription1 = subscriptionService.subscribeApplication(subscription1);
 
         subscription2 = new Subscription();
         subscription2.setActive(Boolean.FALSE);
-        subscription2.setApplication(application);
+        subscription2.setApplication(application2);
 
         try {
             subscription2.setDateSubscribed(dateFormatter.parse("2016-12-12"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        subscription2.setId(111L);
+       // subscription2.setId(111L);
         subscription2.setUser(developer2);
         subscription2 = subscriptionService.subscribeApplication(subscription2);
 
 
         subscription3 = new Subscription();
         subscription3.setActive(Boolean.FALSE);
-        subscription3.setApplication(application);
+        subscription3.setApplication(application3);
 
         try {
             subscription3.setDateUnsubscribed(dateFormatter.parse("2016-12-16"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        subscription3.setId(1111L);
+        //subscription3.setId(1111L);
         subscription3.setUser(developer3);
         subscription3 = subscriptionService.subscribeApplication(subscription3);
 

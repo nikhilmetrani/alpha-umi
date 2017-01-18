@@ -22,4 +22,6 @@ public interface RateRepository extends CrudRepository<Rate, Long>{
 	  @Query("select count(r) from Rate r where r.application.id=:applicationId and r.rating = :rating")
 	  public int countRatingsByApplicationId(@Param("applicationId") String applicationId,@Param("rating") Rating rating);
 
+	  @Query("select r from Rate r where r.application.id=:applicationId and r.consumer.id = :userId")
+	  public Rate checkUserRate(@Param("applicationId") String applicationId,@Param("userId") Long userId);
 }

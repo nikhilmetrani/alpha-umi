@@ -11,6 +11,7 @@ import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.Rating;
 import io._29cu.usmserver.core.repositories.RateRepository;
 import io._29cu.usmserver.core.service.RateService;
+import io._29cu.usmserver.core.model.enumerations.Rating;
 
 @Component
 public class RateServiceImpl implements RateService{
@@ -20,6 +21,10 @@ public class RateServiceImpl implements RateService{
 
 	@Override
 	public Rate createRate(Rate rate, Application application,User user) {
+		Rate rateInDB = checkUserRate(application.getId(),user.getId());
+		if(rateInDB != null) {
+			rate.setId(rateInDB.getId());
+		}
 		rate.setApplication(application);
 		rate.setConsumer(user);
 		return rateRepository.save(rate);
@@ -38,5 +43,10 @@ public class RateServiceImpl implements RateService{
 	@Override
 	public int countRatingsByApplicationId(String applicationId, Rating rating) {
 		return rateRepository.countRatingsByApplicationId(applicationId, rating);
+	}
+
+	@Override
+	public Rate checkUserRate(String applicationId, Long userId) {
+		return rateRepository.checkUserRate(applicationId, userId);
 	}
 }
