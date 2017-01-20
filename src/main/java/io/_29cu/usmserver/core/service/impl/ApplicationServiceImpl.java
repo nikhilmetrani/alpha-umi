@@ -134,6 +134,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 		return applicationList;
 	}
 
+
+
 	@Override
 	public ApplicationList findApplicationsByCategory(String category) {
 		List<Application> appList = applicationRepository.findApplicationsByCategory(category);
@@ -179,5 +181,13 @@ public class ApplicationServiceImpl implements ApplicationService {
 		keyword = "(([[:<:]]|^)" + keyword + "([[:>:]]|$))";
 		appList.setApplications(AppHelper.getInstance().convertIterableToList(applicationRepository.findApplicationsByCategoryAndKeyword(categoryId, keyword)));
 		return appList;
+	}
+
+	@Override
+	public ApplicationList findAllActiveApplicationsByDeveloper(long developerId) {
+		List<Application> appList = applicationRepository.findAllActiveApplicationsByDeveloper(developerId);
+		ApplicationList applicationList = new ApplicationList();
+		applicationList.setApplications(appList);
+		return applicationList;
 	}
 }

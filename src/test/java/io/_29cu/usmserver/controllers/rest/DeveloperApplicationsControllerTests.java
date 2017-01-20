@@ -577,4 +577,13 @@ public class DeveloperApplicationsControllerTests {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void testGetActiveApplicationsIsOk() throws Exception {
+        when(userService.findAuthenticatedUser()).thenReturn(developer);
+        when(applicationService.findAllActiveApplicationsByDeveloper(developer.getId())).thenReturn(applicationList);
+
+        mockMvc.perform(get("/api/0/developer/activeapplications"))
+                .andExpect(status().isOk());
+    }
+
 }

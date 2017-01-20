@@ -79,4 +79,7 @@ public interface ApplicationRepository extends CrudRepository<Application, Strin
     @Query("select u from Application u where LOWER(u.developer.username) = LOWER(:username) and u.state = 1 and u.applicationPublishDate >= :startDate and u.applicationPublishDate <= :endDate")
     List<Application> findApplicationsByUserNameAndState(@Param("username") String username, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
+    @Query("select u from Application u where u.developer.id = :developerId and u.state = 1")
+    List<Application> findAllActiveApplicationsByDeveloper(@Param("developerId") long developerId);
+
 }

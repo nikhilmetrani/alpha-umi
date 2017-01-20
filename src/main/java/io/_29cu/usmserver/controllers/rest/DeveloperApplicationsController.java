@@ -27,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
@@ -369,6 +370,20 @@ public class DeveloperApplicationsController {
             return new ResponseEntity<ApplicationUpdateResource>(newAppUpdateResource, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/activeapplications", method = RequestMethod.GET)
+    public ResponseEntity<ApplicationListResource> getAllActiveApplications(){
+        try {
+            User user = userService.findAuthenticatedUser();
+            if (user == null)
+                return new ResponseEntity<ApplicationListResource>(HttpStatus.FORBIDDEN);
+            ApplicationList appList = applicationService.findAllActiveApplicationsByDeveloper(user.getId());
+            ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(appList);
+            return new ResponseEntity<ApplicationListResource>(appListResource, HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
         }
     }
 }
