@@ -55,7 +55,23 @@ public class UserServiceTests {
 
     @Test
     @Transactional
-    public void testFind() {
+    public void testCreateUser() {
+        User fromDb = service.createUser(account);
+        assertNotNull(fromDb);
+        assertEquals("Account was retrieved", account.getEmail(), fromDb.getEmail());
+    }
+
+    @Test
+    @Transactional
+    public void testUpdateUser() {
+        account.setEmail("email2");
+        Boolean result = service.updateUser(account);
+        assertTrue(result);
+    }
+
+    @Test
+    @Transactional
+    public void testFindUser() {
         User fromDb = service.findUser(account.getId());
         assertNotNull(fromDb);
         assertEquals("Account was retrieved", account.getEmail(), fromDb.getEmail());
