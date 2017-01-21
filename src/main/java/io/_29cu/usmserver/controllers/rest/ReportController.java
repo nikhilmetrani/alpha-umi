@@ -1,28 +1,20 @@
 package io._29cu.usmserver.controllers.rest;
 
-import io._29cu.usmserver.controllers.rest.resources.RatingResource;
-import io._29cu.usmserver.controllers.rest.resources.assemblers.RatingResourceAssembler;
 import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.entities.Rate;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.ApplicationService;
-import io._29cu.usmserver.core.service.RateService;
 import io._29cu.usmserver.core.service.ReportService;
 import io._29cu.usmserver.core.service.UserService;
-import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Controller
 @RequestMapping("/api/0/developer/report")
@@ -51,7 +43,7 @@ public class ReportController {
         }
 		try {
 			DateFormat df = new SimpleDateFormat("yyyyMMdd");
-			int count = reportService.findSubscribedUsersPerApplication(appId, df.parse(start), df.parse(end));
+			int count = reportService.findSubscriptionsPerApplication(appId, df.parse(start), df.parse(end));
 			return new ResponseEntity<Integer>(count, HttpStatus.OK);
 		} catch (Exception ex) {
 			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
@@ -74,7 +66,7 @@ public class ReportController {
 		}
 		try {
 			DateFormat df = new SimpleDateFormat("yyyyMMdd");
-			int count = reportService.findSubscribedActiveUsersPerApplication(appId, df.parse(start), df.parse(end));
+			int count = reportService.findActiveSubscriptionsPerApplication(appId, df.parse(start), df.parse(end));
 			return new ResponseEntity<Integer>(count, HttpStatus.OK);
 		} catch (Exception ex) {
 			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);

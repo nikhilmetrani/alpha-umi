@@ -280,7 +280,7 @@ public class ReportServiceTests {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        int count = 2;//service.findSubscribedUsersPerApplication(subscription.getApplication().getName(),toDate1);
+        int count = 2;//service.findSubscriptionsPerApplication(subscription.getApplication().getName(),toDate1);
         assertEquals("count should be 2", count,2);
     }
 
@@ -294,7 +294,7 @@ public class ReportServiceTests {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        int activeCount = 1;//service.findSubscribedActiveUsersPerApplication(subscription.getApplication().getName(),toDate1);
+        int activeCount = 1;//service.findActiveSubscriptionsPerApplication(subscription.getApplication().getName(),toDate1);
         assertEquals("count should be 1", activeCount,1);
 
     }

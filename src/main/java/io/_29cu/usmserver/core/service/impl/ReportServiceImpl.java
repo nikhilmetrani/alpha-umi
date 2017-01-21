@@ -72,7 +72,7 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public int findSubscribedUsersPerApplication(String applicationId, Date startDate, Date endDate) {
+    public int findSubscriptionsPerApplication(String applicationId, Date startDate, Date endDate) {
         List<String> subscribedUserList = new ArrayList<String>();
         endDate = ReportUtils.findDateRange(endDate);
         List<Subscription> subscriptionList = subscriptionRepository.findSubscribedUsersPerApplication(applicationId, startDate, endDate);
@@ -89,7 +89,7 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public int findSubscribedActiveUsersPerApplication(String applicationId, Date startDate, Date endDate) {
+    public int findActiveSubscriptionsPerApplication(String applicationId, Date startDate, Date endDate) {
         List<String> subscribedActiveUserList = new ArrayList<String>();
         endDate = ReportUtils.findDateRange(endDate);
         List<Subscription> subscriptionList = subscriptionRepository.findSubscribedActiveUsersPerApplication(applicationId, startDate, endDate);
