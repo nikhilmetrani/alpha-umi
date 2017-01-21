@@ -157,7 +157,7 @@ public class SubscriptionControllerTests {
     public void  testFindSubscriptionByUserIdAndApplicationIdIsForbidden() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(null);
 
-        mockMvc.perform(get("/api/0/store/applications/22/checkAppIsSubscribled"))
+        mockMvc.perform(get("/api/0/store/applications/22/checkAppIsSubscribed"))
                 .andExpect(status().isForbidden());
     }
 
@@ -165,7 +165,7 @@ public class SubscriptionControllerTests {
     public void  testFindSubscriptionByUserIdAndApplicationIdNoContent() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(user);
 
-        mockMvc.perform(get("/api/0/store/applications/222/checkAppIsSubscribled"))
+        mockMvc.perform(get("/api/0/store/applications/222/checkAppIsSubscribed"))
                 .andExpect(status().isNoContent());
     }
 
@@ -174,7 +174,7 @@ public class SubscriptionControllerTests {
         when(userService.findAuthenticatedUser()).thenReturn(user);
         when(subscriptionService.findSubscriptionByUserIdAndApplicationId(user.getId(),uuid)).thenReturn(subscription);
 
-        mockMvc.perform(get("/api/0/store/applications/"+uuid+"/checkAppIsSubscribled"))
+        mockMvc.perform(get("/api/0/store/applications/"+uuid+"/checkAppIsSubscribed"))
                 .andExpect(status().isOk());
     }
 
