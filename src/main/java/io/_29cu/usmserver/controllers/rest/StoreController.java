@@ -61,8 +61,9 @@ public class StoreController {
 	CategoryService categoryService;
 
 	/**
-	 * Get store application
+	 * Get active store applications
 	 * @return
+	 * @see ApplicationListResource
 	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> store() {
@@ -78,9 +79,10 @@ public class StoreController {
 	}
 
 	/**
-	 *
+	 * get all store applications
 	 * @param category
 	 * @return
+	 * @see ApplicationListResource
 	 */
 	@RequestMapping(value = "/{category}", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> getApplications(@PathVariable String category) {
@@ -97,9 +99,10 @@ public class StoreController {
 	}
 
 	/**
-	 *
-	 * @param browseType
+	 * Get store applications by browse type
+	 * @param browseType The browse type to be search with
 	 * @return
+	 * @see ApplicationListResource
 	 */
 	@RequestMapping(value = "/browse/{browseType}", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> getApplicationsByBrowseType(@PathVariable AppListType browseType) {
@@ -115,8 +118,9 @@ public class StoreController {
 	}
 
 	/**
-	 *
+	 * Get categories
 	 * @return
+	 * @see CategoryListResource
 	 */
 	@RequestMapping(value = "/category", method = RequestMethod.GET)
 	public ResponseEntity<CategoryListResource> getCategories() {
@@ -132,9 +136,10 @@ public class StoreController {
 	}
 
 	/**
-	 *
-	 * @param categoryId
+	 * Get category by category id
+	 * @param categoryId The category id to be searched with
 	 * @return
+	 * @see CategoryResource
 	 */
 	@RequestMapping(value = "/category/{categoryId}", method = RequestMethod.GET)
 	public ResponseEntity<CategoryResource> getCategory(@PathVariable Long categoryId) {
@@ -151,9 +156,10 @@ public class StoreController {
 	}
 
 	/**
-	 *
-	 * @param categoryResource
+	 * Create category
+	 * @param categoryResource The category to be created
 	 * @return
+	 * @see CategoryResource
 	 */
 	@RequestMapping(path = "/category/create", method = RequestMethod.POST)
 	public ResponseEntity<CategoryResource> createCategory(@RequestBody CategoryResource categoryResource) {
@@ -168,9 +174,10 @@ public class StoreController {
 	}
 
 	/**
-	 *
-	 * @param categoryResource
+	 * Update category
+	 * @param categoryResource The category to be updated
 	 * @return
+	 * @see CategoryResource
 	 */
 	@RequestMapping(path = "/category/update", method = RequestMethod.POST)
 	public ResponseEntity<CategoryResource> updateCategory(@RequestBody CategoryResource categoryResource) {
@@ -185,9 +192,10 @@ public class StoreController {
 	}
 
 	/**
-	 *
-	 * @param categoryId
+	 * Delete category
+	 * @param categoryId The id of the category to be deleted
 	 * @return
+	 * @see CategoryResource
 	 */
 	@RequestMapping(value = "/category/{categoryId}", method = RequestMethod.DELETE)
 	public ResponseEntity<CategoryResource> deleteCategory(@PathVariable Long categoryId) {
@@ -200,9 +208,10 @@ public class StoreController {
 	}
 
 	/**
-	 *
-	 * @param keyword
+	 * Search storey applications
+	 * @param keyword The keyword to be searched with
 	 * @return
+	 * @see ApplicationListResource
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> searchApplication(@RequestParam("keyword") String keyword) {
@@ -221,10 +230,11 @@ public class StoreController {
 	}
 
 	/**
-	 *
-	 * @param categoryId
-	 * @param keyword
+	 * Search store applications by category
+	 * @param categoryId The category id to be search with
+	 * @param keyword The keyword to be search with
 	 * @return
+	 * @see ApplicationListResource
 	 */
 	@RequestMapping(value = "/search/category/{categoryId}", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> searchApplicationByCateogry(@PathVariable Long categoryId, @RequestParam("keyword") String keyword) {
@@ -246,9 +256,10 @@ public class StoreController {
 	}
 
 	/**
-	 *
-	 * @param appId
+	 * Get application by id
+	 * @param appId The application id to be searched with
 	 * @return
+	 * @see ApplicationResource
 	 */
 	@RequestMapping(path = "/applications/{appId}", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationResource> getApplication(
@@ -264,8 +275,9 @@ public class StoreController {
 	}
 
 	/**
-	 *
+	 * Get trending applications
 	 * @return
+	 * @see ApplicationListResource
 	 */
 	@RequestMapping(value = "/trending", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> getTrendingApplications() {
