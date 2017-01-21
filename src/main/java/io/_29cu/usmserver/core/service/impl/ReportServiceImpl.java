@@ -47,26 +47,6 @@ public class ReportServiceImpl implements ReportService{
     ApplicationRepository applicationRepository;
 
     @Override
-    public ApplicationList findApplicationsByUserNameAndState(String username,Date startDate, Date endDate) {
-        List<Application> finalApplicationList = null;
-        ApplicationList applicationList = null;
-        List<Application> appList = applicationRepository.findApplicationsByUserNameAndState(username,startDate, endDate);
-        if(appList != null && !appList.isEmpty()){
-            finalApplicationList = new ArrayList<Application>();
-            long publishDate;
-            for(Application application : appList){
-                publishDate = application.getApplicationPublishDate().getTime();
-                if(publishDate >= startDate.getTime() && publishDate <= endDate.getTime()){
-                    finalApplicationList.add(application);
-                }
-            }
-            applicationList = new ApplicationList();
-            applicationList.setApplications(finalApplicationList);
-        }
-        return  applicationList;
-    }
-
-    @Override
     public int findSubscriptionsPerApplication(String applicationId, Date startDate, Date endDate) {
         List<String> subscribedUserList = new ArrayList<String>();
         endDate = ReportUtils.findDateRange(endDate);

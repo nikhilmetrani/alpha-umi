@@ -19,6 +19,8 @@ package io._29cu.usmserver.core.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.service.utilities.ApplicationBundleList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +54,8 @@ public class ApplicationBundleServiceTests {
 	private ApplicationBundleRepository applicationBundleRepository;
 
 	private User developer;
-	private ApplicationBundle applicationBundle;
+	private Category category;
+	private ApplicationBundle applicationBundle1, applicationBundle2;
 
 	@Before
 	@Transactional
@@ -64,53 +67,92 @@ public class ApplicationBundleServiceTests {
 		developer.setEnabled(true);
 		developer = userService.createUser(developer);
 
-		applicationBundle = new ApplicationBundle();
-		applicationBundle.setName("applicationBundle");
-		applicationBundle.setDeveloper(developer);
-		applicationBundle.setState(AppState.Staging);
-		applicationBundle.setDescription("test description");
-		applicationBundle = service.createApplicationBundle(applicationBundle);
+		category = new Category("Productivity");
+		category.setId(1l);
+
+		applicationBundle1 = new ApplicationBundle();
+		applicationBundle1.setName("applicationBundle1");
+		applicationBundle1.setDeveloper(developer);
+		applicationBundle1.setState(AppState.Staging);
+		//applicationBundle1.setCategory(category);
+		applicationBundle1.setDescription("test description");
+		applicationBundle1 = service.createApplicationBundle(applicationBundle1);
+
+		applicationBundle2 = new ApplicationBundle();
+		applicationBundle2.setName("applicationBundle2");
+		applicationBundle2.setDeveloper(developer);
+		applicationBundle2.setState(AppState.Staging);
+		//applicationBundle2.setCategory(category);
+		applicationBundle2.setDescription("test description");
+		applicationBundle2 = service.createApplicationBundle(applicationBundle2);
 	}
 
 	@After
 	public void tearDown() {
-		applicationBundleRepository.delete(applicationBundle.getId());
+		applicationBundleRepository.delete(applicationBundle1.getId());
 		userRepository.delete(developer.getId());
 	}
 
 	@Test
 	@Transactional
-	public void testFind() {
-		ApplicationBundle fromDb = service.findApplicationBundle(applicationBundle.getId());
+	public void testFindApplicationBundle() {
+		ApplicationBundle fromDb = service.findApplicationBundle(applicationBundle1.getId());
 		assertNotNull(fromDb);
-		assertEquals("ApplicationBundle name does not match", applicationBundle.getName(), fromDb.getName());
-		assertEquals("ApplicationBundle developer does not match", applicationBundle.getDeveloper(), fromDb.getDeveloper());
+		assertEquals("ApplicationBundle name does not match", applicationBundle1.getName(), fromDb.getName());
+		assertEquals("ApplicationBundle developer does not match", applicationBundle1.getDeveloper(), fromDb.getDeveloper());
 	}
 
 	@Test
 	@Transactional
 	public void testFindApplicationBundleByDeveloperAndName() {
-		ApplicationBundle fromDb = service.findApplicationBundleByDeveloperAndName(developer.getId(), applicationBundle.getName());
+		ApplicationBundle fromDb = service.findApplicationBundleByDeveloperAndName(developer.getId(), applicationBundle1.getName());
 		assertNotNull(fromDb);
-		assertEquals("ApplicationBundle name does not match", applicationBundle.getName(), fromDb.getName());
-		assertEquals("ApplicationBundle developer does not match", applicationBundle.getDeveloper(), fromDb.getDeveloper());
+		assertEquals("ApplicationBundle name does not match", applicationBundle1.getName(), fromDb.getName());
+		assertEquals("ApplicationBundle developer does not match", applicationBundle1.getDeveloper(), fromDb.getDeveloper());
 	}
 
 	@Test
 	@Transactional
 	public void testFindApplicationBundleByDeveloperAndId() {
-		ApplicationBundle fromDb = service.findApplicationBundleByDeveloperAndId(developer.getId(), applicationBundle.getId());
+		ApplicationBundle fromDb = service.findApplicationBundleByDeveloperAndId(developer.getId(), applicationBundle1.getId());
 		assertNotNull(fromDb);
-		assertEquals("ApplicationBundle Id does not match", applicationBundle.getId(), fromDb.getId());
-		assertEquals("ApplicationBundle developer does not match", applicationBundle.getDeveloper(), fromDb.getDeveloper());
+		assertEquals("ApplicationBundle Id does not match", applicationBundle1.getId(), fromDb.getId());
+		assertEquals("ApplicationBundle developer does not match", applicationBundle1.getDeveloper(), fromDb.getDeveloper());
 	}
 
 	@Test
 	@Transactional
-	public void testCreateApplicationBundle() {
-		ApplicationBundle fromDb = service.createApplicationBundle(applicationBundle);
+	public void testFindApplicationBundlesByDeveloper() {
+		ApplicationBundleList fromDb = service.findApplicationBundlesByDeveloper(developer.getId());
 		assertNotNull(fromDb);
-		assertEquals("ApplicationBundle name does not match", applicationBundle.getId(), fromDb.getId());
-		assertEquals("ApplicationBundle developer does not match", applicationBundle.getDeveloper(), fromDb.getDeveloper());
+		assertEquals("ApplicationBundleList size should be 2", fromDb.getApplicationBundles().size(), 2);
+	}
+
+	/*
+	@Test
+	@Transactional
+	public void testFindApplicationBundlesByCategory() {
+		ApplicationBundleList fromDb = service.findApplicationBundlesByCategory(category.getName());
+		assertNotNull(fromDb);
+		assertEquals("ApplicationBundleList size should be 2", fromDb.getApplicationBundles().size(), 2);
+	}
+	*/
+
+	@Test
+	@Transactional
+	public void testCreateApplicationBundle() {
+		ApplicationBundle fromDb = service.createApplicationBundle(applicationBundle1);
+		assertNotNull(fromDb);
+		assertEquals("ApplicationBundle name does not match", applicationBundle1.getId(), fromDb.getId());
+		assertEquals("ApplicationBundle developer does not match", applicationBundle1.getDeveloper(), fromDb.getDeveloper());
+	}
+
+	@Test
+	@Transactional
+	public void testUpdateApplicationBundle() {
+		applicationBundle2.setName("updated bundle");
+		ApplicationBundle fromDb = service.updateApplicationBundle(applicationBundle2);
+		assertNotNull(fromDb);
+		assertEquals("ApplicationBundle name does not match", applicationBundle2.getName(), fromDb.getName());
 	}
 }

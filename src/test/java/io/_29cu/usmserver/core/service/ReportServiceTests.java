@@ -135,21 +135,21 @@ public class ReportServiceTests {
 
     @Test
     @Transactional
-    public void testfindSubscribedUsersPerApplication() {
+    public void testFindSubscribedUsersPerApplication() {
         int count = service.findSubscriptionsPerApplication(application.getId(), date1, date2);
         assertEquals("count should be 2", count,2);
     }
 
 	@Test
 	@Transactional
-	public void testfindActiveSubscribedUsersPerApplication() {
+	public void testFindActiveSubscribedUsersPerApplication() {
 		int count = service.findActiveSubscriptionsPerApplication(application.getId(), date1, date2);
 		assertEquals("count should be 2", count,2);
 	}
 
 	@Test
 	@Transactional
-	public void testfindTerminatedSubscribedUsersPerApplication() {
+	public void testFindTerminatedSubscribedUsersPerApplication() {
 		int count = service.findTerminatedSubscriptionsPerApplication(application.getId(), date1, date2);
 		assertEquals("count should be 0", count,0);
 	}
