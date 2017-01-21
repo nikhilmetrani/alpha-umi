@@ -55,7 +55,7 @@ public class InstallerServiceTests {
     private ApplicationRepository applicationRepository;
 
     private User developer;
-    private Installer installer1, installer2;
+    private Installer installer;
     private Application application;
 
     @Before
@@ -85,43 +85,36 @@ public class InstallerServiceTests {
         application.setWhatsNew("test");
         application = applicationService.createApplication(application);
 
-        installer1 = new Installer();
-        installer1.setApplication(application);
-        installer1.setDownloadUrl("http://www.abc.com");
-        installer1.setExpressInstallCommand("command");
-        installer1.setOs(OperatingSystem.Windows);
-        installer1.setPlatform(Platform.x64);
-        installer1 = service.createInstaller(installer1);
-
-	    installer2 = new Installer();
-	    installer2.setApplication(application);
-	    installer2.setDownloadUrl("http://www.abc.com");
-	    installer2.setExpressInstallCommand("command");
-	    installer2.setOs(OperatingSystem.Windows);
-	    installer2.setPlatform(Platform.x64);
+        installer = new Installer();
+        installer.setApplication(application);
+        installer.setDownloadUrl("http://www.abc.com");
+        installer.setExpressInstallCommand("command");
+        installer.setOs(OperatingSystem.Windows);
+        installer.setPlatform(Platform.x64);
+        installer = service.createInstaller(installer);
     }
 
     @After
     public void tearDown() {
-	    installerRepository.delete(installer1);
+	    installerRepository.delete(installer);
         applicationRepository.delete(application.getId());
     }
 
     @Test
     @Transactional
     public void testCreateInstaller() {
-        Installer fromDb = service.createInstaller(installer1);
+        Installer fromDb = service.createInstaller(installer);
 	    assertNotNull(fromDb);
-        assertEquals("Installer id does not match", installer1.getId(), fromDb.getId());
+        assertEquals("Installer id does not match", installer.getId(), fromDb.getId());
     }
 
 	@Test
 	@Transactional
 	public void testUpdateInstaller() {
-    	installer1.setExpressInstallCommand("new command");
-		Installer fromDb = service.updateInstaller(installer1);
+    	installer.setExpressInstallCommand("new command");
+		Installer fromDb = service.updateInstaller(installer);
 		assertNotNull(fromDb);
-		assertEquals("Installer command does not updated", installer1.getExpressInstallCommand(), fromDb.getExpressInstallCommand());
+		assertEquals("Installer command does not updated", installer.getExpressInstallCommand(), fromDb.getExpressInstallCommand());
 	}
 
 	@Test
@@ -135,19 +128,17 @@ public class InstallerServiceTests {
 	@Test
 	@Transactional
 	public void testFindInstallerByApplicationId() {
-		Installer fromDb = service.findInstallerByApplicationId(installer1.getId(), application.getId());
+		Installer fromDb = service.findInstallerByApplicationId(installer.getId(), application.getId());
 		assertNotNull(fromDb);
-		assertEquals("Installer id does not match", installer1.getId(), fromDb.getId());
+		assertEquals("Installer id does not match", installer.getId(), fromDb.getId());
 	}
 
 	@Test
 	@Transactional
 	public void testDeleteInstaller() {
-		installer2 = service.createInstaller(installer2);
-		Installer fromDb = service.findInstallerByApplicationId(installer2.getId(), application.getId());
-		assertNotNull(fromDb);
-		service.deleteInstaller(installer2.getId());
-		fromDb = service.findInstallerByApplicationId(installer2.getId(), application.getId());
+		service.deleteInstaller(installer.getId());
+		Installer fromDb = service.findInstallerByApplicationId(installer.getId(), application.getId());
 		assertEquals("Installer should be null", fromDb, null);
+		installer = service.createInstaller(installer);
 	}
 }
