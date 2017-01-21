@@ -168,9 +168,6 @@ public class StoreController {
 				return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
 			}
 			ApplicationList appList = applicationService.findApplicationsByKeyword(keyword);
-			if (appList.getItems() == null || appList.getItems().isEmpty()) {
-				return new ResponseEntity<ApplicationListResource>(HttpStatus.NOT_FOUND);
-			}
 			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
