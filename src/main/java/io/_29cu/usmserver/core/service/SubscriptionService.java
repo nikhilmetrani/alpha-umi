@@ -29,5 +29,5 @@ public interface SubscriptionService {
     ApplicationList getSubscribedApplications(long userId);
     Subscription findSubscriptionByUserIdAndApplicationId(Long userId, String applicationId);
     Subscription subscribeApplication(Subscription subscription);
-    ApplicationList getApplicationsBySubscriptions(Date startDate, Date endDate);
+    ApplicationList getTrendingApplications();
 }
