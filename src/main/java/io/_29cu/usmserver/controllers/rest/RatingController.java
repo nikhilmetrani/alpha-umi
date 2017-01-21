@@ -66,7 +66,7 @@ public class RatingController {
 	 * @param likeType Rating.Like or Rating.Dislike
 	 * @return
 	 */
-	@RequestMapping(path = "/getRateLikeNum/{likeType}", method = RequestMethod.POST)
+	@RequestMapping(path = "/getRateLikeNum/{likeType}", method = RequestMethod.GET)
     public ResponseEntity<String> getRateLikeNumber(
             @PathVariable String applicationId,
             @PathVariable String likeType
@@ -97,7 +97,7 @@ public class RatingController {
 	 * @param applicationId The id of the application
 	 * @return
 	 */
-    @RequestMapping(path = "/checkUserRate", method = RequestMethod.POST)
+    @RequestMapping(path = "/checkUserRate", method = RequestMethod.GET)
     public ResponseEntity<String> checkUserRate(
             @PathVariable String applicationId
     ) {
