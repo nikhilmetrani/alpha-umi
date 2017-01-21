@@ -126,7 +126,7 @@ public class SubscriptionController {
 	 * @return
 	 * @see SubscriptionResource
 	 */
-    @RequestMapping(path = "/applications/{appId}/checkAppIsSubscribled", method = RequestMethod.GET)
+    @RequestMapping(path = "/applications/{appId}/checkAppIsSubscribed", method = RequestMethod.GET)
     public ResponseEntity<SubscriptionResource> FindSubscriptionByUserIdAndApplicationId(
             @PathVariable String appId
     ) {
