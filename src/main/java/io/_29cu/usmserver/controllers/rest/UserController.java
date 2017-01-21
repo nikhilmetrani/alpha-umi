@@ -60,11 +60,22 @@ public class UserController {
 //        return userService.findOne(id).orElseThrow(UserNotFoundException::new);
 //    }
 
+	/**
+	 * Get User
+	 * @return
+	 * @see JwtUser
+	 */
 	@RequestMapping(path = "/0/user", method = RequestMethod.GET)
 	public JwtUser getUser() {
 		return JwtUserFactory.create(userService.findAuthenticatedUser()); //.orElseThrow(UserNotFoundException::new);
 	}
 
+	/**
+	 * Create user
+	 * @param userResource The user instance to be created
+	 * @return
+	 * @see JwtUser
+	 */
 	@RequestMapping(path = "/1/signup", method = RequestMethod.POST)
 	public JwtUser createUser(
 			@RequestBody UserResource userResource
@@ -75,6 +86,11 @@ public class UserController {
 		return JwtUserFactory.create(createdUser);
 	}
 
+	/**
+	 * Change password
+	 * @param changePasswordRequest The ChangePasswordRequest instance
+	 * @return
+	 */
 	@RequestMapping(path = "/0/changepwd", method = RequestMethod.POST)
 	public ResponseEntity<Boolean> changePassword(
 			@RequestBody ChangePasswordRequest changePasswordRequest
@@ -97,6 +113,11 @@ public class UserController {
 		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
 	}
 
+	/**
+	 * Block user
+	 * @param userId The id of the user to be blocked
+	 * @return
+	 */
 	@RequestMapping(path = "/0/admin/users/{userId}/block", method = RequestMethod.POST)
 	public ResponseEntity<Boolean> blockUser(
 			@PathVariable("userId") Long userId

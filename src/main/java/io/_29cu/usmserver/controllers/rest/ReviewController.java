@@ -30,7 +30,14 @@ public class ReviewController {
 	private ReviewService reviewService;
 	@Autowired
     private ApplicationService applicationService;
-	
+
+	/**
+	 * Create review for application
+	 * @param applicationId The id of the application
+	 * @param reviewResource The review to be created
+	 * @return
+	 * @see ReviewResource
+	 */
     @RequestMapping(path = "/create", method = RequestMethod.POST)
     public ResponseEntity<ReviewResource> createReview(
     		@PathVariable String applicationId,
@@ -52,8 +59,13 @@ public class ReviewController {
         ReviewResource createdReviewResource = new ReviewResourceAssembler().toResource(review);
         return new ResponseEntity<ReviewResource>(createdReviewResource,HttpStatus.CREATED);
     }
-    
-    
+
+	/**
+	 * Remove review of application
+	 * @param reviewId The id of the review instance
+	 * @return
+	 * @see ReviewResource
+	 */
     @RequestMapping(path = "/remove/{reviewId}", method = RequestMethod.DELETE)
     public ResponseEntity<ReviewResource> removeReview(
     		@PathVariable Long reviewId
@@ -68,8 +80,13 @@ public class ReviewController {
 		}
         return new ResponseEntity<ReviewResource>(HttpStatus.OK);
     }
-    
-    
+
+	/**
+	 * Set featured review
+	 * @param reviewId The id of the review instance
+	 * @return
+	 * @see ReviewResource
+	 */
     @RequestMapping(path = "/remove/{reviewId}/feature", method = RequestMethod.PUT)
     public ResponseEntity<ReviewResource> featureReview(
     		@PathVariable Long reviewId
@@ -80,7 +97,13 @@ public class ReviewController {
 		reviewService.featureReview(reviewId);
         return new ResponseEntity<ReviewResource>(HttpStatus.OK);
     }
-    
+
+	/**
+	 * Unset featured review
+	 * @param reviewId The id of the review instance
+	 * @return
+	 * @see ReviewResource
+	 */
     @RequestMapping(path = "/remove/{reviewId}/unfeature", method = RequestMethod.PUT)
     public ResponseEntity<ReviewResource> unFeatureReview(
     		@PathVariable Long reviewId

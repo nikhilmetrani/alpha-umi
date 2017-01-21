@@ -29,7 +29,14 @@ public class ReviewReplyController {
 	private ReviewReplyService reviewReplyService;
 	@Autowired
     private ReviewService reviewService;
-	
+
+	/**
+	 * Create review for review
+	 * @param reviewId The id of the review to be reviewed
+	 * @param reviewReplyResource The new review instance
+	 * @return
+	 * @see ReviewReplyResource
+	 */
 	@RequestMapping(path = "/create", method = RequestMethod.POST)
 	public ResponseEntity<ReviewReplyResource> createReview(@PathVariable String reviewId,
 			@RequestBody ReviewReplyResource reviewReplyResource) {
@@ -46,8 +53,13 @@ public class ReviewReplyController {
 		ReviewReplyResource createdReviewResource = new ReviewReplyResourceAssembler().toResource(reviewReply);
 		return new ResponseEntity<ReviewReplyResource>(createdReviewResource, HttpStatus.CREATED);
 	}
-	 
-	 
+
+	/**
+	 * Remove review for review
+	 * @param reviewReplyId The id of review to be removed
+	 * @return
+	 * @see ReviewReplyResource
+	 */
 	@RequestMapping(path = "/remove/{reviewReplyId}", method = RequestMethod.DELETE)
 	public ResponseEntity<ReviewReplyResource> removeReviewReply(@PathVariable String reviewReplyId) {
 		User user = userService.findAuthenticatedUser();
