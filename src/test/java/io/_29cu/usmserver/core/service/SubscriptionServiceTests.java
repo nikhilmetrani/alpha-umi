@@ -208,4 +208,11 @@ public class SubscriptionServiceTests {
         }
     }
 
+    @Test
+    @Transactional
+    public void testGetTrendingApplications() {
+        ApplicationList fromDb = subscriptionService.getTrendingApplications();
+        assertNotNull("ApplicationList is Null", fromDb);
+    }
+
  }

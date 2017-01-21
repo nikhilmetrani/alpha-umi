@@ -44,7 +44,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.Date;
 
 @Controller
 @RequestMapping("/api/1/store")
@@ -216,10 +215,7 @@ public class StoreController {
 	@RequestMapping(value = "/trending", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> getTrendingApplications() {
 		try {
-			Date endDate = new Date();
-			Date startDate = new Date();
-			startDate.setTime(new Date().getTime() - 30 * 24 * 60 * 60 * 1000);
-			ApplicationList appList = subscriptionService.getApplicationsBySubscriptions(startDate, endDate);
+			ApplicationList appList = subscriptionService.getTrendingApplications();
 			if (appList.getItems() == null || appList.getItems().isEmpty()) {
 				return new ResponseEntity<ApplicationListResource>(HttpStatus.NOT_FOUND);
 			}

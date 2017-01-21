@@ -38,16 +38,13 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Lon
     @Query("select s from Subscription s where s.application.id = :applicationId and s.dateSubscribed >= :startDate and s.dateSubscribed <= :endDate and s.active = 1")
     List<Subscription> findSubscribedActiveUsersPerApplication(@Param("applicationId") String applicationId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    @Query("select s from Subscription s where s.application.id = :applicationId and s.dateUnsubscribed >= :startDate and s.dateUnsubscribed <= :endDate")
+    @Query("select s from Subscription s where s.application.id = :applicationId and s.dateUnsubscribed >= :startDate and s.dateUnsubscribed <= :endDate and s.active <> 1")
     List<Subscription> findTerminatedSubscriptionsPerApplication(@Param("applicationId") String applicationId,@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     @Query("select a from Subscription a where a.user.id = :userId and a.application.id = :applicationId and a.active = 1 order by a.id desc")
     Subscription findSubscription(@Param("userId") Long userId, @Param("applicationId") String applicationId);
 
-	//TODO
-//	@Query("select s.application, count(s.application) as total from Subscription s where s.dateSubscribed >= :startDate and s.dateSubscribed <= :endDate and s.active = 1 " +
-//			"group by s.application.id order by total desc")
-	@Query("select s.application from Subscription s where s.active = 1")
-	List<Application> getApplicationsBySubscriptions(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+	@Query("select s.application from Subscription s where s.active = 1 and s.dateSubscribed >= :startDate and s.dateSubscribed <= :endDate")
+	List<Application> getTrendingApplications(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
 }
