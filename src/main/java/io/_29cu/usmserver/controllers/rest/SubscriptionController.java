@@ -81,8 +81,14 @@ public class SubscriptionController {
         if (user == null)
             return new ResponseEntity<SubscriptionResource>(HttpStatus.FORBIDDEN);
         Subscription updatedSubscription = subscriptionService.unsubscribeApplication(appId,user);
-        SubscriptionResource updatedSubscriptionResource = new SubscriptionResourceAssembler().toResource(updatedSubscription);
-        return new ResponseEntity<SubscriptionResource>(updatedSubscriptionResource, HttpStatus.OK);
+        SubscriptionResource updatedSubscriptionResource=null;
+        if(updatedSubscription != null){
+            updatedSubscriptionResource = new SubscriptionResourceAssembler().toResource(updatedSubscription);
+            return new ResponseEntity<SubscriptionResource>(updatedSubscriptionResource, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<SubscriptionResource>(updatedSubscriptionResource, HttpStatus.NOT_FOUND);
+        }
     }
 
     @RequestMapping(path = "/subscriptions", method = RequestMethod.GET)
