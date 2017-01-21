@@ -3,6 +3,7 @@ package io._29cu.usmserver.controllers.rest;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,6 +34,8 @@ import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.RateService;
 import io._29cu.usmserver.core.service.UserService;
 
+import java.util.UUID;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
@@ -47,9 +50,10 @@ public class RatingControllerTests {
 	private ApplicationService applicationService;
 	
 	private MockMvc mockMvc;
+	private String uuid;
+	private Rate rate;
 	private User consumer;
 	private Application application;
-	private Rate rate;
 	
 	SecurityContext securityContextMocked;
 	Authentication authenticationMocked;
@@ -58,7 +62,8 @@ public class RatingControllerTests {
 	public void setup() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		mockMvc = MockMvcBuilders.standaloneSetup(ratingController).build();
-		
+		uuid = UUID.randomUUID().toString();
+
 		consumer = new User();
 		consumer.setId(1L);
 		consumer.setEmail("owner@test.com");
@@ -142,5 +147,25 @@ public class RatingControllerTests {
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status()
 				.isNotFound());
+	}
+
+	@Test
+	public void testGetRateLikeNumber() throws Exception {
+		when(userService.findAuthenticatedUser()).thenReturn(consumer);
+		when(applicationService.findApplication(uuid)).thenReturn(application);
+		when(rateService.countRatingsByApplicationId(uuid, Rating.Dislike)).thenReturn(1);
+
+		mockMvc.perform(post("/api/0/consumer/"+uuid+"/rating/getRateLikeNum/0"))
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	public void testCheckUserRate() throws Exception {
+		when(userService.findAuthenticatedUser()).thenReturn(consumer);
+		when(applicationService.findApplication(uuid)).thenReturn(application);
+		when(rateService.checkUserRate(uuid, consumer.getId())).thenReturn(null);
+
+		mockMvc.perform(post("/api/0/consumer/"+uuid+"/rating/checkUserRate"))
+				.andExpect(status().isOk());
 	}
 }

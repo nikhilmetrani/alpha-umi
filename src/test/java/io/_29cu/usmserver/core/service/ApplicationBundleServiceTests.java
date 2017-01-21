@@ -95,6 +95,14 @@ public class ApplicationBundleServiceTests {
 
 	@Test
 	@Transactional
+	public void testGetAllApplicationBundles() {
+		ApplicationBundleList fromDb = service.getAllApplicationBundles();
+		assertNotNull(fromDb);
+		assertEquals("ApplicationBundleList size should be 2", fromDb.getApplicationBundles().size(), 2);
+	}
+
+	@Test
+	@Transactional
 	public void testFindApplicationBundle() {
 		ApplicationBundle fromDb = service.findApplicationBundle(applicationBundle1.getId());
 		assertNotNull(fromDb);
