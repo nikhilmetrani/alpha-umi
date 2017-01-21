@@ -29,6 +29,11 @@ public class ConsumerProfileController {
     private ConsumerProfileService consumerProfileService;
 
     // userId path variable imposes a security risk. Need to remove it.
+    /**
+     * Get consumer profile
+     * @return The ConsumerProfileResource found
+     * @see ConsumerProfileResource
+     */
     @RequestMapping(path = "/profile", method = RequestMethod.GET)
     public ResponseEntity<ConsumerProfileResource> consumerProfile() {
         // Let's get the user from principal and validate the userId against it.
@@ -50,6 +55,12 @@ public class ConsumerProfileController {
         }
     }
 
+    /**
+     * Create consumer profile
+     * @param consumerProfileResource The ConsumerProfileResource to be created
+     * @return The ConsumerProfileResource created
+     * @see ConsumerProfileResource
+     */
     @RequestMapping(path = "/profile", method = RequestMethod.POST)
     public ResponseEntity<ConsumerProfileResource> createConsumerProfile(
             @RequestBody ConsumerProfileResource consumerProfileResource

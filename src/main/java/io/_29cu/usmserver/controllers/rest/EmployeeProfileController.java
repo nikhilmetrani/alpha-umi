@@ -42,6 +42,11 @@ public class EmployeeProfileController {
     private EmployeeProfileService employeeProfileService;
 
     // userId path variable imposes a security risk. Need to remove it.
+    /**
+     * Get employee profile
+     * @return
+     * @see EmployeeProfileResource
+     */
     @RequestMapping(path = "/profile", method = RequestMethod.GET)
     public ResponseEntity<EmployeeProfileResource> employeeProfile() {
         // Let's get the user from principal and validate the userId against it.
@@ -63,6 +68,12 @@ public class EmployeeProfileController {
         }
     }
 
+	/**
+	 * Create employee profile
+	 * @param employeeProfileResource The profile to be created
+	 * @return
+	 * @see EmployeeProfileResource
+	 */
     @RequestMapping(path = "/profile", method = RequestMethod.POST)
     public ResponseEntity<EmployeeProfileResource> createEmployeeProfile(
             @RequestBody EmployeeProfileResource employeeProfileResource

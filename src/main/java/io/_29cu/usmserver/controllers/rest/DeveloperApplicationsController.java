@@ -16,6 +16,7 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.controllers.rest.resources.ApplicationBundleResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationUpdateResourceAssembler;
 import io._29cu.usmserver.core.model.entities.*;
 import io._29cu.usmserver.core.service.*;
@@ -65,7 +66,11 @@ public class DeveloperApplicationsController {
     // Add similar methods for create, update and publish updates
     // And publish application
 
-    // Get all applications
+    /**
+     * Get all applications
+     * @return The ApplicationListResource found
+     * @see ApplicationListResource
+     */
     @RequestMapping(path = "/applications", method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> getApplications(){
         // Let's get the user from principal and validate the userId against it.
@@ -81,7 +86,12 @@ public class DeveloperApplicationsController {
         }
     }
 
-    // Get all applications
+	/**
+	 * Get application by application id
+	 * @param appId The application id to be search by
+	 * @return The ApplicationResource created
+	 * @see ApplicationResource
+	 */
     @RequestMapping(path = "/applications/{appId}", method = RequestMethod.GET)
     public ResponseEntity<ApplicationResource> getApplication(
             @PathVariable String appId
@@ -99,6 +109,13 @@ public class DeveloperApplicationsController {
         }
     }
 
+	/**
+	 * Upload application logo
+	 * @param appId The id of the application
+	 * @param file The image file for the logo
+	 * @return
+	 * @see MultipartFile
+	 */
     @RequestMapping(path = "/applications/{appId}/image", method = RequestMethod.POST)
     public ResponseEntity<String> uploadApplicationLogo(
             @PathVariable String appId,
@@ -117,6 +134,12 @@ public class DeveloperApplicationsController {
         }
     }
 
+	/**
+	 * Get application logo
+	 * @param appId The id of the application
+	 * @return
+	 * @see Resource
+	 */
     @RequestMapping(path = "/applications/{appId}/image", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Resource> getApplicationLogo(
@@ -138,7 +161,12 @@ public class DeveloperApplicationsController {
         }
     }
 
-    // Create Application
+	/**
+	 * Create Application
+	 * @param applicationResource The application to be created
+	 * @return The application created
+	 * @see ApplicationResource
+	 */
     @RequestMapping(path = "/applications/create", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> createDeveloperApplication(
             @RequestBody ApplicationResource applicationResource
@@ -156,7 +184,12 @@ public class DeveloperApplicationsController {
         return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
     }
 
-    // Create Application
+	/**
+	 * Check whether the application name already exists under the same developer
+	 * @param name The application name to be checked
+	 * @return The application with the bundle name under the same developer
+	 * @see ApplicationResource
+	 */
     @RequestMapping(path = "/applications/check", method = RequestMethod.GET)
     public ResponseEntity<ApplicationResource> checkApplicationNameExistsForDeveloper(
             @RequestParam String name
@@ -176,7 +209,12 @@ public class DeveloperApplicationsController {
         }
     }
 
-    // Create Application
+	/**
+	 * Create and publish application
+	 * @param applicationResource The application to be created and published
+	 * @return
+	 * @see ApplicationResource
+	 */
     @RequestMapping(path = "/applications/publish", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> createAndPublishDeveloperApplication(
             @RequestBody ApplicationResource applicationResource
@@ -195,7 +233,13 @@ public class DeveloperApplicationsController {
         return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
     }
 
-    // Update Application
+	/**
+	 * Update developer application
+	 * @param appId The id of the application to be updated
+	 * @param applicationResource The updated application instance
+	 * @return
+	 * @see ApplicationResource
+	 */
     @RequestMapping(path = "/applications/{appId}/update", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> updateDeveloperApplication(
             @PathVariable String appId,
@@ -219,7 +263,13 @@ public class DeveloperApplicationsController {
 	    return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
     }
 
-    // Update and Publish Application
+	/**
+	 * Update and publish application
+	 * @param appId The id of the application to be updated and published
+	 * @param applicationResource The application to be created and published
+	 * @return
+	 * @see ApplicationResource
+	 */
     @RequestMapping(path = "/applications/{appId}/updateAndPublish", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> updateAndPublishDeveloperApplication(
             @PathVariable String appId,
@@ -244,7 +294,12 @@ public class DeveloperApplicationsController {
         return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
     }
 
-    // Publish Application
+	/**
+	 * Publish developer application
+	 * @param appId The id of the application to be published
+	 * @return
+	 * @see ApplicationResource
+	 */
     @RequestMapping(path = "/applications/{appId}/publish", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> publishDeveloperApplication(
             @PathVariable String appId
@@ -278,7 +333,12 @@ public class DeveloperApplicationsController {
         }
     }
 
-    // Recall Application
+	/**
+	 * Recall developer application
+	 * @param appId The id of the application to be recalled
+	 * @return
+	 * @see ApplicationResource
+	 */
     @RequestMapping(path = "/applications/{appId}/recall", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> recallDeveloperApplication(
             @PathVariable String appId
@@ -316,7 +376,13 @@ public class DeveloperApplicationsController {
         }
     }
 
-    // Create Update Application
+	/**
+	 * Created application update
+	 * @param appId The id of the application
+	 * @param applicationUpdateResource The application update instance to be created
+	 * @return
+	 * @see ApplicationResource
+	 */
     @RequestMapping(path = "/{userId}/applications/{appId}/createUpdate", method = RequestMethod.POST)
     public ResponseEntity<ApplicationResource> createUpdateDeveloperApplication(
             @PathVariable String userId,
@@ -350,7 +416,13 @@ public class DeveloperApplicationsController {
         }
     }
 
-    // Publish Application Update
+
+	/**
+	 * Publish Application Update
+	 * @param appUpdate
+	 * @param applicationUpdateResource
+	 * @return
+	 */
     @RequestMapping(path = "/{userId}/applications/{appId}/publishUpdate", method = RequestMethod.POST)
     public ResponseEntity<ApplicationUpdateResource> PublishDeveloperApplicationUpdate(
             @PathVariable String userId,
@@ -373,6 +445,11 @@ public class DeveloperApplicationsController {
         }
     }
 
+	/**
+	 * Get all active applications
+	 * @return
+	 * @see ApplicationListResource
+	 */
     @RequestMapping(value = "/activeapplications", method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> getAllActiveApplications(){
         try {

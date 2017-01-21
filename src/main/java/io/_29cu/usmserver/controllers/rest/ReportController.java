@@ -26,7 +26,14 @@ public class ReportController {
 	private ReportService reportService;
 	@Autowired
     private ApplicationService applicationService;
-	
+
+	/**
+	 *
+	 * @param appId
+	 * @param start
+	 * @param end
+	 * @return
+	 */
 	@RequestMapping(path = "/subscriptions/{appId}/{start}/{end}", method = RequestMethod.GET)
     public ResponseEntity<Integer> findSubscribedUsersPerApplication(
 			@PathVariable String appId,
@@ -50,6 +57,13 @@ public class ReportController {
 		}
     }
 
+	/**
+	 *
+	 * @param appId
+	 * @param start
+	 * @param end
+	 * @return
+	 */
 	@RequestMapping(path = "/activesubscriptions/{appId}/{start}/{end}", method = RequestMethod.GET)
 	public ResponseEntity<Integer> findActiveSubscribedUsersPerApplication(
 			@PathVariable String appId,
@@ -73,6 +87,13 @@ public class ReportController {
 		}
 	}
 
+	/**
+	 *
+	 * @param appId
+	 * @param start
+	 * @param end
+	 * @return
+	 */
 	@RequestMapping(path = "/terminatedsubscriptions/{appId}/{start}/{end}", method = RequestMethod.GET)
 	public ResponseEntity<Integer> findTerminatedSubscribedUsersPerApplication(
 			@PathVariable String appId,

@@ -40,11 +40,11 @@ public class ApplicationBundleController {
     @Autowired
     private ApplicationBundleService applicationBundleService;
 
-    // Skeleton methods
-    // Add similar methods for create, update and publish updates
-    // And publish application
-
-    // Get all applications
+    /**
+     * Get all applications
+     * @return The ApplicationBundleListResource found
+     * @see ApplicationBundleListResource
+     */
     @RequestMapping(path = "/applicationBundles", method = RequestMethod.GET)
     public ResponseEntity<ApplicationBundleListResource> getApplicationBundles(){
         // Let's get the user from principal and validate the userId against it.
@@ -60,7 +60,12 @@ public class ApplicationBundleController {
         }
     }
 
-    // Get all applications
+    /**
+     * Get all ApplicationBundle by appBundleId
+     * @param appBundleId The id of the ApplicationBundle to be search by
+     * @return The ApplicationBundleResource found
+     * @see ApplicationBundleResource
+     */
     @RequestMapping(path = "/applicationBundles/{appBundleId}", method = RequestMethod.GET)
     public ResponseEntity<ApplicationBundleResource> getApplicationBundle(
             @PathVariable String appBundleId
@@ -77,7 +82,13 @@ public class ApplicationBundleController {
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.BAD_REQUEST);
         }
     }
-    // Create Application Bundle
+
+    /**
+     * Create ApplicationBundle
+     * @param applicationBundleResource The ApplicationBundle to be created
+     * @return The ApplicationBundleResource created
+     * @see ApplicationBundleResource
+     */
     @RequestMapping(path = "/applicationBundles/create", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> createDeveloperApplicationBundle(
             @RequestBody ApplicationBundleResource applicationBundleResource
@@ -94,7 +105,12 @@ public class ApplicationBundleController {
         return new ResponseEntity<ApplicationBundleResource>(createdApplicationBundleResource, HttpStatus.OK);
     }
 
-    // Check if another application bundle with the same name already exists - to be check from the front end
+    /**
+     * Check whether the bundle name already exists under the same developer
+     * @param name The bundle name to be checked
+     * @return The ApplicationBundleResource with the bundle name under the same developer
+     * @see ApplicationBundleResource
+     */
     @RequestMapping(path = "/applicationBundles/create", method = RequestMethod.GET)
     public ResponseEntity<ApplicationBundleResource> checkApplicationBundleNameExistsForDeveloper(
             @RequestParam String name
@@ -112,7 +128,13 @@ public class ApplicationBundleController {
         }
     }
 
-    // Update ApplicationBundle
+    /**
+     * Update ApplicationBundle
+     * @param appBundleId The id of the ApplicationBundle to be updated
+     * @param applicationBundleResource The updated ApplicationBundle
+     * @return The updated ApplicationBundleResource
+     * @see ApplicationBundleResource
+     */
     @RequestMapping(path = "/applicationBundles/{appBundleId}/update", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> UpdateDeveloperApplicationBundle(
             @PathVariable String appBundleId,
@@ -135,7 +157,12 @@ public class ApplicationBundleController {
 	    return new ResponseEntity<ApplicationBundleResource>(updatedApplicationBundleResource, HttpStatus.OK);
     }
 
-    // Publish ApplicationBundle
+    /**
+     * Publish ApplicationBundle
+     * @param appBundleId The id of the ApplicationBundle to be published
+     * @return The ApplicationBundleResource that has been published
+     * @see ApplicationBundleResource
+     */
     @RequestMapping(path = "/applicationBundles/{appBundleId}/publish", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> publishDeveloperApplicationBundle(
             @PathVariable String appBundleId
@@ -177,7 +204,12 @@ public class ApplicationBundleController {
         }
     }
 
-    // Recall ApplicationBundle
+    /**
+     * Recall ApplicationBundle
+     * @param appBundleId The id of the ApplicationBundle to be recalled
+     * @return The ApplicationBundleResource that has been successfully recalled
+     * @see ApplicationBundleResource
+     */
     @RequestMapping(path = "/applicationBundles/{appBundleId}/recall", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> recallDeveloperApplicationBundle(
             @PathVariable String appBundleId

@@ -48,7 +48,12 @@ public class DeveloperProfileController {
     private StorageService storageService;
 
     // userId path variable imposes a security risk. Need to remove it.
-    @RequestMapping(path = "/profile", method = RequestMethod.GET)
+	/**
+	 * Get developer profile
+	 * @return
+	 * @see DeveloperProfileResource
+	 */
+	@RequestMapping(path = "/profile", method = RequestMethod.GET)
     public ResponseEntity<DeveloperProfileResource> developerProfile() {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
@@ -69,6 +74,12 @@ public class DeveloperProfileController {
         }
     }
 
+	/**
+	 * Create developer profile
+	 * @param developerProfileResource The profile to be created
+	 * @return
+	 * @see DeveloperProfileResource
+	 */
     @RequestMapping(path = "/profile", method = RequestMethod.POST)
     public ResponseEntity<DeveloperProfileResource> createDeveloperProfile(
             @RequestBody DeveloperProfileResource developerProfileResource
@@ -90,6 +101,11 @@ public class DeveloperProfileController {
         }
     }
 
+	/**
+	 * Upload profile image
+	 * @param file The image file for the profile
+	 * @return
+	 */
     @RequestMapping(path = "/profile/image", method = RequestMethod.POST)
     public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file,
                                                    RedirectAttributes redirectAttributes) {
@@ -105,6 +121,12 @@ public class DeveloperProfileController {
         return responseEntity;
     }
 
+	/**
+	 * Handle storage file not found
+	 * @param exc The exception for storage file not found
+	 * @return
+	 * @see StorageFileNotFoundException
+	 */
     @ExceptionHandler(StorageFileNotFoundException.class)
     public ResponseEntity handleStorageFileNotFound(StorageFileNotFoundException exc) {
         return ResponseEntity.notFound().build();

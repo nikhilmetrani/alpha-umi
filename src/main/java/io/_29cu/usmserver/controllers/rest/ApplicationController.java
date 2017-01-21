@@ -41,6 +41,12 @@ public class ApplicationController {
 	@Autowired
 	private ApplicationService applicationService;
 
+	/**
+	 * Get application by application id
+	 * @param appId The Application id to be search by
+	 * @return The ApplicationResource found
+	 * @see ApplicationResource
+	 */
 	@RequestMapping(value = "/1/store/application/{appId}", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationResource> getApplication(
 			@PathVariable String appId
@@ -65,6 +71,11 @@ public class ApplicationController {
 		return new ResponseEntity<ApplicationListResource>(applicationListResource, HttpStatus.OK);
 	}
 
+	/**
+	 * Block developer application
+	 * @param appId The id of the Application to be blocked
+	 * @return A boolean value that indicates whether the update is successful
+	 */
 	@RequestMapping(path = "/0/admin/applications/{appId}/block", method = RequestMethod.POST)
 	public ResponseEntity<Boolean> updateDeveloperApplication(
 			@PathVariable String appId

@@ -54,6 +54,13 @@ public class AuthenticationRestController {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    /**
+     * Create authentication token
+     * @param authenticationRequest
+     * @param device
+     * @return
+     * @throws AuthenticationException
+     */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, Device device) throws AuthenticationException {
 
@@ -75,6 +82,11 @@ public class AuthenticationRestController {
 //        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
+    /**
+     * Refresh authentication token
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/token/refresh", method = RequestMethod.GET)
     public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);

@@ -33,7 +33,14 @@ public class RatingController {
     private ApplicationService applicationService;
 
     private final Log logger = LogFactory.getLog(this.getClass());
-	
+
+    /**
+     * Create application review
+     * @param applicationId The id of the application
+     * @param rateResource The rate to be created
+     * @return
+     * @see RatingResource
+     */
 	@RequestMapping(path = "/create", method = RequestMethod.POST)
     public ResponseEntity<RatingResource> createReview(
     		@PathVariable String applicationId,
@@ -53,7 +60,13 @@ public class RatingController {
         return new ResponseEntity<RatingResource>(createdRateResource,HttpStatus.CREATED);
     }
 
-    @RequestMapping(path = "/getRateLikeNum/{likeType}", method = RequestMethod.POST)
+	/**
+	 * Get number of likes
+	 * @param applicationId The id of the application
+	 * @param likeType Rating.Like or Rating.Dislike
+	 * @return
+	 */
+	@RequestMapping(path = "/getRateLikeNum/{likeType}", method = RequestMethod.POST)
     public ResponseEntity<String> getRateLikeNumber(
             @PathVariable String applicationId,
             @PathVariable String likeType
@@ -79,6 +92,11 @@ public class RatingController {
         return new ResponseEntity<String>(Integer.toString(likeNum),HttpStatus.OK);
     }
 
+	/**
+	 * Check user rate
+	 * @param applicationId The id of the application
+	 * @return
+	 */
     @RequestMapping(path = "/checkUserRate", method = RequestMethod.POST)
     public ResponseEntity<String> checkUserRate(
             @PathVariable String applicationId

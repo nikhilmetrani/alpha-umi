@@ -37,6 +37,11 @@ public class CodeDefinitionController {
     @Autowired
     private CategoryService categoryService;
 
+    /**
+     * Get category codes
+     * @return The CodesResource found
+     * @see CodesResource
+     */
     @RequestMapping(value = "/category", method = RequestMethod.GET)
     public ResponseEntity<CodesResource> getCategoryCodes() {
         try {
