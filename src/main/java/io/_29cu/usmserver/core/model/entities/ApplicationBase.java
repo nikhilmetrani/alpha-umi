@@ -35,7 +35,7 @@ public class ApplicationBase {
     private String description;
     @NotNull
     private String version;
-    @NotNull
+
     private String whatsNew;
 
     public String getId() {

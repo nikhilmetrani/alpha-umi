@@ -31,9 +31,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import io._29cu.usmserver.core.service.SubscriptionService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -73,6 +75,9 @@ public class StoreControllerTests {
     private ApplicationService applicationService;
 
     @Mock
+    private SubscriptionService subscriptionService;
+
+    @Mock
     private ApplicationListService applicationListService;
 
     @Mock 
@@ -81,6 +86,8 @@ public class StoreControllerTests {
     private MockMvc mockMvc;
 
     private User appOwner;
+	private Date endDate;
+    private Date startDate;
     private ApplicationList appList;
     private ApplicationList activeAppList;
 
@@ -94,6 +101,9 @@ public class StoreControllerTests {
         mockMvc = MockMvcBuilders.standaloneSetup(storeController).build();
         uuid = UUID.randomUUID().toString();
         appUUID2 = UUID.randomUUID().toString();
+
+        startDate = new Date();
+        endDate = new Date();
 
         appOwner = new User();
         appOwner.setId(1L);
@@ -533,5 +543,13 @@ public class StoreControllerTests {
         mockMvc.perform(get("/api/1/store/applications/" + uuid))
                 .andExpect(status().isOk());
     }
+
+	@Test
+	public void  testGetTrendingApplications() throws Exception {
+		when(subscriptionService.getTrendingApplications()).thenReturn(appList);
+
+		mockMvc.perform(get("/api/1/store/trending"))
+				.andExpect(status().isOk());
+	}
     
 }

@@ -43,7 +43,7 @@ public class ReviewController {
         Review review = reviewResource.toEntity();
         review.setCreationDate(Calendar.getInstance().getTime());
         review.setConsumer(user);
-        review.setTitle(review.getDescription());
+        review.setTitle(review.getTitle());
         Application application = applicationService.findApplication(applicationId);
         if(application == null){
         	 return new ResponseEntity<ReviewResource>(HttpStatus.NOT_FOUND);
