@@ -28,10 +28,10 @@ public class ReportController {
     private ApplicationService applicationService;
 
 	/**
-	 *
-	 * @param appId
-	 * @param start
-	 * @param end
+	 * Find subscribed users for application
+	 * @param appId The id of the application
+	 * @param start The start date
+	 * @param end The end date
 	 * @return
 	 */
 	@RequestMapping(path = "/subscriptions/{appId}/{start}/{end}", method = RequestMethod.GET)
@@ -58,10 +58,10 @@ public class ReportController {
     }
 
 	/**
-	 *
-	 * @param appId
-	 * @param start
-	 * @param end
+	 * Find active subscribed users for application
+	 * @param appId The id of the application
+	 * @param start The start date
+	 * @param end The end date
 	 * @return
 	 */
 	@RequestMapping(path = "/activesubscriptions/{appId}/{start}/{end}", method = RequestMethod.GET)
@@ -88,10 +88,10 @@ public class ReportController {
 	}
 
 	/**
-	 *
-	 * @param appId
-	 * @param start
-	 * @param end
+	 * Find terminated subscribed users for application
+	 * @param appId The id of the application
+	 * @param start The start date
+	 * @param end The end date
 	 * @return
 	 */
 	@RequestMapping(path = "/terminatedsubscriptions/{appId}/{start}/{end}", method = RequestMethod.GET)

@@ -53,7 +53,12 @@ public class SubscriptionController {
     @Autowired
     private SubscriptionService subscriptionService;
 
-    // Create Subscription
+    /**
+     * Subscribe application
+     * @param appId The id of the application to be subscribed
+     * @return
+     * @see SubscriptionResource
+     */
     @RequestMapping(path = "/applications/{appId}/subscribe", method = RequestMethod.POST)
     public ResponseEntity<SubscriptionResource> SubscribeApplication(
             @PathVariable String appId
@@ -72,6 +77,12 @@ public class SubscriptionController {
         }
     }
 
+    /**
+     * Unsubscribe application
+     * @param appId The id of the application to be unsubscribed
+     * @return
+     * @see SubscriptionResource
+     */
     @RequestMapping(path = "/applications/{appId}/unsubscribe", method = RequestMethod.POST)
     public ResponseEntity<SubscriptionResource> UnsubscribeApplication(
             @PathVariable String appId
@@ -91,6 +102,11 @@ public class SubscriptionController {
         }
     }
 
+	/**
+	 * Get subscribed application
+	 * @return
+	 * @see ApplicationListResource
+	 */
     @RequestMapping(path = "/subscriptions", method = RequestMethod.GET)
     public ResponseEntity<ApplicationListResource> getSubscribedApplications() {
         // Let's get the user from principal and validate the userId against it.
@@ -104,6 +120,12 @@ public class SubscriptionController {
         return new ResponseEntity<ApplicationListResource>(appListResource, HttpStatus.OK);
     }
 
+	/**
+	 * Find subscription by user and application
+	 * @param appId The id of the application
+	 * @return
+	 * @see SubscriptionResource
+	 */
     @RequestMapping(path = "/applications/{appId}/checkAppIsSubscribled", method = RequestMethod.GET)
     public ResponseEntity<SubscriptionResource> FindSubscriptionByUserIdAndApplicationId(
             @PathVariable String appId
