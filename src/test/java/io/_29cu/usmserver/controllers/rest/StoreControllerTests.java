@@ -274,7 +274,7 @@ public class StoreControllerTests {
         when(applicationService.findApplicationsByKeyword("tool")).thenReturn(appList);
 
         mockMvc.perform(get("/api/1/store/search?keyword=tool"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk());
     }
 
     @Test

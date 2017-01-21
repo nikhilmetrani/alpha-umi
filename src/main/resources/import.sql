@@ -8,8 +8,14 @@ INSERT INTO AUTHORITY (ID, NAME) VALUES (3, 'ROLE_ADMIN');
 INSERT INTO AUTHORITY (ID, NAME) VALUES (4, 'ROLE_MANAGER');
 INSERT INTO AUTHORITY (ID, NAME) VALUES (5, 'ROLE_MAINTAINER');
 
-INSERT INTO Category (id, name) VALUES (1, 'Uncategorized');
-INSERT INTO Category (id, name) VALUES (2, 'Productivity');
+INSERT INTO Category (id, name) VALUES (1, 'Productivity');
+INSERT INTO Category (id, name) VALUES (2, 'Photography');
+INSERT INTO Category (id, name) VALUES (3, 'Entertainment');
+INSERT INTO Category (id, name) VALUES (4, 'Education');
+INSERT INTO Category (id, name) VALUES (5, 'Finance');
+INSERT INTO Category (id, name) VALUES (6, 'Shopping');
+INSERT INTO Category (id, name) VALUES (7, 'Social Networking');
+INSERT INTO Category (id, name) VALUES (8, 'Utilities');
 
 -- To create 5 developers
 INSERT INTO `user` (`ID`,`EMAIL`,`ENABLED`,`FIRSTNAME`,`LASTPASSWORDRESETDATE`,`LASTNAME`,`PASSWORD`,`USERNAME`) VALUES (101,'developer1@usm.com',1,NULL,'2017-01-08 03:59:23',NULL,'$2a$10$AMt7mj5oYaIThHB0fL4v6.D4btzzy5jMRaLQaDRigmzWSqRuu/NoS','developer1@usm.com');
@@ -49,14 +55,14 @@ INSERT INTO `user_authority` (`USER_ID`,`AUTHORITY_ID`) VALUES (105,1);
 -- State: O = Staging, 1 = Published, 2 = Recalled
 INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('1','Dev 1 App 1','Dev1App1','1.0','nothing',NULL,1,1,101);
 INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('2','Dev 1 App 2','Dev1App2','1.0','nothing',NULL,1,2,101);
-INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('3','Dev 1 App 3','Dev1App3','1.0','nothing',NULL,1,2,101);
-INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('4','Dev 2 App 1','Dev2App1','1.0','nothing',NULL,1,1,102);
-INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('5','Dev 3 App 1','Dev3App1','1.0','nothing',NULL,1,2,103);
-INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('6','Dev 3 App 2','Dev3App2','1.0','nothing',NULL,1,2,103);
-INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('7','Dev 4 App 1','Dev4App1','1.0','nothing',NULL,1,1,104);
-INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('8','Dev 4 App 2','Dev4App2','1.0','nothing',NULL,1,2,104);
-INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('9','Dev 4 App 3','Dev4App3','1.0','nothing',NULL,1,2,104);
-INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('10','Dev 5 App 1','Dev5App1','1.0','nothing',NULL,1,1,105);
+INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('3','Dev 1 App 3','Dev1App3','1.0','nothing',NULL,1,3,101);
+INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('4','Dev 2 App 1','Dev2App1','1.0','nothing',NULL,1,4,102);
+INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('5','Dev 3 App 1','Dev3App1','1.0','nothing',NULL,1,5,103);
+INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('6','Dev 3 App 2','Dev3App2','1.0','nothing',NULL,1,6,103);
+INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('7','Dev 4 App 1','Dev4App1','1.0','nothing',NULL,1,7,104);
+INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('8','Dev 4 App 2','Dev4App2','1.0','nothing',NULL,1,8,104);
+INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('9','Dev 4 App 3','Dev4App3','1.0','nothing',NULL,1,1,104);
+INSERT INTO `application` (`id`,`description`,`name`,`version`,`whatsNew`,`applicationpublishdate`,`state`,`category_id`,`developer_ID`) VALUES ('10','Dev 5 App 1','Dev5App1','1.0','nothing',NULL,1,2,105);
 
 
 --To create 5 Active Featured applications
