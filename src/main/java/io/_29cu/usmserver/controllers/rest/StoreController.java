@@ -60,6 +60,10 @@ public class StoreController {
 	@Autowired
 	CategoryService categoryService;
 
+	/**
+	 * Get store application
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> store() {
 		try {
@@ -73,6 +77,11 @@ public class StoreController {
 		}
 	}
 
+	/**
+	 *
+	 * @param category
+	 * @return
+	 */
 	@RequestMapping(value = "/{category}", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> getApplications(@PathVariable String category) {
 		try {
@@ -87,6 +96,11 @@ public class StoreController {
 		}
 	}
 
+	/**
+	 *
+	 * @param browseType
+	 * @return
+	 */
 	@RequestMapping(value = "/browse/{browseType}", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> getApplicationsByBrowseType(@PathVariable AppListType browseType) {
 		try {
@@ -100,6 +114,10 @@ public class StoreController {
 		}
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	@RequestMapping(value = "/category", method = RequestMethod.GET)
 	public ResponseEntity<CategoryListResource> getCategories() {
 		try {
@@ -113,6 +131,11 @@ public class StoreController {
 		}
 	}
 
+	/**
+	 *
+	 * @param categoryId
+	 * @return
+	 */
 	@RequestMapping(value = "/category/{categoryId}", method = RequestMethod.GET)
 	public ResponseEntity<CategoryResource> getCategory(@PathVariable Long categoryId) {
 		try {
@@ -127,6 +150,11 @@ public class StoreController {
 		}
 	}
 
+	/**
+	 *
+	 * @param categoryResource
+	 * @return
+	 */
 	@RequestMapping(path = "/category/create", method = RequestMethod.POST)
 	public ResponseEntity<CategoryResource> createCategory(@RequestBody CategoryResource categoryResource) {
 		Category category = categoryResource.toEntity();
@@ -139,6 +167,11 @@ public class StoreController {
 		return new ResponseEntity<CategoryResource>(createdCategoryResource, HttpStatus.CREATED);
 	}
 
+	/**
+	 *
+	 * @param categoryResource
+	 * @return
+	 */
 	@RequestMapping(path = "/category/update", method = RequestMethod.POST)
 	public ResponseEntity<CategoryResource> updateCategory(@RequestBody CategoryResource categoryResource) {
 		Category category = categoryResource.toEntity();
@@ -151,6 +184,11 @@ public class StoreController {
 		return new ResponseEntity<CategoryResource>(updatedCategoryResource, HttpStatus.OK);
 	}
 
+	/**
+	 *
+	 * @param categoryId
+	 * @return
+	 */
 	@RequestMapping(value = "/category/{categoryId}", method = RequestMethod.DELETE)
 	public ResponseEntity<CategoryResource> deleteCategory(@PathVariable Long categoryId) {
 		try {
@@ -161,6 +199,11 @@ public class StoreController {
 		return new ResponseEntity<CategoryResource>(HttpStatus.OK);
 	}
 
+	/**
+	 *
+	 * @param keyword
+	 * @return
+	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> searchApplication(@RequestParam("keyword") String keyword) {
 		try {
@@ -177,6 +220,12 @@ public class StoreController {
 		}
 	}
 
+	/**
+	 *
+	 * @param categoryId
+	 * @param keyword
+	 * @return
+	 */
 	@RequestMapping(value = "/search/category/{categoryId}", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> searchApplicationByCateogry(@PathVariable Long categoryId, @RequestParam("keyword") String keyword) {
 		try {
@@ -196,6 +245,11 @@ public class StoreController {
 		}
 	}
 
+	/**
+	 *
+	 * @param appId
+	 * @return
+	 */
 	@RequestMapping(path = "/applications/{appId}", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationResource> getApplication(
 			@PathVariable String appId
@@ -209,6 +263,10 @@ public class StoreController {
 		}
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	@RequestMapping(value = "/trending", method = RequestMethod.GET)
 	public ResponseEntity<ApplicationListResource> getTrendingApplications() {
 		try {
