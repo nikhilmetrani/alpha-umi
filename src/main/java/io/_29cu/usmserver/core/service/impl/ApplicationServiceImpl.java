@@ -103,8 +103,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	@Override
 	public Application recallApplication(Application application) {
-		Application recalledApplication =   applicationRepository.save(application);
-		return recalledApplication;
+		return applicationRepository.save(application);
 	}
 
 	@Override
@@ -161,8 +160,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 	@Override
 	public Boolean blockApplication(Application application) {
 		application.setState(AppState.Blocked);
-		application = applicationRepository.save(application);
-		return application != null && application.getState().equals(AppState.Blocked);
+		Application newApplication = applicationRepository.save(application);
+		return newApplication != null && newApplication.getState().equals(AppState.Blocked);
 	}
 
 	@Override
