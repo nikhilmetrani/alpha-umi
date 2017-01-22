@@ -495,7 +495,7 @@ public class DeveloperApplicationsControllerTests {
     public void testRecallDeveloperApplication() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
         when(applicationService.findApplicationByDeveloperIdAndAppId(developer.getId(), uuid)).thenReturn(activeApplication);
-        when(applicationService.updateApplication(any(Application.class))).thenReturn(recalledApplication);
+        when(applicationService.recallApplication(any(Application.class))).thenReturn(recalledApplication);
 
         mockMvc.perform(post("/api/0/developer/applications/" + uuid +"/recall")
                 .contentType(MediaType.APPLICATION_JSON))
