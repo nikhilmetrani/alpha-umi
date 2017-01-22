@@ -16,12 +16,16 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.common.utilities.AppConstants;
 import io._29cu.usmserver.controllers.rest.resources.EmployeeProfileResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.EmployeeProfileResourceAssembler;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.entities.EmployeeProfile;
 import io._29cu.usmserver.core.service.EmployeeProfileService;
 import io._29cu.usmserver.core.service.UserService;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,6 +44,7 @@ public class EmployeeProfileController {
     private UserService userService;
     @Autowired
     private EmployeeProfileService employeeProfileService;
+    private final Log logger = LogFactory.getLog(this.getClass());
 
     // userId path variable imposes a security risk. Need to remove it.
     /**
@@ -52,7 +57,7 @@ public class EmployeeProfileController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<EmployeeProfileResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try {
             EmployeeProfile employeeProfile = employeeProfileService.findProfileByUserId(user.getId());
             if (null == employeeProfile) {
@@ -62,9 +67,10 @@ public class EmployeeProfileController {
             EmployeeProfileResource employeeProfileResource = new EmployeeProfileResourceAssembler().toResource(employeeProfile);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(employeeProfileResource.getLink("self").getHref()));
-            return new ResponseEntity<EmployeeProfileResource>(employeeProfileResource, headers, HttpStatus.OK);
+            return new ResponseEntity<>(employeeProfileResource, headers, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<EmployeeProfileResource>(HttpStatus.BAD_REQUEST);
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -81,7 +87,7 @@ public class EmployeeProfileController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<EmployeeProfileResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try {
             EmployeeProfile receivedProfile = employeeProfileResource.toEntity();
             receivedProfile.setEmployee(user);
@@ -89,9 +95,10 @@ public class EmployeeProfileController {
             EmployeeProfileResource createdProfileResource = new EmployeeProfileResourceAssembler().toResource(createdProfile);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(createdProfileResource.getLink("self").getHref()));
-            return new ResponseEntity<EmployeeProfileResource>(createdProfileResource, headers, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<EmployeeProfileResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(createdProfileResource, headers, HttpStatus.OK);
+        } catch (Exception ex) {
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -19,6 +19,8 @@ package io._29cu.usmserver.controllers.rest;
 import java.net.URI;
 import java.nio.file.Path;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import io._29cu.usmserver.common.exceptions.StorageFileNotFoundException;
+import io._29cu.usmserver.common.utilities.AppConstants;
 import io._29cu.usmserver.controllers.rest.resources.DeveloperProfileResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.DeveloperProfileResourceAssembler;
 import io._29cu.usmserver.core.model.entities.DeveloperProfile;
@@ -50,6 +53,7 @@ public class DeveloperProfileController {
     private DeveloperProfileService developerProfileService;
     @Autowired
     private StorageService storageService;
+    private final Log logger = LogFactory.getLog(this.getClass());
 
     // userId path variable imposes a security risk. Need to remove it.
 	/**
@@ -74,6 +78,7 @@ public class DeveloperProfileController {
             headers.setLocation(URI.create(developerProfileResource.getLink("self").getHref()));
             return new ResponseEntity<>(developerProfileResource, headers, HttpStatus.OK);
         } catch (Exception ex) {
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -100,7 +105,8 @@ public class DeveloperProfileController {
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(createdProfileResource.getLink("self").getHref()));
             return new ResponseEntity<>(createdProfileResource, headers, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (Exception ex) {
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -131,7 +137,7 @@ public class DeveloperProfileController {
 	 * @see StorageFileNotFoundException
 	 */
     @ExceptionHandler(StorageFileNotFoundException.class)
-    public ResponseEntity handleStorageFileNotFound(StorageFileNotFoundException exc) {
+    public ResponseEntity<Void> handleStorageFileNotFound(StorageFileNotFoundException exc) {
         return ResponseEntity.notFound().build();
     }
 }

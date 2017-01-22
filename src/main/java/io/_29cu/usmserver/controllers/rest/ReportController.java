@@ -1,10 +1,14 @@
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.common.utilities.AppConstants;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.ReportService;
 import io._29cu.usmserver.core.service.UserService;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +30,7 @@ public class ReportController {
 	private ReportService reportService;
 	@Autowired
     private ApplicationService applicationService;
+	private final Log logger = LogFactory.getLog(this.getClass());
 
 	/**
 	 * Find subscribed users for application
@@ -42,18 +47,19 @@ public class ReportController {
     ) {
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<Integer>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		
         Application application = applicationService.findApplication(appId);
         if(application == null){
-        	 return new ResponseEntity<Integer>(HttpStatus.NOT_FOUND);
+        	 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 		try {
 			DateFormat df = new SimpleDateFormat("yyyyMMdd");
 			int count = reportService.findSubscriptionsPerApplication(appId, df.parse(start), df.parse(end));
-			return new ResponseEntity<Integer>(count, HttpStatus.OK);
+			return new ResponseEntity<>(count, HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
     }
 
@@ -72,18 +78,19 @@ public class ReportController {
 	) {
 		User user = userService.findAuthenticatedUser();
 		if (user == null)
-			return new ResponseEntity<Integer>(HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
 		Application application = applicationService.findApplication(appId);
 		if(application == null){
-			return new ResponseEntity<Integer>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		try {
 			DateFormat df = new SimpleDateFormat("yyyyMMdd");
 			int count = reportService.findActiveSubscriptionsPerApplication(appId, df.parse(start), df.parse(end));
-			return new ResponseEntity<Integer>(count, HttpStatus.OK);
+			return new ResponseEntity<>(count, HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -102,18 +109,19 @@ public class ReportController {
 	) {
 		User user = userService.findAuthenticatedUser();
 		if (user == null)
-			return new ResponseEntity<Integer>(HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
 		Application application = applicationService.findApplication(appId);
 		if(application == null){
-			return new ResponseEntity<Integer>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		try {
 			DateFormat df = new SimpleDateFormat("yyyyMMdd");
 			int count = reportService.findTerminatedSubscriptionsPerApplication(appId, df.parse(start), df.parse(end));
-			return new ResponseEntity<Integer>(count, HttpStatus.OK);
+			return new ResponseEntity<>(count, HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 }

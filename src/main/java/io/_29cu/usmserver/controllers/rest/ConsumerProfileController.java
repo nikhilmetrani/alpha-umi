@@ -1,5 +1,6 @@
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.common.utilities.AppConstants;
 /**
  * Created by yniu on 10/12/2016.
  */
@@ -9,6 +10,9 @@ import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.entities.ConsumerProfile;
 import io._29cu.usmserver.core.service.ConsumerProfileService;
 import io._29cu.usmserver.core.service.UserService;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,6 +31,7 @@ public class ConsumerProfileController {
     private UserService userService;
     @Autowired
     private ConsumerProfileService consumerProfileService;
+    private final Log logger = LogFactory.getLog(this.getClass());
 
     // userId path variable imposes a security risk. Need to remove it.
     /**
@@ -51,6 +56,7 @@ public class ConsumerProfileController {
             headers.setLocation(URI.create(consumerProfileResource.getLink("self").getHref()));
             return new ResponseEntity<ConsumerProfileResource>(consumerProfileResource, headers, HttpStatus.OK);
         } catch (Exception ex) {
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
             return new ResponseEntity<ConsumerProfileResource>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -77,7 +83,8 @@ public class ConsumerProfileController {
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(createdProfileResource.getLink("self").getHref()));
             return new ResponseEntity<ConsumerProfileResource>(createdProfileResource, headers, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (Exception ex) {
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
             return new ResponseEntity<ConsumerProfileResource>(HttpStatus.BAD_REQUEST);
         }
     }

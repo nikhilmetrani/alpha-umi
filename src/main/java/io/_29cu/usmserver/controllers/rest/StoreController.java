@@ -16,6 +16,22 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import java.net.URI;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import io._29cu.usmserver.common.utilities.AppConstants;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
 import io._29cu.usmserver.controllers.rest.resources.CategoryListResource;
@@ -26,7 +42,6 @@ import io._29cu.usmserver.controllers.rest.resources.assemblers.CategoryListReso
 import io._29cu.usmserver.controllers.rest.resources.assemblers.CategoryResourceAssembler;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Category;
-import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppListType;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationListService;
@@ -37,14 +52,6 @@ import io._29cu.usmserver.core.service.exception.CategoryAlreadyExistException;
 import io._29cu.usmserver.core.service.exception.CategoryDoesNotExistException;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
 import io._29cu.usmserver.core.service.utilities.CategoryList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
 
 @Controller
 @RequestMapping("/api/1/store")
@@ -60,6 +67,7 @@ public class StoreController {
 
 	@Autowired
 	CategoryService categoryService;
+	private final Log logger = LogFactory.getLog(this.getClass());
 
 	/**
 	 * Get active store applications
@@ -75,6 +83,7 @@ public class StoreController {
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
 			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
+			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -95,6 +104,7 @@ public class StoreController {
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
 			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
+			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -114,6 +124,7 @@ public class StoreController {
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
 			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
+			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -132,6 +143,7 @@ public class StoreController {
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
 			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
+			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -152,6 +164,7 @@ public class StoreController {
 			CategoryResource categoryResource = new CategoryResourceAssembler().toResource(category);
 			return new ResponseEntity<>(categoryResource, HttpStatus.OK);
 		} catch (Exception ex) {
+			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -167,7 +180,8 @@ public class StoreController {
 		Category category = categoryResource.toEntity();
 		try {
 			category = categoryService.createCategory(category);
-		} catch (CategoryAlreadyExistException e) {
+		} catch (CategoryAlreadyExistException ex) {
+			logger.error("Category already exists",ex);
 			return new ResponseEntity<>(HttpStatus.FOUND);
 		}
 		CategoryResource createdCategoryResource = new CategoryResourceAssembler().toResource(category);
@@ -185,7 +199,8 @@ public class StoreController {
 		Category category = categoryResource.toEntity();
 		try {
 			category = categoryService.updateCategory(category);
-		} catch (CategoryAlreadyExistException e) {
+		} catch (CategoryAlreadyExistException ex) {
+			logger.error("Category already exists",ex);
 			return new ResponseEntity<>(HttpStatus.FOUND);
 		}
 		CategoryResource updatedCategoryResource = new CategoryResourceAssembler().toResource(category);
@@ -202,7 +217,8 @@ public class StoreController {
 	public ResponseEntity<CategoryResource> deleteCategory(@PathVariable Long categoryId) {
 		try {
 			categoryService.deleteCategory(categoryId);
-		} catch (CategoryDoesNotExistException e) {
+		} catch (CategoryDoesNotExistException ex) {
+			logger.error("Category does not exists",ex);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -218,13 +234,14 @@ public class StoreController {
 	public ResponseEntity<CategoryResource> checkCategoryNameExistsForDeveloper(
 			@RequestParam String name
 	) {
-		//Let's check whether the application is already registered.
+		logger.info("Let's check whether the application is already registered.");
 		Category existingCat = categoryService.findCategoryByName(name);
 
-		if (null == existingCat) { //We can't find the category in our database
+		if (null == existingCat) { 
+			logger.debug("Category does not exist");
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} else {
-			// Category with same name already exists
+			logger.debug("Category with same name already exists");
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 	}
@@ -247,6 +264,7 @@ public class StoreController {
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
 			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
+			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -273,6 +291,7 @@ public class StoreController {
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
 			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
+			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -292,6 +311,7 @@ public class StoreController {
 			ApplicationResource applicationResource = new ApplicationResourceAssembler().toResource(application);
 			return new ResponseEntity<>(applicationResource, HttpStatus.OK);
 		} catch (Exception ex) {
+			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -313,6 +333,7 @@ public class StoreController {
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
 			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
+			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}

@@ -20,6 +20,9 @@ import io._29cu.usmserver.configurations.security.JwtAuthenticationRequest;
 import io._29cu.usmserver.configurations.security.JwtAuthenticationResponse;
 import io._29cu.usmserver.configurations.security.JwtTokenUtil;
 import io._29cu.usmserver.configurations.security.JwtUser;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +57,7 @@ public class AuthenticationRestController {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    private final Log logger = LogFactory.getLog(this.getClass());
     /**
      * Create authentication token
      * @param authenticationRequest
@@ -96,6 +100,7 @@ public class AuthenticationRestController {
             String refreshedToken = jwtTokenUtil.refreshToken(token);
             return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
         } else {
+        	logger.error("Token cannot be refreshed)");
             return ResponseEntity.badRequest().body(null);
         }
     }

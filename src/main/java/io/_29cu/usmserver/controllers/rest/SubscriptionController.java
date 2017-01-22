@@ -16,6 +16,8 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +44,7 @@ public class SubscriptionController {
 
     @Autowired
     private SubscriptionService subscriptionService;
+    private final Log logger = LogFactory.getLog(this.getClass());
 
     /**
      * Subscribe application
@@ -63,6 +66,7 @@ public class SubscriptionController {
             return new ResponseEntity<>(createdSubscriptionResource, HttpStatus.OK);
         }
         else{
+        	logger.debug("Subscription is present");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -88,6 +92,7 @@ public class SubscriptionController {
             return new ResponseEntity<>(updatedSubscriptionResource, HttpStatus.OK);
         }
         else{
+        	logger.debug("Updated Subscription is present");
             return new ResponseEntity<>(updatedSubscriptionResource, HttpStatus.NOT_FOUND);
         }
     }
@@ -120,13 +125,13 @@ public class SubscriptionController {
     public ResponseEntity<SubscriptionResource> FindSubscriptionByUserIdAndApplicationId(
             @PathVariable String appId
     ) {
-        // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         Subscription subscription = subscriptionService.findSubscriptionByUserIdAndApplicationId(user.getId(),appId);
-        if (null == subscription) { //We can't find the subscription in our database for the user.
+        if (null == subscription) { 
+        	logger.debug("We can't find the subscription in our database for the user.");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);

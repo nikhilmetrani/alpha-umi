@@ -19,6 +19,8 @@ package io._29cu.usmserver.controllers.rest;
 import java.nio.file.Path;
 import java.util.Calendar;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import io._29cu.usmserver.common.utilities.AppConstants;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationUpdateResource;
@@ -67,6 +70,7 @@ public class DeveloperApplicationsController {
     private CategoryService categoryService;
     @Autowired
     private StorageService storageService;
+    private final Log logger = LogFactory.getLog(this.getClass());
 
     // Skeleton methods
     // Add similar methods for create, update and publish updates
@@ -88,6 +92,7 @@ public class DeveloperApplicationsController {
             ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(appList);
             return new ResponseEntity<>(appListResource, HttpStatus.OK);
         } catch (Exception ex) {
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -111,6 +116,7 @@ public class DeveloperApplicationsController {
             ApplicationResource applicationResource = new ApplicationResourceAssembler().toResource(application);
             return new ResponseEntity<>(applicationResource, HttpStatus.OK);
         } catch (Exception ex) {
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -135,6 +141,7 @@ public class DeveloperApplicationsController {
             response = response.replace("'", "\"");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception ex) {
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -161,6 +168,7 @@ public class DeveloperApplicationsController {
                 .header(HttpHeaders.CONTENT_TYPE, "image/png")
                 .body(file);
         } catch (Exception ex) {
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
             // Maybe the image is not yet uploaded, so let's just return ok.
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -333,6 +341,7 @@ public class DeveloperApplicationsController {
 	        	return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
 	        }
         }catch(Exception ex){
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
         	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -374,7 +383,7 @@ public class DeveloperApplicationsController {
                 return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
             }
         }catch(Exception ex){
-            ex.printStackTrace();
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -415,6 +424,7 @@ public class DeveloperApplicationsController {
                 return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
             }
         }catch(Exception ex){
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -439,6 +449,7 @@ public class DeveloperApplicationsController {
             ApplicationUpdateResource newAppUpdateResource = new ApplicationUpdateResourceAssembler().toResource(appUpdate);
             return new ResponseEntity<>(newAppUpdateResource, HttpStatus.OK);
         } catch (Exception ex) {
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -458,6 +469,7 @@ public class DeveloperApplicationsController {
             ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(appList);
             return new ResponseEntity<>(appListResource, HttpStatus.OK);
         } catch (Exception ex) {
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

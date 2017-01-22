@@ -1,5 +1,9 @@
 package io._29cu.usmserver.controllers.rest;
 
+import java.util.Calendar;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +23,6 @@ import io._29cu.usmserver.core.service.ReviewService;
 import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.exception.ReviewDoesNotExistException;
 
-import java.util.Calendar;
-
 @Controller
 @RequestMapping("/api/0/consumer/{applicationId}/review")
 public class ReviewController {
@@ -30,6 +32,7 @@ public class ReviewController {
 	private ReviewService reviewService;
 	@Autowired
     private ApplicationService applicationService;
+	private final Log logger = LogFactory.getLog(this.getClass());
 
 	/**
 	 * Create review for application
@@ -75,7 +78,8 @@ public class ReviewController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try {
 			reviewService.removeReview(reviewId);
-		} catch (ReviewDoesNotExistException e) {
+		} catch (ReviewDoesNotExistException ex) {
+			logger.error("Review does not exist",ex);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
         return new ResponseEntity<>(HttpStatus.OK);

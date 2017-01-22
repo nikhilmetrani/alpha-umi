@@ -1,5 +1,7 @@
 package io._29cu.usmserver.controllers.rest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,7 @@ public class ReviewReplyController {
 	private ReviewReplyService reviewReplyService;
 	@Autowired
     private ReviewService reviewService;
+	private final Log logger = LogFactory.getLog(this.getClass());
 
 	/**
 	 * Create review for review
@@ -46,6 +49,7 @@ public class ReviewReplyController {
 		ReviewReply reviewReply = reviewReplyResource.toEntity();
 		Review review = reviewService.findReview(new Long(reviewId));
 		if (review == null) {
+			logger.error("Review not found");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		reviewReply = reviewReplyService.createReviewReply(reviewReply, review, user);
@@ -67,7 +71,8 @@ public class ReviewReplyController {
 
 		try {
 			reviewReplyService.removeReviewReply(new Long(reviewReplyId));
-		} catch (ReviewReplyDoesNotExistException e) {
+		} catch (ReviewReplyDoesNotExistException ex) {
+			logger.error("Review reply does not exists",ex);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);

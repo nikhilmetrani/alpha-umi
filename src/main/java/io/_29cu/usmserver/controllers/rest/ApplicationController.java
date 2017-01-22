@@ -25,6 +25,9 @@ import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +43,7 @@ public class ApplicationController {
 	private UserService userService;
 	@Autowired
 	private ApplicationService applicationService;
+	private final Log logger = LogFactory.getLog(this.getClass());
 
 	/**
 	 * Get application by application id
@@ -52,9 +56,10 @@ public class ApplicationController {
 			@PathVariable String appId
 	) {
 		Application application = applicationService.findApplication(appId);
-		if (null == application)
+		if (null == application){
+			logger.debug("Application not found");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
+		}
 		ApplicationResource applicationResource = new ApplicationResourceAssembler().toResource(application);
 		return new ResponseEntity<>(applicationResource, HttpStatus.OK);
 	}
@@ -64,8 +69,10 @@ public class ApplicationController {
 			@PathVariable long developerId
 	) {
 		ApplicationList applicationList = applicationService.findApplicationsByDeveloper(developerId);
-		if (null == applicationList)
+		if (null == applicationList){
+			logger.debug("Application not found");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 
 		ApplicationListResource applicationListResource = new ApplicationListResourceAssembler().toResource(applicationList);
 		return new ResponseEntity<>(applicationListResource, HttpStatus.OK);
@@ -88,8 +95,10 @@ public class ApplicationController {
 		// TODO check and ensure user is Moderator role
 
 		Application application = applicationService.findApplication(appId);
-		if (application == null)
+		if (application == null){
+			logger.debug("Application not found pre condition failed");
 			return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+		}	
 
 		// TODO what if Application was already blocked?
 

@@ -16,6 +16,8 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +42,7 @@ import io._29cu.usmserver.core.service.UserService;
 public class UserController {
 	@Autowired
 	private UserService userService;
+	private final Log logger = LogFactory.getLog(this.getClass());
 
 	private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -103,6 +106,7 @@ public class UserController {
 
 		// Existing pwd not match
 		if (!(passwordEncoder.matches(changePasswordRequest.getCurrentPwd(), user.getPassword()))) {
+			logger.debug("password is mismatched");
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 

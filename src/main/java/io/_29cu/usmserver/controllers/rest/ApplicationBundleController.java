@@ -16,6 +16,7 @@
 
 package io._29cu.usmserver.controllers.rest;
 
+import io._29cu.usmserver.common.utilities.AppConstants;
 import io._29cu.usmserver.controllers.rest.resources.*;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationBundleListResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationBundleResourceAssembler;
@@ -23,6 +24,9 @@ import io._29cu.usmserver.core.model.entities.*;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.*;
 import io._29cu.usmserver.core.service.utilities.ApplicationBundleList;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +42,7 @@ public class ApplicationBundleController {
     private UserService userService;
     @Autowired
     private ApplicationBundleService applicationBundleService;
-
+    private final Log logger = LogFactory.getLog(this.getClass());
     /**
      * Get all applications
      * @return The ApplicationBundleListResource found
@@ -49,13 +53,14 @@ public class ApplicationBundleController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationBundleListResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try {
             ApplicationBundleList appBundleList = applicationBundleService.findApplicationBundlesByDeveloper(user.getId());
             ApplicationBundleListResource appBundleListResource = new ApplicationBundleListResourceAssembler().toResource(appBundleList);
-            return new ResponseEntity<ApplicationBundleListResource>(appBundleListResource, HttpStatus.OK);
+            return new ResponseEntity<>(appBundleListResource, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<ApplicationBundleListResource>(HttpStatus.BAD_REQUEST);
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -72,13 +77,14 @@ public class ApplicationBundleController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try {
             ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(user.getId(), appBundleId);
             ApplicationBundleResource applicationBundleResource = new ApplicationBundleResourceAssembler().toResource(applicationBundle);
-            return new ResponseEntity<ApplicationBundleResource>(applicationBundleResource, HttpStatus.OK);
+            return new ResponseEntity<>(applicationBundleResource, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<ApplicationBundleResource>(HttpStatus.BAD_REQUEST);
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -95,13 +101,13 @@ public class ApplicationBundleController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         ApplicationBundle receivedApplicationBundle = applicationBundleResource.toEntity();
         receivedApplicationBundle.setDeveloper(user);
         ApplicationBundle applicationBundle = applicationBundleService.createApplicationBundle(receivedApplicationBundle);
         ApplicationBundleResource createdApplicationBundleResource = new ApplicationBundleResourceAssembler().toResource(applicationBundle);
-        return new ResponseEntity<ApplicationBundleResource>(createdApplicationBundleResource, HttpStatus.OK);
+        return new ResponseEntity<>(createdApplicationBundleResource, HttpStatus.OK);
     }
 
     /**
@@ -117,13 +123,13 @@ public class ApplicationBundleController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         ApplicationBundle existingAppBdl = applicationBundleService.findApplicationBundleByDeveloperAndName(user.getId(), name);
         if (existingAppBdl == null) {           //non-existing
-            return new ResponseEntity<ApplicationBundleResource>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {                                //existing
-        	return new ResponseEntity<ApplicationBundleResource>(HttpStatus.OK);
+        	return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 
@@ -142,18 +148,18 @@ public class ApplicationBundleController {
 	    // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
 	    ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(user.getId(), appBundleId);
 	    if (applicationBundle == null)
-		    return new ResponseEntity<ApplicationBundleResource>(HttpStatus.PRECONDITION_FAILED);
+		    return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
 
 	    ApplicationBundle receivedApplicationBundle = applicationBundleResource.toEntity();
 	    receivedApplicationBundle.setDeveloper(user);
 	    receivedApplicationBundle.setId(appBundleId);
 	    applicationBundle = applicationBundleService.updateApplicationBundle(receivedApplicationBundle);
 	    ApplicationBundleResource updatedApplicationBundleResource = new ApplicationBundleResourceAssembler().toResource(applicationBundle);
-	    return new ResponseEntity<ApplicationBundleResource>(updatedApplicationBundleResource, HttpStatus.OK);
+	    return new ResponseEntity<>(updatedApplicationBundleResource, HttpStatus.OK);
     }
 
     /**
@@ -169,7 +175,7 @@ public class ApplicationBundleController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         try{
 	        ApplicationBundle appBdl = applicationBundleService.findApplicationBundleByDeveloperAndId(user.getId(), appBundleId);
@@ -193,13 +199,13 @@ public class ApplicationBundleController {
                 appBdl.setName(appBdl.getName());                 //to set the name of the bundle
                 appBdl.setDescription(appBdl.getDescription());   //to add a description for the bundle
                 ApplicationBundleResource newApplicationBundleResource = new ApplicationBundleResourceAssembler().toResource(appBdl);
-                return new ResponseEntity<ApplicationBundleResource>(newApplicationBundleResource, HttpStatus.OK);
+                return new ResponseEntity<>(newApplicationBundleResource, HttpStatus.OK);
             } else {
-                return new ResponseEntity<ApplicationBundleResource>(HttpStatus.PRECONDITION_FAILED);
+                return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
             }
         }catch(Exception ex){
-        	ex.printStackTrace();
-        	return new ResponseEntity<ApplicationBundleResource>(HttpStatus.BAD_REQUEST);
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
+        	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -216,7 +222,7 @@ public class ApplicationBundleController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         try{
             ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(user.getId(), appBundleId);
@@ -233,13 +239,13 @@ public class ApplicationBundleController {
 
                 //return the applicationBundle
                 ApplicationBundleResource createdApplicationBundleResource = new ApplicationBundleResourceAssembler().toResource(applicationBundle);
-                return new ResponseEntity<ApplicationBundleResource>(createdApplicationBundleResource, HttpStatus.OK);
+                return new ResponseEntity<>(createdApplicationBundleResource, HttpStatus.OK);
             }else{
-                return new ResponseEntity<ApplicationBundleResource>(HttpStatus.PRECONDITION_FAILED);
+                return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
             }
         }catch(Exception ex){
-            ex.printStackTrace();
-            return new ResponseEntity<ApplicationBundleResource>(HttpStatus.BAD_REQUEST);
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

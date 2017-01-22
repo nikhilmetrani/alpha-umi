@@ -18,6 +18,8 @@ package io._29cu.usmserver.controllers.rest;
 
 import java.net.URI;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import io._29cu.usmserver.common.utilities.AppConstants;
 import io._29cu.usmserver.controllers.rest.resources.CodesResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.CodesResourceAssembler;
 import io._29cu.usmserver.core.service.CategoryService;
@@ -36,6 +39,7 @@ import io._29cu.usmserver.core.service.utilities.Codes;
 public class CodeDefinitionController {
     @Autowired
     private CategoryService categoryService;
+    private final Log logger = LogFactory.getLog(this.getClass());
 
     /**
      * Get category codes
@@ -51,6 +55,7 @@ public class CodeDefinitionController {
             headers.setLocation(URI.create(resource.getLink("self").getHref()));
             return new ResponseEntity<CodesResource>(resource, headers, HttpStatus.OK);
         } catch (Exception ex) {
+        	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
             return new ResponseEntity<CodesResource>(HttpStatus.BAD_REQUEST);
         }
     }
