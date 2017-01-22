@@ -48,16 +48,16 @@ public class RatingController {
     ) {
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<RatingResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		
         Rate rate = rateResource.toEntity();
         Application application = applicationService.findApplication(applicationId);
         if(application == null){
-        	 return new ResponseEntity<RatingResource>(HttpStatus.NOT_FOUND);
+        	 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }       
         rate = rateService.createRate(rate,application,user);
         RatingResource createdRateResource = new RatingResourceAssembler().toResource(rate);
-        return new ResponseEntity<RatingResource>(createdRateResource,HttpStatus.CREATED);
+        return new ResponseEntity<>(createdRateResource,HttpStatus.CREATED);
     }
 
 	/**
@@ -73,23 +73,23 @@ public class RatingController {
     ) {
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         Application application = applicationService.findApplication(applicationId);
         if(application == null){
-            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         logger.info("likeType = " + likeType);
 
         Rating rating = Rating.Dislike;
-        if(likeType.equals("0")){
+        if("0".equals(likeType)){
             rating = Rating.Like;
         }
         logger.info("rating type = " + rating.toString());
 
         int likeNum = rateService.countRatingsByApplicationId(applicationId, rating);
         logger.info("likeNum = " + Integer.toString(likeNum));
-        return new ResponseEntity<String>(Integer.toString(likeNum),HttpStatus.OK);
+        return new ResponseEntity<>(Integer.toString(likeNum),HttpStatus.OK);
     }
 
 	/**
@@ -105,17 +105,17 @@ public class RatingController {
         String appRate = "2";
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         Application application = applicationService.findApplication(applicationId);
         if(application == null){
-            return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Rate rate = rateService.checkUserRate(applicationId, user.getId());
         if(rate != null){
             appRate = Integer.toString(rate.getRating().ordinal());
             logger.info("appRate = " + appRate);
         }
-        return new ResponseEntity<String>(appRate,HttpStatus.OK);
+        return new ResponseEntity<>(appRate,HttpStatus.OK);
     }
 }
