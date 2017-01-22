@@ -62,7 +62,7 @@ public class DeveloperProfileController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try {
             DeveloperProfile developerProfile = developerProfileService.findProfileByUserId(user.getId());
             if (null == developerProfile) {
@@ -72,9 +72,9 @@ public class DeveloperProfileController {
             DeveloperProfileResource developerProfileResource = new DeveloperProfileResourceAssembler().toResource(developerProfile);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(developerProfileResource.getLink("self").getHref()));
-            return new ResponseEntity<DeveloperProfileResource>(developerProfileResource, headers, HttpStatus.OK);
+            return new ResponseEntity<>(developerProfileResource, headers, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -91,7 +91,7 @@ public class DeveloperProfileController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<DeveloperProfileResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try {
             DeveloperProfile receivedProfile = developerProfileResource.toEntity();
             receivedProfile.setOwner(user);
@@ -99,9 +99,9 @@ public class DeveloperProfileController {
             DeveloperProfileResource createdProfileResource = new DeveloperProfileResourceAssembler().toResource(createdProfile);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(createdProfileResource.getLink("self").getHref()));
-            return new ResponseEntity<DeveloperProfileResource>(createdProfileResource, headers, HttpStatus.OK);
+            return new ResponseEntity<>(createdProfileResource, headers, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<DeveloperProfileResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -116,13 +116,12 @@ public class DeveloperProfileController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         Path generatedFile = storageService.storeProfileImage(file, user.getId());
         String response = "{'originalName': '" + file.getOriginalFilename() + "', 'generatedName': '" + generatedFile.getFileName() + "'}";
         response = response.replace("'", "\"");
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(response, HttpStatus.OK);
-        return responseEntity;
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 	/**

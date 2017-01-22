@@ -72,9 +72,9 @@ public class StoreController {
 			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
-			return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
+			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -92,9 +92,9 @@ public class StoreController {
 			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
-			return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
+			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -111,9 +111,9 @@ public class StoreController {
 			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
-			return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
+			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -129,9 +129,9 @@ public class StoreController {
 			CategoryListResource resource = new CategoryListResourceAssembler().toResource(categoryList);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
-			return new ResponseEntity<CategoryListResource>(resource, headers, HttpStatus.OK);
+			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<CategoryListResource>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -146,12 +146,12 @@ public class StoreController {
 		try {
 			Category category = categoryService.findCategory(categoryId);
 			if (category == null) {
-				return new ResponseEntity<CategoryResource>(HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 			CategoryResource categoryResource = new CategoryResourceAssembler().toResource(category);
-			return new ResponseEntity<CategoryResource>(categoryResource, HttpStatus.OK);
+			return new ResponseEntity<>(categoryResource, HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<CategoryResource>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -167,10 +167,10 @@ public class StoreController {
 		try {
 			category = categoryService.createCategory(category);
 		} catch (CategoryAlreadyExistException e) {
-			return new ResponseEntity<CategoryResource>(HttpStatus.FOUND);
+			return new ResponseEntity<>(HttpStatus.FOUND);
 		}
 		CategoryResource createdCategoryResource = new CategoryResourceAssembler().toResource(category);
-		return new ResponseEntity<CategoryResource>(createdCategoryResource, HttpStatus.CREATED);
+		return new ResponseEntity<>(createdCategoryResource, HttpStatus.CREATED);
 	}
 
 	/**
@@ -185,10 +185,10 @@ public class StoreController {
 		try {
 			category = categoryService.updateCategory(category);
 		} catch (CategoryAlreadyExistException e) {
-			return new ResponseEntity<CategoryResource>(HttpStatus.FOUND);
+			return new ResponseEntity<>(HttpStatus.FOUND);
 		}
 		CategoryResource updatedCategoryResource = new CategoryResourceAssembler().toResource(category);
-		return new ResponseEntity<CategoryResource>(updatedCategoryResource, HttpStatus.OK);
+		return new ResponseEntity<>(updatedCategoryResource, HttpStatus.OK);
 	}
 
 	/**
@@ -202,9 +202,9 @@ public class StoreController {
 		try {
 			categoryService.deleteCategory(categoryId);
 		} catch (CategoryDoesNotExistException e) {
-			return new ResponseEntity<CategoryResource>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<CategoryResource>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	/**
@@ -217,15 +217,15 @@ public class StoreController {
 	public ResponseEntity<ApplicationListResource> searchApplication(@RequestParam("keyword") String keyword) {
 		try {
 			if (keyword == null || keyword.isEmpty()) {
-				return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 			ApplicationList appList = applicationService.findApplicationsByKeyword(keyword);
 			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
-			return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
+			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -240,18 +240,18 @@ public class StoreController {
 	public ResponseEntity<ApplicationListResource> searchApplicationByCateogry(@PathVariable Long categoryId, @RequestParam("keyword") String keyword) {
 		try {
 			if (keyword == null || keyword.isEmpty()) {
-				return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 			ApplicationList appList = applicationService.findApplicationsByCategoryAndKeyword(categoryId, keyword);
 			if (appList.getItems() == null || appList.getItems().isEmpty()) {
-				return new ResponseEntity<ApplicationListResource>(HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
-			return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
+			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -268,9 +268,9 @@ public class StoreController {
 		try {
 			Application application = applicationService.findApplication(appId);
 			ApplicationResource applicationResource = new ApplicationResourceAssembler().toResource(application);
-			return new ResponseEntity<ApplicationResource>(applicationResource, HttpStatus.OK);
+			return new ResponseEntity<>(applicationResource, HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -284,14 +284,14 @@ public class StoreController {
 		try {
 			ApplicationList appList = subscriptionService.getTrendingApplications();
 			if (appList.getItems() == null || appList.getItems().isEmpty()) {
-				return new ResponseEntity<ApplicationListResource>(HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(URI.create(resource.getLink("self").getHref()));
-			return new ResponseEntity<ApplicationListResource>(resource, headers, HttpStatus.OK);
+			return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 		} catch (Exception ex) {
-			return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 }

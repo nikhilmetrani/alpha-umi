@@ -53,10 +53,10 @@ public class ApplicationController {
 	) {
 		Application application = applicationService.findApplication(appId);
 		if (null == application)
-			return new ResponseEntity<ApplicationResource>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 		ApplicationResource applicationResource = new ApplicationResourceAssembler().toResource(application);
-		return new ResponseEntity<ApplicationResource>(applicationResource, HttpStatus.OK);
+		return new ResponseEntity<>(applicationResource, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/1/store/application/developer/{developerId}", method = RequestMethod.GET)
@@ -65,10 +65,10 @@ public class ApplicationController {
 	) {
 		ApplicationList applicationList = applicationService.findApplicationsByDeveloper(developerId);
 		if (null == applicationList)
-			return new ResponseEntity<ApplicationListResource>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 		ApplicationListResource applicationListResource = new ApplicationListResourceAssembler().toResource(applicationList);
-		return new ResponseEntity<ApplicationListResource>(applicationListResource, HttpStatus.OK);
+		return new ResponseEntity<>(applicationListResource, HttpStatus.OK);
 	}
 
 	/**
@@ -89,11 +89,11 @@ public class ApplicationController {
 
 		Application application = applicationService.findApplication(appId);
 		if (application == null)
-			return new ResponseEntity<Boolean>(HttpStatus.PRECONDITION_FAILED);
+			return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
 
 		// TODO what if Application was already blocked?
 
 		Boolean result = applicationService.blockApplication(application);
-		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }

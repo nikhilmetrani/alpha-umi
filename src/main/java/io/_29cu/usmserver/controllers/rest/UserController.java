@@ -98,19 +98,19 @@ public class UserController {
 		// Let's get the user from principal and validate the userId against it.
 		User user = userService.findAuthenticatedUser();
 		if (user == null) {
-			return new ResponseEntity<Boolean>(HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
 		// Existing pwd not match
 		if (!(passwordEncoder.matches(changePasswordRequest.getCurrentPwd(), user.getPassword()))) {
-			return new ResponseEntity<Boolean>(HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
 		// TODO check and ensure new pwd follow password policy
 
 		user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPwd()));
 		Boolean result = userService.updateUser(user);
-		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	/**
@@ -125,19 +125,19 @@ public class UserController {
 		// Let's get the user from principal and validate the userId against it.
 		User user = userService.findAuthenticatedUser();
 		if (user == null) {
-			return new ResponseEntity<Boolean>(HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
 		// TODO check and ensure user is Moderator role
 
 		User target = userService.findUser(userId);
 		if (target == null) {
-			return new ResponseEntity<Boolean>(HttpStatus.PRECONDITION_FAILED);
+			return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
 		}
 		// TODO what if Application was already blocked?
 
 		Boolean result = userService.blockUser(target);
-		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No user")

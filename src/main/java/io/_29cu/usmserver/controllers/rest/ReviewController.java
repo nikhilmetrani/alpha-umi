@@ -45,7 +45,7 @@ public class ReviewController {
     ) {
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ReviewResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		
         Review review = reviewResource.toEntity();
         review.setCreationDate(Calendar.getInstance().getTime());
@@ -53,11 +53,11 @@ public class ReviewController {
         review.setTitle(review.getTitle());
         Application application = applicationService.findApplication(applicationId);
         if(application == null){
-        	 return new ResponseEntity<ReviewResource>(HttpStatus.NOT_FOUND);
+        	 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }       
         review = reviewService.createReview(review,application,user);
         ReviewResource createdReviewResource = new ReviewResourceAssembler().toResource(review);
-        return new ResponseEntity<ReviewResource>(createdReviewResource,HttpStatus.CREATED);
+        return new ResponseEntity<>(createdReviewResource,HttpStatus.CREATED);
     }
 
 	/**
@@ -72,13 +72,13 @@ public class ReviewController {
     ) {
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ReviewResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try {
 			reviewService.removeReview(reviewId);
 		} catch (ReviewDoesNotExistException e) {
-			return new ResponseEntity<ReviewResource>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-        return new ResponseEntity<ReviewResource>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 	/**
@@ -93,9 +93,9 @@ public class ReviewController {
     ) {
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ReviewResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		reviewService.featureReview(reviewId);
-        return new ResponseEntity<ReviewResource>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 	/**
@@ -110,8 +110,8 @@ public class ReviewController {
     ) {
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ReviewResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		reviewService.unfeatureReview(reviewId);
-        return new ResponseEntity<ReviewResource>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

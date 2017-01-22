@@ -41,16 +41,16 @@ public class ReviewReplyController {
 			@RequestBody ReviewReplyResource reviewReplyResource) {
 		User user = userService.findAuthenticatedUser();
 		if (user == null)
-			return new ResponseEntity<ReviewReplyResource>(HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
 		ReviewReply reviewReply = reviewReplyResource.toEntity();
 		Review review = reviewService.findReview(new Long(reviewId));
 		if (review == null) {
-			return new ResponseEntity<ReviewReplyResource>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		reviewReply = reviewReplyService.createReviewReply(reviewReply, review, user);
 		ReviewReplyResource createdReviewResource = new ReviewReplyResourceAssembler().toResource(reviewReply);
-		return new ResponseEntity<ReviewReplyResource>(createdReviewResource, HttpStatus.CREATED);
+		return new ResponseEntity<>(createdReviewResource, HttpStatus.CREATED);
 	}
 
 	/**
@@ -63,14 +63,14 @@ public class ReviewReplyController {
 	public ResponseEntity<ReviewReplyResource> removeReviewReply(@PathVariable String reviewReplyId) {
 		User user = userService.findAuthenticatedUser();
 		if (user == null)
-			return new ResponseEntity<ReviewReplyResource>(HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
 		try {
 			reviewReplyService.removeReviewReply(new Long(reviewReplyId));
 		} catch (ReviewReplyDoesNotExistException e) {
-			return new ResponseEntity<ReviewReplyResource>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<ReviewReplyResource>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }

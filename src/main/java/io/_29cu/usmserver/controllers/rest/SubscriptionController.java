@@ -30,7 +30,6 @@ import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListR
 import io._29cu.usmserver.controllers.rest.resources.assemblers.SubscriptionResourceAssembler;
 import io._29cu.usmserver.core.model.entities.Subscription;
 import io._29cu.usmserver.core.model.entities.User;
-import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.SubscriptionService;
 import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
@@ -40,9 +39,6 @@ import io._29cu.usmserver.core.service.utilities.ApplicationList;
 public class SubscriptionController {
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private ApplicationService applicationService;
 
     @Autowired
     private SubscriptionService subscriptionService;
@@ -60,14 +56,14 @@ public class SubscriptionController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<SubscriptionResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         Subscription subscription = subscriptionService.subscribeApplication(appId,user);
         if(subscription != null){
             SubscriptionResource createdSubscriptionResource = new SubscriptionResourceAssembler().toResource(subscription);
-            return new ResponseEntity<SubscriptionResource>(createdSubscriptionResource, HttpStatus.OK);
+            return new ResponseEntity<>(createdSubscriptionResource, HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<SubscriptionResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -84,15 +80,15 @@ public class SubscriptionController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<SubscriptionResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         Subscription updatedSubscription = subscriptionService.unsubscribeApplication(appId,user);
         SubscriptionResource updatedSubscriptionResource=null;
         if(updatedSubscription != null){
             updatedSubscriptionResource = new SubscriptionResourceAssembler().toResource(updatedSubscription);
-            return new ResponseEntity<SubscriptionResource>(updatedSubscriptionResource, HttpStatus.OK);
+            return new ResponseEntity<>(updatedSubscriptionResource, HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<SubscriptionResource>(updatedSubscriptionResource, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(updatedSubscriptionResource, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -106,12 +102,12 @@ public class SubscriptionController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationListResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         ApplicationList appList = subscriptionService.getSubscribedApplications(user.getId());
         // It's assumed that appList will never be null
         ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(appList);
-        return new ResponseEntity<ApplicationListResource>(appListResource, HttpStatus.OK);
+        return new ResponseEntity<>(appListResource, HttpStatus.OK);
     }
 
 	/**
@@ -127,13 +123,13 @@ public class SubscriptionController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<SubscriptionResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         Subscription subscription = subscriptionService.findSubscriptionByUserIdAndApplicationId(user.getId(),appId);
         if (null == subscription) { //We can't find the subscription in our database for the user.
-            return new ResponseEntity<SubscriptionResource>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<SubscriptionResource>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 }
