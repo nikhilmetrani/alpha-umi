@@ -26,6 +26,7 @@ import io._29cu.usmserver.controllers.rest.resources.assemblers.CategoryListReso
 import io._29cu.usmserver.controllers.rest.resources.assemblers.CategoryResourceAssembler;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppListType;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationListService;
@@ -205,6 +206,27 @@ public class StoreController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
+	 * Check whether the category name already exists
+	 * @param name The category name to be checked
+	 * @return
+	 * @see CategoryResource
+	 */
+	@RequestMapping(path = "/category/check", method = RequestMethod.GET)
+	public ResponseEntity<CategoryResource> checkCategoryNameExistsForDeveloper(
+			@RequestParam String name
+	) {
+		//Let's check whether the application is already registered.
+		Category existingCat = categoryService.findCategoryByName(name);
+
+		if (null == existingCat) { //We can't find the category in our database
+			return new ResponseEntity<CategoryResource>(HttpStatus.NO_CONTENT);
+		} else {
+			// Category with same name already exists
+			return new ResponseEntity<CategoryResource>(HttpStatus.OK);
+		}
 	}
 
 	/**
