@@ -22,7 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 @Controller
-@RequestMapping("/api/0/consumer/{applicationId}/rating")
+@RequestMapping("")
 public class RatingController {
 	
 	@Autowired
@@ -41,7 +41,7 @@ public class RatingController {
      * @return
      * @see RatingResource
      */
-	@RequestMapping(path = "/create", method = RequestMethod.POST)
+	@RequestMapping(path = "/api/0/consumer/{applicationId}/rating/create", method = RequestMethod.POST)
     public ResponseEntity<RatingResource> createReview(
     		@PathVariable String applicationId,
     		@RequestBody RatingResource rateResource
@@ -66,15 +66,11 @@ public class RatingController {
 	 * @param likeType Rating.Like or Rating.Dislike
 	 * @return
 	 */
-	@RequestMapping(path = "/getRateLikeNum/{likeType}", method = RequestMethod.GET)
+	@RequestMapping(path = "/api/1/consumer/{applicationId}/rating/getRateLikeNum/{likeType}", method = RequestMethod.GET)
     public ResponseEntity<String> getRateLikeNumber(
             @PathVariable String applicationId,
             @PathVariable String likeType
-    ) {
-        User user = userService.findAuthenticatedUser();
-        if (user == null)
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
+    ) {      
         Application application = applicationService.findApplication(applicationId);
         if(application == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -97,7 +93,7 @@ public class RatingController {
 	 * @param applicationId The id of the application
 	 * @return
 	 */
-    @RequestMapping(path = "/checkUserRate", method = RequestMethod.GET)
+    @RequestMapping(path = "/api/0/consumer/{applicationId}/rating/checkUserRate", method = RequestMethod.GET)
     public ResponseEntity<String> checkUserRate(
             @PathVariable String applicationId
     ) {
