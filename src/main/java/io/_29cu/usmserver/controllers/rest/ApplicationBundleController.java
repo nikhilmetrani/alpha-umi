@@ -219,7 +219,6 @@ public class ApplicationBundleController {
             return new ResponseEntity<ApplicationBundleResource>(HttpStatus.FORBIDDEN);
 
         try{
-            //ApplicationBundleUpdate applicationBundleUpdate = ApplicationBundleResource.toEntity();
             ApplicationBundle applicationBundle = applicationBundleService.findApplicationBundleByDeveloperAndId(user.getId(), appBundleId);
             // If the applicationBundle state is 'Active'
             if(applicationBundle.getState().equals(AppState.Active)) {

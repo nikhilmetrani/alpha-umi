@@ -37,35 +37,4 @@ public class CodesResource extends EntityResourceBase<Codes> {
     public Codes toEntity() {
         return null;
     }
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((codes == null) ? 0 : codes.hashCode());
-		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CodesResource other = (CodesResource) obj;
-		if (codes == null) {
-			if (other.codes != null)
-				return false;
-		} else if (!codes.equals(other.codes))
-			return false;
-		return true;
-	}
 }

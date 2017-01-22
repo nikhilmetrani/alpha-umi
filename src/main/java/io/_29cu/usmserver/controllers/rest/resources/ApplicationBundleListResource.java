@@ -38,28 +38,4 @@ public class ApplicationBundleListResource extends EntityResourceBase<Applicatio
         return null;
     }
     
-    @Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((applicationBundles == null) ? 0 : applicationBundles.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ApplicationBundleListResource other = (ApplicationBundleListResource) obj;
-		if (applicationBundles == null) {
-			if (other.applicationBundles != null)
-				return false;
-		} else if (!applicationBundles.equals(other.applicationBundles))
-			return false;
-		return true;
-	}
-}
+ }
