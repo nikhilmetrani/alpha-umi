@@ -95,7 +95,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
 		ApplicationList appList = new ApplicationList();
 		List<Application> apps = subscriptionRepository.getTrendingApplications(startDate, endDate);
-		//TODO
 		if (apps != null && apps.size() > 10) {
 			apps = apps.subList(0, 10);
 			appList.setApplications(AppHelper.getInstance().convertIterableToList(apps));

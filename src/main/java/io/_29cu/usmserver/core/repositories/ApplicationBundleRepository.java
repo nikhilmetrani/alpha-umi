@@ -30,7 +30,6 @@ public interface ApplicationBundleRepository extends CrudRepository<ApplicationB
     @Query("select u from ApplicationBundle u where u.developer.id = :id")
     List<ApplicationBundle> findApplicationBundlesByDeveloper(@Param("id") Long id);
 
-    //TODO may not needed
     @Query("select u from ApplicationBundle u where u.category.name = :category")
     List<ApplicationBundle> findApplicationBundlesByCategory(@Param("category") String category);
 

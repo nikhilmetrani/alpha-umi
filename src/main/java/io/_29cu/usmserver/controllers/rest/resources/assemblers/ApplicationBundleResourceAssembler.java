@@ -40,7 +40,7 @@ public class ApplicationBundleResourceAssembler extends ResourceAssemblerSupport
         applicationBundleResource.setDescription(applicationBundle.getDescription());
         applicationBundleResource.add(linkTo(methodOn(ApplicationBundleController.class).getApplicationBundle(applicationBundle.getId())).withSelfRel());
         if(applicationBundle.getDeveloper() != null)
-            applicationBundleResource.add(linkTo(ApplicationBundleController.class).slash("developer/" + applicationBundle.getDeveloper().getId()).withRel("developerApps"));//TODO update "developerApps"
+            applicationBundleResource.add(linkTo(ApplicationBundleController.class).slash("developer/" + applicationBundle.getDeveloper().getId()).withRel("developerApps"));
         return applicationBundleResource;
     }
 }

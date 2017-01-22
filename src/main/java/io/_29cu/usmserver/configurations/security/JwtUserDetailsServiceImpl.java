@@ -36,7 +36,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
      * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)  {
         Optional<User> user = userRepository.findByUsername(username);
 
         if (!user.isPresent()) {

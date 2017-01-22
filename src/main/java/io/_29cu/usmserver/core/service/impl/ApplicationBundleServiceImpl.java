@@ -38,7 +38,6 @@ public class ApplicationBundleServiceImpl implements ApplicationBundleService{
 
     @Override
     public ApplicationBundleList getAllApplicationBundles() {
-        //DummyData.createDummyData(userRepository, applicationBundleRepository, categoryRepository); //TODO update DummyData to include ApplicationBundle
         ApplicationBundleList appBundleList = new ApplicationBundleList();
         appBundleList.setApplicationBundles(AppHelper.getInstance().convertIterableToList(applicationBundleRepository.findAll()));
         return appBundleList;
