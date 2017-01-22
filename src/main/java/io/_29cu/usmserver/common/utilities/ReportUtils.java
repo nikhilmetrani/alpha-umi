@@ -26,6 +26,11 @@ public class ReportUtils {
 
     private ReportUtils() {}
 
+    /**
+     * Find the range of Date.
+     * @param toApplicationPublishDate
+     * @return
+     */
     public static Date findDateRange(Date toApplicationPublishDate){
         // return one week date range for reporting purpose
         return new Date(toApplicationPublishDate.getTime() + (23*3600 + 59*60 + 59) *1000);

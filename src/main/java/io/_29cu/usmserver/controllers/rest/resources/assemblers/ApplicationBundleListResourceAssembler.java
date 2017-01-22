@@ -33,6 +33,9 @@ public class ApplicationBundleListResourceAssembler extends ResourceAssemblerSup
     public ApplicationBundleListResourceAssembler() {
         super(StoreController.class, ApplicationBundleListResource.class);
     }
+    /* (non-Javadoc)
+     * @see org.springframework.hateoas.ResourceAssembler#toResource(java.lang.Object)
+     */
     @Override
     public ApplicationBundleListResource toResource(ApplicationBundleList applicationBundleList) {
         List<ApplicationBundleResource> appBundleResourceList = new ApplicationBundleResourceAssembler().toResources(applicationBundleList.getApplicationBundles());

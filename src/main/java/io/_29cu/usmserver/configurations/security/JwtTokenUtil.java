@@ -29,6 +29,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author user
+ *
+ */
+/**
+ * @author user
+ *
+ */
+/**
+ * @author user
+ *
+ */
 @Component
 public class JwtTokenUtil implements Serializable {
 
@@ -49,6 +61,11 @@ public class JwtTokenUtil implements Serializable {
     @Value("${jwt.expiration}")
     private Long expiration;
 
+    /**
+     * Get the user name from token.
+     * @param token
+     * @return
+     */
     public String getUsernameFromToken(String token) {
         String username;
         try {
@@ -60,6 +77,11 @@ public class JwtTokenUtil implements Serializable {
         return username;
     }
 
+    /**
+     * Get created date the from the token
+     * @param token
+     * @return
+     */
     public Date getCreatedDateFromToken(String token) {
         Date created;
         try {
@@ -71,6 +93,11 @@ public class JwtTokenUtil implements Serializable {
         return created;
     }
 
+    /**
+     * Get the expiration date from the token.
+     * @param token
+     * @return
+     */
     public Date getExpirationDateFromToken(String token) {
         Date expiration;
         try {
@@ -82,6 +109,11 @@ public class JwtTokenUtil implements Serializable {
         return expiration;
     }
 
+    /**
+     * Get the audience from the token using CLAIM_KEY_AUDIENCE
+     * @param token
+     * @return
+     */
     public String getAudienceFromToken(String token) {
         String audience;
         try {
@@ -93,6 +125,11 @@ public class JwtTokenUtil implements Serializable {
         return audience;
     }
 
+    /**
+     * Get the claims from token.
+     * @param token
+     * @return
+     */
     private Claims getClaimsFromToken(String token) {
         Claims claims;
         try {
@@ -144,6 +181,11 @@ public class JwtTokenUtil implements Serializable {
         return generateToken(claims);
     }
 
+    /**
+     * Generate token from claims.
+     * @param claims
+     * @return
+     */
     String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -152,12 +194,24 @@ public class JwtTokenUtil implements Serializable {
                 .compact();
     }
 
+    /**
+     * Check if token can be refreshed.
+     * @param token
+     * @param lastPasswordReset
+     * @return
+     */
     public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
         final Date created = getCreatedDateFromToken(token);
         return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
                 && (!isTokenExpired(token) || ignoreTokenExpiration(token));
     }
 
+    
+    /**
+     * Refresh the token by generating token from claims.
+     * @param token
+     * @return
+     */
     public String refreshToken(String token) {
         String refreshedToken;
         try {
@@ -170,11 +224,17 @@ public class JwtTokenUtil implements Serializable {
         return refreshedToken;
     }
 
+    
+    /**
+     * Validate token
+     * @param token
+     * @param userDetails
+     * @return
+     */
     public Boolean validateToken(String token, UserDetails userDetails) {
         JwtUser user = (JwtUser) userDetails;
         final String username = getUsernameFromToken(token);
         final Date created = getCreatedDateFromToken(token);
-        //final Date expiration = getExpirationDateFromToken(token);
         return (
                 username.equals(user.getUsername())
                         && !isTokenExpired(token)

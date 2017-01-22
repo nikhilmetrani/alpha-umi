@@ -31,6 +31,11 @@ public class AppHelper {
         return instance;
     }
 
+    /**
+     * Converting iterable to List
+     * @param iter
+     * @return
+     */
     public <E> List<E> convertIterableToList(Iterable<E> iter) {
         List<E> list = new ArrayList<E>();
         for (E item : iter) {
@@ -39,6 +44,11 @@ public class AppHelper {
         return list;
     }
 
+    /**
+     * Replace all single quotes with double quotes.
+     * @param source
+     * @return
+     */
     public static String escapeSQLString(String source) {
     	if(source != null) {
     		return source.replaceAll("'", "''");

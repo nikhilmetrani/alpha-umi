@@ -43,6 +43,11 @@ public final class JwtUserFactory {
         );
     }
 
+    /**
+     * Map to the granted authorities for role managemnent
+     * @param authorities
+     * @return
+     */
     private static List<GrantedAuthority> mapToGrantedAuthorities(List<Authority> authorities) {
         return authorities.stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getName().name()))

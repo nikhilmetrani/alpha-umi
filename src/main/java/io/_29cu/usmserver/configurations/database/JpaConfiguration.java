@@ -47,6 +47,11 @@ public class JpaConfiguration {
         this.jpaResource = jpaResource;
     }
 
+    /**
+     * Get the Datasource object form URL , username and password 
+     * @return
+     * @throws SQLException
+     */
     @Bean
     @Primary
     public DataSource dataSource() throws SQLException {
@@ -61,6 +66,10 @@ public class JpaConfiguration {
         return dataSource;
     }
 
+    /**
+     * Get JpaVendorAdapter set configuration of setting dialect, generation of DDL and displaying SQL in the Console.
+     * @return JpaVendorAdapter
+     */
     @Bean
     public JpaVendorAdapter jpaVendorAdapter() {
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
