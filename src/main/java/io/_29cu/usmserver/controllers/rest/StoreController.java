@@ -222,10 +222,10 @@ public class StoreController {
 		Category existingCat = categoryService.findCategoryByName(name);
 
 		if (null == existingCat) { //We can't find the category in our database
-			return new ResponseEntity<CategoryResource>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} else {
 			// Category with same name already exists
-			return new ResponseEntity<CategoryResource>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 	}
 

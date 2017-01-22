@@ -83,7 +83,7 @@ public class ApplicationController {
 		// Let's get the user from principal and validate the userId against it.
 		User user = userService.findAuthenticatedUser();
 		if (user == null)
-			return new ResponseEntity<Boolean>(HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
 		// TODO check and ensure user is Moderator role
 

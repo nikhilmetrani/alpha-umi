@@ -20,11 +20,13 @@ import io._29cu.usmserver.common.exceptions.StorageFileNotFoundException;
 import io._29cu.usmserver.common.utilities.StorageProperties;
 import io._29cu.usmserver.core.service.StorageService;
 
-//@ComponentScan
 @Service
 public class StorageServiceImpl implements StorageService {
 
-    private final Path rootLocation;
+    private static final String FAILED_TO_STORE_FILE = "Failed to store file ";
+	private static final String FAILED_TO_STORE_EMPTY_FILE = "Failed to store empty file ";
+	private static final String COULD_NOT_INITIALIZE_STORAGE = "Could not initialize storage";
+	private final Path rootLocation;
     private final Path profileImageLocation;
     private final Path appLogoLocation;
     private final Path setupsLocation;
@@ -43,18 +45,18 @@ public class StorageServiceImpl implements StorageService {
     public void store(MultipartFile file) {
         try {
             if (file.isEmpty()) {
-                throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
+                throw new StorageException(FAILED_TO_STORE_EMPTY_FILE + file.getOriginalFilename());
             }
             Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
         } catch (IOException e) {
-            throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
+            throw new StorageException(FAILED_TO_STORE_FILE + file.getOriginalFilename(), e);
         }
     }
 
     @Override
     public Path storeProfileImage(MultipartFile file, Long userId) {
         if (file.isEmpty()) {
-            throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
+            throw new StorageException(FAILED_TO_STORE_EMPTY_FILE + file.getOriginalFilename());
         }
         String extension = getFileExtension(file.getOriginalFilename());
         Path destinationPath = createProfileDirectory(userId).resolve("profileImage." + extension);
@@ -75,7 +77,7 @@ public class StorageServiceImpl implements StorageService {
                     // Let the original exception be thrown.
                 }
             }
-            throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
+            throw new StorageException(FAILED_TO_STORE_FILE + file.getOriginalFilename(), e);
         }
         return destinationPath;
     }
@@ -83,9 +85,8 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public Path storeApplicationLogo(MultipartFile file, Long userId, String appId) {
         if (file.isEmpty()) {
-            throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
+            throw new StorageException(FAILED_TO_STORE_EMPTY_FILE + file.getOriginalFilename());
         }
-        String extension = getFileExtension(file.getOriginalFilename());
         Path destinationPath = createAppLogosDirectory(userId).resolve(appId);
         Path backUpPath = createAppLogosDirectory(userId).resolve(appId + ".bkp");
         try {
@@ -104,7 +105,7 @@ public class StorageServiceImpl implements StorageService {
                     // Let the original exception be thrown.
                 }
             }
-            throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
+            throw new StorageException(FAILED_TO_STORE_FILE + file.getOriginalFilename(), e);
         }
         return destinationPath;
     }
@@ -163,7 +164,7 @@ public class StorageServiceImpl implements StorageService {
             Files.createDirectory(screenshotsLocation);
             Files.createDirectory(appLogoLocation);
         } catch (IOException e) {
-            throw new StorageException("Could not initialize storage", e);
+            throw new StorageException(COULD_NOT_INITIALIZE_STORAGE, e);
         }
     }
 
@@ -183,7 +184,7 @@ public class StorageServiceImpl implements StorageService {
             if (!Files.exists(subdir))
                 Files.createDirectory(subdir);
         } catch (IOException e) {
-            throw new StorageException("Could not initialize storage", e);
+            throw new StorageException(COULD_NOT_INITIALIZE_STORAGE, e);
         }
         return subdir;
     }
@@ -194,7 +195,7 @@ public class StorageServiceImpl implements StorageService {
             if (!Files.exists(subdir))
                 Files.createDirectory(subdir);
         } catch (IOException e) {
-            throw new StorageException("Could not initialize storage", e);
+            throw new StorageException(COULD_NOT_INITIALIZE_STORAGE, e);
         }
         return subdir;
     }
