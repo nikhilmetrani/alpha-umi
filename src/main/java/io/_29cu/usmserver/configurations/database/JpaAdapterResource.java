@@ -22,6 +22,11 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan
 @ConfigurationProperties(prefix = "database.jpa")
 public class JpaAdapterResource {
+	
+	private String dialect;
+    private Boolean showsql;
+    private Boolean generateddl;
+    
     public String getDialect() {
         return dialect;
     }
@@ -46,7 +51,5 @@ public class JpaAdapterResource {
         this.generateddl = generateddl;
     }
 
-    private String dialect;
-    private Boolean showsql;
-    private Boolean generateddl;
+    
 }
