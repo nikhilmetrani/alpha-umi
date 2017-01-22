@@ -268,7 +268,7 @@ public class ApplicationServiceTests {
     	ApplicationList fromDb = service.findApplicationsByCategoryAndKeyword(cat1.getId(), "application description2");
         for(Application app: fromDb.getItems()) {
         	assertTrue("Application does not match", (Pattern.matches("(.*(application).*)|(.*(description2).*)", app.getName().toLowerCase()) || Pattern.matches("(.*(application).*)|(.*(description2).*)", app.getDescription().toLowerCase())) 
-        			&& app.getCategory().equals(cat1.getName()));
+        			&& app.getCategory().getName().equals(cat1.getName()));
         }
     }
 }
