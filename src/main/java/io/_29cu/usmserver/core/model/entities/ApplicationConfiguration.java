@@ -22,14 +22,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import java.util.HashMap;
-import java.util.Map;
 
 @Entity
 public class ApplicationConfiguration {
     @Id
     @GeneratedValue
     private Long id;
-    private Map<String, Object> settings;
+    private HashMap<String, Object> settings;
     @OneToOne
     @NaturalId
     private Application application;
@@ -42,11 +41,11 @@ public class ApplicationConfiguration {
         this.id = id;
     }
 
-    public Map<String, Object> getSettings() {
+    public HashMap<String, Object> getSettings() {
         return new HashMap<>(this.settings);
     }
 
-    public void setSettings(Map<String, Object> settings) {
+    public void setSettings(HashMap<String, Object> settings) {
         this.settings = settings;
     }
 
