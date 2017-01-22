@@ -364,7 +364,7 @@ public class DeveloperApplicationsController {
 
                 //if there is no history app, then set the state to "Recalled"
                 application.setState(AppState.Recalled);
-                application = applicationService.updateApplication(application);
+                application = applicationService.recallApplication(application);
                 ApplicationResource updateApplicationResource = new ApplicationResourceAssembler().toResource(application);
                 return new ResponseEntity<ApplicationResource>(updateApplicationResource, HttpStatus.OK);
             }else{

@@ -102,6 +102,12 @@ public class ApplicationServiceImpl implements ApplicationService {
 	}
 
 	@Override
+	public Application recallApplication(Application application) {
+		Application recalledApplication =   applicationRepository.save(application);
+		return recalledApplication;
+	}
+
+	@Override
 	public Application findApplicationByDeveloperIdAndAppName(long developerId, String applicationName) {
 		return applicationRepository.findApplicationByDeveloperIdAndAppName(developerId, applicationName);
 	}
