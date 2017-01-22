@@ -155,7 +155,7 @@ public class RatingControllerTests {
 		when(applicationService.findApplication(uuid)).thenReturn(application);
 		when(rateService.countRatingsByApplicationId(uuid, Rating.Dislike)).thenReturn(1);
 
-		mockMvc.perform(get("/api/0/consumer/"+uuid+"/rating/getRateLikeNum/0"))
+		mockMvc.perform(get("/api/1/consumer/"+uuid+"/rating/getRateLikeNum/0"))
 				.andExpect(status().isOk());
 	}
 
