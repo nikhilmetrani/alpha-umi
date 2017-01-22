@@ -333,7 +333,6 @@ public class DeveloperApplicationsController {
 	        	return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
 	        }
         }catch(Exception ex){
-        	//ex.printStackTrace();
         	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -353,7 +352,6 @@ public class DeveloperApplicationsController {
         if (user == null)
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try{
-            //ApplicationUpdate applicationUpdate = ApplicationResource.toEntity();
             Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
             if (application == null)
                 return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
