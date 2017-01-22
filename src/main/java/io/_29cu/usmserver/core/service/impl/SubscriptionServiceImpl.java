@@ -100,8 +100,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		//TODO
 		if (apps != null && apps.size() > 10) {
 			apps = apps.subList(0, 10);
-		}
-		appList.setApplications(AppHelper.getInstance().convertIterableToList(apps));
+			appList.setApplications(AppHelper.getInstance().convertIterableToList(apps));
+		}		
 		return appList;
 	}
 }
