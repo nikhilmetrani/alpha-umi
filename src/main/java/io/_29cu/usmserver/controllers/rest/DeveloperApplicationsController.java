@@ -82,13 +82,13 @@ public class DeveloperApplicationsController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationListResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try {
             ApplicationList appList = applicationService.findApplicationsByDeveloper(user.getId());
             ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(appList);
-            return new ResponseEntity<ApplicationListResource>(appListResource, HttpStatus.OK);
+            return new ResponseEntity<>(appListResource, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -105,13 +105,13 @@ public class DeveloperApplicationsController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try {
             Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
             ApplicationResource applicationResource = new ApplicationResourceAssembler().toResource(application);
-            return new ResponseEntity<ApplicationResource>(applicationResource, HttpStatus.OK);
+            return new ResponseEntity<>(applicationResource, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -128,15 +128,14 @@ public class DeveloperApplicationsController {
             @RequestParam("file") MultipartFile file) {
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try {
             Path generatedFile = storageService.storeApplicationLogo(file, user.getId(), appId);
             String response = "{'originalName': '" + file.getOriginalFilename() + "', 'generatedName': '" + generatedFile.getFileName() + "'}";
             response = response.replace("'", "\"");
-            ResponseEntity<String> responseEntity = new ResponseEntity<String>(response, HttpStatus.OK);
-            return responseEntity;
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -152,7 +151,7 @@ public class DeveloperApplicationsController {
             @PathVariable String appId) {
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<Resource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         try {
         Resource file = storageService.loadApplicationLogoAsResource(user.getId(), appId);
@@ -163,7 +162,7 @@ public class DeveloperApplicationsController {
                 .body(file);
         } catch (Exception ex) {
             // Maybe the image is not yet uploaded, so let's just return ok.
-            return new ResponseEntity<Resource>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 
@@ -180,14 +179,14 @@ public class DeveloperApplicationsController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         Application receivedApplication = applicationResource.toEntity();
         receivedApplication.setDeveloper(user);
         receivedApplication.setCategory(categoryService.findCategory(Long.valueOf(receivedApplication.getCategory().getName())));
         receivedApplication.setState(AppState.Staging);
         Application application = applicationService.createApplication(receivedApplication);
         ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application); 
-        return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
+        return new ResponseEntity<>(createdApplicationResource, HttpStatus.OK);
     }
 
 	/**
@@ -203,15 +202,15 @@ public class DeveloperApplicationsController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         //Let's check whether the application is already registered.
         Application existingApp = applicationService.findApplicationByDeveloperIdAndAppName(user.getId(), name);
         if (null == existingApp) { //We can't find the application in our database for the developer.
-            return new ResponseEntity<ApplicationResource>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             // Application with same name already exists 
-        	return new ResponseEntity<ApplicationResource>(HttpStatus.OK);
+        	return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 
@@ -228,7 +227,7 @@ public class DeveloperApplicationsController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         Application receivedApplication = applicationResource.toEntity();
         receivedApplication.setDeveloper(user);
         receivedApplication.setCategory(categoryService.findCategory(Long.valueOf(receivedApplication.getCategory().getName())));
@@ -236,7 +235,7 @@ public class DeveloperApplicationsController {
         receivedApplication.setApplicationPublishDate(Calendar.getInstance().getTime());
         Application application = applicationService.createApplication(receivedApplication);
         ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application); 
-        return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
+        return new ResponseEntity<>(createdApplicationResource, HttpStatus.OK);
     }
 
 	/**
@@ -254,10 +253,10 @@ public class DeveloperApplicationsController {
 	    // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 	    Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
 	    if (application == null)
-		    return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
+		    return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
 
 	    Application receivedApplication = applicationResource.toEntity();
 	    receivedApplication.setDeveloper(user);
@@ -266,7 +265,7 @@ public class DeveloperApplicationsController {
         receivedApplication.setCategory(categoryService.findCategoryByName(categoryName));
 	    application = applicationService.updateApplication(receivedApplication);
 	    ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application);
-	    return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
+	    return new ResponseEntity<>(createdApplicationResource, HttpStatus.OK);
     }
 
 	/**
@@ -284,10 +283,10 @@ public class DeveloperApplicationsController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
         if (application == null)
-            return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
+            return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
 
         Application receivedApplication = applicationResource.toEntity();
         receivedApplication.setDeveloper(user);
@@ -297,7 +296,7 @@ public class DeveloperApplicationsController {
         receivedApplication.setCategory(categoryService.findCategoryByName(categoryName));
         application = applicationService.updateApplication(receivedApplication);
         ApplicationResource createdApplicationResource = new ApplicationResourceAssembler().toResource(application);
-        return new ResponseEntity<ApplicationResource>(createdApplicationResource, HttpStatus.OK);
+        return new ResponseEntity<>(createdApplicationResource, HttpStatus.OK);
     }
 
 	/**
@@ -313,7 +312,7 @@ public class DeveloperApplicationsController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try{
 	        Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
 	        // If the application state is not 'blocked' 
@@ -329,13 +328,13 @@ public class DeveloperApplicationsController {
                 applicationHistoryService.createApplicationHistory(applicationHistory);
                 application = applicationService.updateApplication(application);
                 ApplicationResource newApplicationResource = new ApplicationResourceAssembler().toResource(application);
-                return new ResponseEntity<ApplicationResource>(newApplicationResource, HttpStatus.OK);
+                return new ResponseEntity<>(newApplicationResource, HttpStatus.OK);
 	        }else{
-	        	return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
+	        	return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
 	        }
         }catch(Exception ex){
         	//ex.printStackTrace();
-        	return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+        	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -352,12 +351,12 @@ public class DeveloperApplicationsController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try{
             //ApplicationUpdate applicationUpdate = ApplicationResource.toEntity();
             Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
             if (application == null)
-                return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
+                return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
             // If the application state is 'Active'
             if(application.getState().equals(AppState.Active)) {
                 //get top 1 application from history based on date (desc).
@@ -372,13 +371,13 @@ public class DeveloperApplicationsController {
                 application.setState(AppState.Recalled);
                 application = applicationService.recallApplication(application);
                 ApplicationResource updateApplicationResource = new ApplicationResourceAssembler().toResource(application);
-                return new ResponseEntity<ApplicationResource>(updateApplicationResource, HttpStatus.OK);
+                return new ResponseEntity<>(updateApplicationResource, HttpStatus.OK);
             }else{
-                return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
+                return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
             }
         }catch(Exception ex){
             ex.printStackTrace();
-            return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -398,7 +397,7 @@ public class DeveloperApplicationsController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         try{
             ApplicationUpdate applicationUpdate = applicationUpdateResource.toEntity();
@@ -413,12 +412,12 @@ public class DeveloperApplicationsController {
                 application.setDescription(applicationUpdate.getDescription());
                 application.setName(applicationUpdate.getName());
                 ApplicationResource newApplicationUpdateResource = new ApplicationResourceAssembler().toResource(application);
-                return new ResponseEntity<ApplicationResource>(newApplicationUpdateResource, HttpStatus.OK);
+                return new ResponseEntity<>(newApplicationUpdateResource, HttpStatus.OK);
             }else{
-                return new ResponseEntity<ApplicationResource>(HttpStatus.PRECONDITION_FAILED);
+                return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
             }
         }catch(Exception ex){
-            return new ResponseEntity<ApplicationResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -436,13 +435,13 @@ public class DeveloperApplicationsController {
             @RequestBody ApplicationUpdateResource applicationUpdateResource) {
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         try{
             ApplicationUpdateResource newAppUpdateResource = new ApplicationUpdateResourceAssembler().toResource(appUpdate);
-            return new ResponseEntity<ApplicationUpdateResource>(newAppUpdateResource, HttpStatus.OK);
+            return new ResponseEntity<>(newAppUpdateResource, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -456,12 +455,12 @@ public class DeveloperApplicationsController {
         try {
             User user = userService.findAuthenticatedUser();
             if (user == null)
-                return new ResponseEntity<ApplicationListResource>(HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             ApplicationList appList = applicationService.findAllActiveApplicationsByDeveloper(user.getId());
             ApplicationListResource appListResource = new ApplicationListResourceAssembler().toResource(appList);
-            return new ResponseEntity<ApplicationListResource>(appListResource, HttpStatus.OK);
+            return new ResponseEntity<>(appListResource, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<ApplicationListResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }
