@@ -8,14 +8,14 @@ INSERT INTO AUTHORITY (ID, NAME) VALUES (3, 'ROLE_ADMIN');
 INSERT INTO AUTHORITY (ID, NAME) VALUES (4, 'ROLE_MANAGER');
 INSERT INTO AUTHORITY (ID, NAME) VALUES (5, 'ROLE_MAINTAINER');
 
-INSERT INTO Category (id, name) VALUES (1, 'Productivity');
-INSERT INTO Category (id, name) VALUES (2, 'Photography');
-INSERT INTO Category (id, name) VALUES (3, 'Entertainment');
-INSERT INTO Category (id, name) VALUES (4, 'Education');
-INSERT INTO Category (id, name) VALUES (5, 'Finance');
-INSERT INTO Category (id, name) VALUES (6, 'Shopping');
-INSERT INTO Category (id, name) VALUES (7, 'Social Networking');
-INSERT INTO Category (id, name) VALUES (8, 'Utilities');
+INSERT INTO Category (id, name) VALUES (101, 'Productivity');
+INSERT INTO Category (id, name) VALUES (102, 'Photography');
+INSERT INTO Category (id, name) VALUES (103, 'Entertainment');
+INSERT INTO Category (id, name) VALUES (104, 'Education');
+INSERT INTO Category (id, name) VALUES (105, 'Finance');
+INSERT INTO Category (id, name) VALUES (106, 'Shopping');
+INSERT INTO Category (id, name) VALUES (107, 'Social Networking');
+INSERT INTO Category (id, name) VALUES (108, 'Utilities');
 
 -- To create 5 developers
 INSERT INTO `user` (`ID`,`EMAIL`,`ENABLED`,`FIRSTNAME`,`LASTPASSWORDRESETDATE`,`LASTNAME`,`PASSWORD`,`USERNAME`) VALUES (101,'developer1@usm.com',1,NULL,'2017-01-08 03:59:23',NULL,'$2a$10$AMt7mj5oYaIThHB0fL4v6.D4btzzy5jMRaLQaDRigmzWSqRuu/NoS','developer1@usm.com');
