@@ -37,4 +37,35 @@ public class ApplicationListResource extends EntityResourceBase<ApplicationList>
     public ApplicationList toEntity() {
         return null;
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((applications == null) ? 0 : applications.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ApplicationListResource other = (ApplicationListResource) obj;
+		if (applications == null) {
+			if (other.applications != null)
+				return false;
+		} else if (!applications.equals(other.applications))
+			return false;
+		return true;
+	}
 }
