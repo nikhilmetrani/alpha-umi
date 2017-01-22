@@ -404,9 +404,9 @@ public class DeveloperApplicationsController {
             ApplicationUpdate applicationUpdate = applicationUpdateResource.toEntity();
             Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
             // If the application state is not 'blocked' and should be active/RECALLED for the update to take place
-            if(null != application && !AppState.Blocked.equals(application.getState()) && (AppState.Active.equals(application.getState())) || AppState.Recalled.equals(application.getState())) {
+            if(null != application && !AppState.Blocked.equals(application.getState()) && AppState.Active.equals(application.getState()) || (null != application && AppState.Recalled.equals(application.getState()))) {
                 applicationUpdate.setTarget(application);
-                ApplicationUpdate newApplicationUpdate = applicationUpdateService.createApplicationUpdateByDeveloper(user.getId(),applicationUpdate);
+                applicationUpdateService.createApplicationUpdateByDeveloper(user.getId(),applicationUpdate);
                 application.setId(applicationUpdate.getTarget().getId());
                 application.setVersion(applicationUpdate.getVersion());
                 application.setWhatsNew(applicationUpdate.getWhatsNew());
@@ -439,11 +439,6 @@ public class DeveloperApplicationsController {
             return new ResponseEntity<ApplicationUpdateResource>(HttpStatus.FORBIDDEN);
 
         try{
-            //ApplicationUpdate dbApplicationUpdate = applicationUpdateService.findByApplication(appId);
-            //ApplicationUpdate dbApplicationUpdate = applicationUpdateService.findByApplication(appId);
-            //Application app = appUpdate.getTarget();    //The application whose update is for publishing
-            //ApplicationUpdate newAppUpdate = new ApplicationUpdateResourceAssembler().toResource(appUpdate);
-
             ApplicationUpdateResource newAppUpdateResource = new ApplicationUpdateResourceAssembler().toResource(appUpdate);
             return new ResponseEntity<ApplicationUpdateResource>(newAppUpdateResource, HttpStatus.OK);
         } catch (Exception ex) {

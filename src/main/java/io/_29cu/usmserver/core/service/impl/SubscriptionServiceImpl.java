@@ -16,6 +16,12 @@
 
 package io._29cu.usmserver.core.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import io._29cu.usmserver.common.utilities.AppHelper;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Subscription;
@@ -24,21 +30,13 @@ import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.repositories.SubscriptionRepository;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.SubscriptionService;
-import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.Date;
-import java.util.List;
 
 @Component
 public class SubscriptionServiceImpl implements SubscriptionService {
 
 	@Autowired
 	private SubscriptionRepository subscriptionRepository;
-	@Autowired
-	private UserService userService;
 	@Autowired
 	private ApplicationService applicationService;
 
