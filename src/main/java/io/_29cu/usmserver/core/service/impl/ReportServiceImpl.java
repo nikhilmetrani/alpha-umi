@@ -43,9 +43,9 @@ public class ReportServiceImpl implements ReportService{
     ApplicationRepository applicationRepository;
 
     @Override
-    public int findSubscriptionsPerApplication(String applicationId, Date startDate, Date endDate) {
-        List<String> subscribedUserList = new ArrayList<String>();
-        endDate = ReportUtils.findDateRange(endDate);
+    public int findSubscriptionsPerApplication(String applicationId, Date startDate, Date endDt) {
+        List<String> subscribedUserList = new ArrayList<>();
+        Date endDate = ReportUtils.findDateRange(endDt);
         List<Subscription> subscriptionList = subscriptionRepository.findSubscribedUsersPerApplication(applicationId, startDate, endDate);
         if(subscriptionList != null && !subscriptionList.isEmpty()){
 	        long subscribeDate;
@@ -60,9 +60,9 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public int findActiveSubscriptionsPerApplication(String applicationId, Date startDate, Date endDate) {
-        List<String> subscribedActiveUserList = new ArrayList<String>();
-        endDate = ReportUtils.findDateRange(endDate);
+    public int findActiveSubscriptionsPerApplication(String applicationId, Date startDate, Date endDt) {
+        List<String> subscribedActiveUserList = new ArrayList<>();
+        Date endDate = ReportUtils.findDateRange(endDt);
         List<Subscription> subscriptionList = subscriptionRepository.findSubscribedActiveUsersPerApplication(applicationId, startDate, endDate);
         if(subscriptionList != null && !subscriptionList.isEmpty()){
 	        long subscribeDate;
@@ -76,9 +76,10 @@ public class ReportServiceImpl implements ReportService{
         return  subscribedActiveUserList.size();
     }
 
-    public int findTerminatedSubscriptionsPerApplication(String applicationId, Date startDate, Date endDate) {
-        List<String> terminatedApplicationList = new ArrayList<String>();
-        endDate = ReportUtils.findDateRange(endDate);
+    @Override
+    public int findTerminatedSubscriptionsPerApplication(String applicationId, Date startDate, Date endDt) {
+        List<String> terminatedApplicationList = new ArrayList<>();
+        Date endDate = ReportUtils.findDateRange(endDt);
         List<Subscription> subscriptionList = subscriptionRepository.findTerminatedSubscriptionsPerApplication(applicationId, startDate, endDate);
 	    if(subscriptionList != null && !subscriptionList.isEmpty()){
 		    long subscribeDate;
