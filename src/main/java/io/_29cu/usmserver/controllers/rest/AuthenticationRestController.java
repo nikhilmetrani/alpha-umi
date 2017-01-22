@@ -62,7 +62,7 @@ public class AuthenticationRestController {
      * @throws AuthenticationException
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, Device device) throws AuthenticationException {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, Device device) {
 
         // Perform the security
         final Authentication authentication = authenticationManager.authenticate(
@@ -79,7 +79,6 @@ public class AuthenticationRestController {
 
         // Return the token in header
         return ResponseEntity.ok().header("x-auth-token", new JwtAuthenticationResponse(token).getToken()).body("");
-//        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
     /**
