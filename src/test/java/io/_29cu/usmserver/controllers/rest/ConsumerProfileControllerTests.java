@@ -15,8 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.text.SimpleDateFormat;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,9 +74,6 @@ public class ConsumerProfileControllerTests {
         profile.setId(23L);
         profile.setEmail("test@test.com");
         profile.setWebsite("https://test.com");
-
-        String pattern = "dd/MM/yyyy";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
 
         // Let's mock the security context
         authenticationMocked = Mockito.mock(Authentication.class);
