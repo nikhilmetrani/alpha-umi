@@ -50,6 +50,14 @@ INSERT INTO `user_authority` (`USER_ID`,`AUTHORITY_ID`) VALUES (103,1);
 INSERT INTO `user_authority` (`USER_ID`,`AUTHORITY_ID`) VALUES (104,1);
 INSERT INTO `user_authority` (`USER_ID`,`AUTHORITY_ID`) VALUES (105,1);
 
+-- To create 2 employees: Site Manager and Site Maintainer
+INSERT INTO `user` (`ID`,`EMAIL`,`ENABLED`,`FIRSTNAME`,`LASTPASSWORDRESETDATE`,`LASTNAME`,`PASSWORD`,`USERNAME`) VALUES (111,'manager1@usm.com',1,NULL,'2017-01-08 04:30:24',NULL,'$2a$10$p0k2y/vQER2o58mzuPK2fu9UrJSEc2nZtC2PHvBTfxijMfx3VzRmK','manager1@usm.com');
+INSERT INTO `user` (`ID`,`EMAIL`,`ENABLED`,`FIRSTNAME`,`LASTPASSWORDRESETDATE`,`LASTNAME`,`PASSWORD`,`USERNAME`) VALUES (112,'maintainer1@usm.com',1,NULL,'2017-01-08 04:30:36',NULL,'$2a$10$zJKhQK00/YSXf4BUFyZyY.HCAeZCmTnlItyEZAdIswpYdoHiv0DJu','maintainer1@usm.com');
+
+-- To assign manager and maintainer authority to the 2 employees
+INSERT INTO `user_authority` (`USER_ID`,`AUTHORITY_ID`) VALUES (111,4);   -- Site Manager
+INSERT INTO `user_authority` (`USER_ID`,`AUTHORITY_ID`) VALUES (112,5);   -- Site Maintainer
+
 -- To create 10 applications
 -- Category: 1 = Uncategorized, Category 2 = Productivity
 -- State: O = Staging, 1 = Published, 2 = Recalled
