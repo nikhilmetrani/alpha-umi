@@ -87,4 +87,35 @@ public class ApplicationBundleResource extends EntityResourceBase<ApplicationBun
         applicationBundle.setDescription(description);
         return applicationBundle;
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((rid == null) ? 0 : rid.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ApplicationBundleResource other = (ApplicationBundleResource) obj;
+		if (rid == null) {
+			if (other.rid != null)
+				return false;
+		} else if (!rid.equals(other.rid))
+			return false;
+		return true;
+	}
 }

@@ -23,7 +23,7 @@ import io._29cu.usmserver.core.service.utilities.ApplicationBundleList;
 
 public class ApplicationBundleListResource extends EntityResourceBase<ApplicationBundleList> {
 
-    private List<ApplicationBundleResource> applicationBundles = new ArrayList<>();
+	private List<ApplicationBundleResource> applicationBundles = new ArrayList<>();
 
     public List<ApplicationBundleResource> getApplicationBundles() {
         return applicationBundles;
@@ -37,4 +37,29 @@ public class ApplicationBundleListResource extends EntityResourceBase<Applicatio
     public ApplicationBundleList toEntity() {
         return null;
     }
+    
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((applicationBundles == null) ? 0 : applicationBundles.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ApplicationBundleListResource other = (ApplicationBundleListResource) obj;
+		if (applicationBundles == null) {
+			if (other.applicationBundles != null)
+				return false;
+		} else if (!applicationBundles.equals(other.applicationBundles))
+			return false;
+		return true;
+	}
 }
