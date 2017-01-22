@@ -34,7 +34,7 @@ public class SubscriptionResource extends EntityResourceBase<Subscription>{
         return rid;
     }
 
-    public void setRid(Long id) {
+    public void setRid(Long rid) {
         this.rid = rid;
     }
 

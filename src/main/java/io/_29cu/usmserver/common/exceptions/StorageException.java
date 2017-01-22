@@ -2,7 +2,9 @@ package io._29cu.usmserver.common.exceptions;
 
 public class StorageException extends RuntimeException {
 
-    public StorageException(String message) {
+	private static final long serialVersionUID = -905031374766346394L;
+
+	public StorageException(String message) {
         super(message);
     }
 

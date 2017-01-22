@@ -19,7 +19,6 @@ package io._29cu.usmserver.core.service.utilities;
 import java.util.ArrayList;
 import java.util.List;
 
-import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Code;
 
 public class Codes {

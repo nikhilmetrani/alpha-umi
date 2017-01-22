@@ -33,7 +33,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api/0/developer")
-//@EnableResourceServer
 public class ApplicationBundleController {
     @Autowired
     private UserService userService;

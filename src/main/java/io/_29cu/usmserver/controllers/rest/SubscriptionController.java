@@ -16,30 +16,24 @@
 
 package io._29cu.usmserver.controllers.rest;
 
-import java.util.Date;
-
-import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.model.enumerations.AppState;
-import io._29cu.usmserver.controllers.rest.resources.SubscriptionResource;
-import io._29cu.usmserver.controllers.rest.resources.assemblers.SubscriptionResourceAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
+import io._29cu.usmserver.controllers.rest.resources.SubscriptionResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.SubscriptionResourceAssembler;
 import io._29cu.usmserver.core.model.entities.Subscription;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.SubscriptionService;
 import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequestMapping("/api/0/store")

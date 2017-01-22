@@ -80,6 +80,11 @@ public class JpaConfiguration {
         return jpaVendorAdapter;
     }
 
+    /**
+     * Get LocalContainerEntityManagerFactoryBean, Set the hibernate configuaration properties.
+     * @return
+     * @throws SQLException
+     */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws SQLException {
 

@@ -16,11 +16,9 @@
 
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entities.Application;
-import io._29cu.usmserver.core.service.utilities.ApplicationList;
-import org.springframework.stereotype.Component;
-
 import java.util.Date;
+
+import org.springframework.stereotype.Component;
 
 @Component
 public interface ReportService {

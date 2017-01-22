@@ -1,19 +1,12 @@
 package io._29cu.usmserver.controllers.rest.resources;
 
-//import lombok.Data;
-//import lombok.NoArgsConstructor;
-
 import java.util.Optional;
 
-//@Data
-//@NoArgsConstructor
 public final class PageParams {
 
-    private static final int DEFAULT_COUNT = 20;
 
     private Long sinceId;
     private Long maxId;
-    private int count = DEFAULT_COUNT;
 
     public Optional<Long> getSinceId() {
         return Optional.ofNullable(sinceId);

@@ -19,7 +19,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Authority;
 import io._29cu.usmserver.core.model.entities.Review;

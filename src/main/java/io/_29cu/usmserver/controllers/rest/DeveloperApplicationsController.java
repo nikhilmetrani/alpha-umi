@@ -16,38 +16,44 @@
 
 package io._29cu.usmserver.controllers.rest;
 
-import io._29cu.usmserver.controllers.rest.resources.ApplicationBundleResource;
-import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationUpdateResourceAssembler;
-import io._29cu.usmserver.core.model.entities.*;
-import io._29cu.usmserver.core.service.*;
+import java.nio.file.Path;
+import java.util.Calendar;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.nio.file.Path;
-import java.util.ArrayList;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
 import io._29cu.usmserver.controllers.rest.resources.ApplicationUpdateResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationUpdateResourceAssembler;
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.ApplicationHistory;
+import io._29cu.usmserver.core.model.entities.ApplicationUpdate;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
+import io._29cu.usmserver.core.service.ApplicationHistoryService;
+import io._29cu.usmserver.core.service.ApplicationService;
+import io._29cu.usmserver.core.service.ApplicationUpdateService;
+import io._29cu.usmserver.core.service.CategoryService;
+import io._29cu.usmserver.core.service.StorageService;
+import io._29cu.usmserver.core.service.UserService;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Calendar;
-import java.util.List;
 
 @Controller
 @RequestMapping("/api/0/developer")
-//@EnableResourceServer
 public class DeveloperApplicationsController {
     @Autowired
     private UserService userService;

@@ -35,7 +35,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import io._29cu.usmserver.core.service.SubscriptionService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,6 +58,7 @@ import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationListService;
 import io._29cu.usmserver.core.service.ApplicationService;
 import io._29cu.usmserver.core.service.CategoryService;
+import io._29cu.usmserver.core.service.SubscriptionService;
 import io._29cu.usmserver.core.service.exception.CategoryAlreadyExistException;
 import io._29cu.usmserver.core.service.exception.CategoryDoesNotExistException;
 import io._29cu.usmserver.core.service.utilities.ApplicationList;

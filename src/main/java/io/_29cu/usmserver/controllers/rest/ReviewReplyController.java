@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import io._29cu.usmserver.controllers.rest.resources.ReviewReplyResource;
-import io._29cu.usmserver.controllers.rest.resources.ReviewResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ReviewReplyResourceAssembler;
 import io._29cu.usmserver.core.model.entities.Review;
 import io._29cu.usmserver.core.model.entities.ReviewReply;

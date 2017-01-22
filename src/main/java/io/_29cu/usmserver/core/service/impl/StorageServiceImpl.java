@@ -1,23 +1,24 @@
 package io._29cu.usmserver.core.service.impl;
 
-import io._29cu.usmserver.common.exceptions.StorageException;
-import io._29cu.usmserver.common.exceptions.StorageFileNotFoundException;
-import io._29cu.usmserver.common.utilities.StorageProperties;
-import io._29cu.usmserver.core.service.StorageService;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.*;
-import java.util.stream.Stream;
+import io._29cu.usmserver.common.exceptions.StorageException;
+import io._29cu.usmserver.common.exceptions.StorageFileNotFoundException;
+import io._29cu.usmserver.common.utilities.StorageProperties;
+import io._29cu.usmserver.core.service.StorageService;
 
 //@ComponentScan
 @Service

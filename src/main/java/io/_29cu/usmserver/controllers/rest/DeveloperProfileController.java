@@ -16,26 +16,30 @@
 
 package io._29cu.usmserver.controllers.rest;
 
-import io._29cu.usmserver.common.exceptions.StorageFileNotFoundException;
-import io._29cu.usmserver.controllers.rest.resources.DeveloperProfileResource;
-import io._29cu.usmserver.controllers.rest.resources.assemblers.DeveloperProfileResourceAssembler;
-import io._29cu.usmserver.core.model.entities.User;
-import io._29cu.usmserver.core.model.entities.DeveloperProfile;
-import io._29cu.usmserver.core.service.DeveloperProfileService;
-import io._29cu.usmserver.core.service.StorageService;
-import io._29cu.usmserver.core.service.UserService;
+import java.net.URI;
+import java.nio.file.Path;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.net.URI;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import io._29cu.usmserver.common.exceptions.StorageFileNotFoundException;
+import io._29cu.usmserver.controllers.rest.resources.DeveloperProfileResource;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.DeveloperProfileResourceAssembler;
+import io._29cu.usmserver.core.model.entities.DeveloperProfile;
+import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.service.DeveloperProfileService;
+import io._29cu.usmserver.core.service.StorageService;
+import io._29cu.usmserver.core.service.UserService;
 
 @Controller
 @RequestMapping("/api/0/developer")

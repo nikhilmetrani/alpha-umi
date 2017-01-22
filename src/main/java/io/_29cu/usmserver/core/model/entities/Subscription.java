@@ -16,10 +16,15 @@
 
 package io._29cu.usmserver.core.model.entities;
 
-import org.hibernate.annotations.NaturalId;
-
-import javax.persistence.*;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Subscription {
@@ -27,10 +32,8 @@ public class Subscription {
     @GeneratedValue
     private Long id;
     @ManyToOne
-    //@NaturalId
     private Application application;
     @ManyToOne
-    //@NaturalId
     private User user;
 
     @Column(name = "dateSubscribed")

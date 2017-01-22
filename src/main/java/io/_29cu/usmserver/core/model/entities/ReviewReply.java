@@ -3,8 +3,6 @@ package io._29cu.usmserver.core.model.entities;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.NaturalId;
-
 @Entity
 public class ReviewReply extends BaseValueObject {
 

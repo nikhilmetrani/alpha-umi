@@ -11,7 +11,6 @@ import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.Rating;
 import io._29cu.usmserver.core.repositories.RateRepository;
 import io._29cu.usmserver.core.service.RateService;
-import io._29cu.usmserver.core.model.enumerations.Rating;
 
 @Component
 public class RateServiceImpl implements RateService{

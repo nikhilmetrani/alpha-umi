@@ -16,6 +16,12 @@
 
 package io._29cu.usmserver.core.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import io._29cu.usmserver.core.model.entities.Authority;
 import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AuthorityName;
@@ -23,11 +29,6 @@ import io._29cu.usmserver.core.repositories.AuthorityRepository;
 import io._29cu.usmserver.core.repositories.UserRepository;
 import io._29cu.usmserver.core.service.SecurityContextService;
 import io._29cu.usmserver.core.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class UserServiceImpl implements UserService {

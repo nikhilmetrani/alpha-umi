@@ -1,10 +1,5 @@
 package io._29cu.usmserver.controllers.rest.resources;
 
-/**
- * Created by yniu on 10/12/2016.
- */
-import java.util.Date;
-
 import io._29cu.usmserver.core.model.entities.ConsumerProfile;
 
 public class ConsumerProfileResource extends EntityResourceBase<ConsumerProfile>  {

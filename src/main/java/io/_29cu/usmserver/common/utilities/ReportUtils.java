@@ -16,13 +16,9 @@
 
 package io._29cu.usmserver.common.utilities;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class ReportUtils {
-
-    private static ReportUtils instance = null;
 
     private ReportUtils() {}
 
