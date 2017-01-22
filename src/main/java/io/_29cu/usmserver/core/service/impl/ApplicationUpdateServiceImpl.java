@@ -48,7 +48,6 @@ public class ApplicationUpdateServiceImpl implements ApplicationUpdateService{
 
     @Override
     public ApplicationUpdate createApplicationUpdate(ApplicationUpdate applicationUpdate) {
-        //Application application = applicationRepository.save(applicationUpdate.getTarget());
     	ApplicationUpdate savedApplicationUpdate = applicationUpdateRepository.save(applicationUpdate);
     	List<Installer> oldInstallers = installerService.findAllInstallersByApplicationUpdateId(applicationUpdate.getId());
     	if(oldInstallers != null) {

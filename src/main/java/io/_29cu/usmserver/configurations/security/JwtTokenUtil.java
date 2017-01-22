@@ -16,18 +16,21 @@
 
 package io._29cu.usmserver.configurations.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 /**
  * @author user
@@ -44,7 +47,9 @@ import java.util.Map;
 @Component
 public class JwtTokenUtil implements Serializable {
 
-    private static final long serialVersionUID = -3301605591108950415L;
+    private static final String ERROR_GETTING_CLAIMS_FROM_TOKEN = "Error while getting claims from token";
+
+	private static final long serialVersionUID = -3301605591108950415L;
 
     static final String CLAIM_KEY_USERNAME = "sub";
     static final String CLAIM_KEY_AUDIENCE = "audience";
@@ -60,6 +65,8 @@ public class JwtTokenUtil implements Serializable {
 
     @Value("${jwt.expiration}")
     private Long expiration;
+    
+    private final Log logger = LogFactory.getLog(this.getClass());
 
     /**
      * Get the user name from token.
@@ -88,6 +95,7 @@ public class JwtTokenUtil implements Serializable {
             final Claims claims = getClaimsFromToken(token);
             created = new Date((Long) claims.get(CLAIM_KEY_CREATED));
         } catch (Exception e) {
+        	logger.error(ERROR_GETTING_CLAIMS_FROM_TOKEN,e);
             created = null;
         }
         return created;
@@ -104,6 +112,7 @@ public class JwtTokenUtil implements Serializable {
             final Claims claims = getClaimsFromToken(token);
             expirationDate = claims.getExpiration();
         } catch (Exception e) {
+        	logger.error(ERROR_GETTING_CLAIMS_FROM_TOKEN,e);
             expirationDate = null;
         }
         return expirationDate;
@@ -120,6 +129,7 @@ public class JwtTokenUtil implements Serializable {
             final Claims claims = getClaimsFromToken(token);
             audience = (String) claims.get(CLAIM_KEY_AUDIENCE);
         } catch (Exception e) {
+        	logger.error(ERROR_GETTING_CLAIMS_FROM_TOKEN,e);
             audience = null;
         }
         return audience;
@@ -138,6 +148,7 @@ public class JwtTokenUtil implements Serializable {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
+        	logger.error(ERROR_GETTING_CLAIMS_FROM_TOKEN,e);
             claims = null;
         }
         return claims;
@@ -219,6 +230,7 @@ public class JwtTokenUtil implements Serializable {
             claims.put(CLAIM_KEY_CREATED, new Date());
             refreshedToken = generateToken(claims);
         } catch (Exception e) {
+        	logger.error(ERROR_GETTING_CLAIMS_FROM_TOKEN,e);
             refreshedToken = null;
         }
         return refreshedToken;

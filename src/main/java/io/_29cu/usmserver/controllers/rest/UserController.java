@@ -38,30 +38,12 @@ import io._29cu.usmserver.core.service.UserService;
 
 @RestController
 @RequestMapping("/api")
-//@EnableResourceServer
 public class UserController {
 	@Autowired
 	private UserService userService;
 	private final Log logger = LogFactory.getLog(this.getClass());
 
 	private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-//    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-//    public ResponseEntity<UserResource> getUser(
-//            @PathVariable String userId
-//    ) {
-//        User user = userService.findUser(userId);
-//        if (null == user)
-//            return new ResponseEntity<UserResource>(HttpStatus.NOT_FOUND);
-//
-//        UserResource userResource = new UserResourceAssembler().toResource(user);
-//        return new ResponseEntity<UserResource>(userResource, HttpStatus.OK);
-//    }
-
-//    @RequestMapping(value = "{id:\\d+}")
-//    public UserDTO show(@PathVariable("id") Long id) {
-//        return userService.findOne(id).orElseThrow(UserNotFoundException::new);
-//    }
 
 	/**
 	 * Get User
@@ -70,7 +52,7 @@ public class UserController {
 	 */
 	@RequestMapping(path = "/0/user", method = RequestMethod.GET)
 	public JwtUser getUser() {
-		return JwtUserFactory.create(userService.findAuthenticatedUser()); //.orElseThrow(UserNotFoundException::new);
+		return JwtUserFactory.create(userService.findAuthenticatedUser());
 	}
 
 	/**

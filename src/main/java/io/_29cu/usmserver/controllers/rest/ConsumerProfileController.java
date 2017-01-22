@@ -44,7 +44,7 @@ public class ConsumerProfileController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ConsumerProfileResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try {
             ConsumerProfile consumerProfile = consumerProfileService.findProfileByUserId(user.getId());
             if (null == consumerProfile) {
@@ -54,10 +54,10 @@ public class ConsumerProfileController {
             ConsumerProfileResource consumerProfileResource = new ConsumerProfileResourceAssembler().toResource(consumerProfile);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(consumerProfileResource.getLink("self").getHref()));
-            return new ResponseEntity<ConsumerProfileResource>(consumerProfileResource, headers, HttpStatus.OK);
+            return new ResponseEntity<>(consumerProfileResource, headers, HttpStatus.OK);
         } catch (Exception ex) {
         	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
-            return new ResponseEntity<ConsumerProfileResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -74,7 +74,7 @@ public class ConsumerProfileController {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
         if (user == null)
-            return new ResponseEntity<ConsumerProfileResource>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         try {
             ConsumerProfile receivedProfile = consumerProfileResource.toEntity();
             receivedProfile.setConsumer(user);
@@ -82,10 +82,10 @@ public class ConsumerProfileController {
             ConsumerProfileResource createdProfileResource = new ConsumerProfileResourceAssembler().toResource(createdProfile);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create(createdProfileResource.getLink("self").getHref()));
-            return new ResponseEntity<ConsumerProfileResource>(createdProfileResource, headers, HttpStatus.OK);
+            return new ResponseEntity<>(createdProfileResource, headers, HttpStatus.OK);
         } catch (Exception ex) {
         	logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
-            return new ResponseEntity<ConsumerProfileResource>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

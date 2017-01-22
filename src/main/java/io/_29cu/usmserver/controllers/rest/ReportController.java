@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 @RequestMapping("/api/0/developer/report")
 public class ReportController {
 	
+	private static final String YYYY_M_MDD = "yyyyMMdd";
 	@Autowired
     private UserService userService;
 	@Autowired
@@ -54,7 +55,7 @@ public class ReportController {
         	 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 		try {
-			DateFormat df = new SimpleDateFormat("yyyyMMdd");
+			DateFormat df = new SimpleDateFormat(YYYY_M_MDD);
 			int count = reportService.findSubscriptionsPerApplication(appId, df.parse(start), df.parse(end));
 			return new ResponseEntity<>(count, HttpStatus.OK);
 		} catch (Exception ex) {
@@ -85,7 +86,7 @@ public class ReportController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		try {
-			DateFormat df = new SimpleDateFormat("yyyyMMdd");
+			DateFormat df = new SimpleDateFormat(YYYY_M_MDD);
 			int count = reportService.findActiveSubscriptionsPerApplication(appId, df.parse(start), df.parse(end));
 			return new ResponseEntity<>(count, HttpStatus.OK);
 		} catch (Exception ex) {
@@ -116,7 +117,7 @@ public class ReportController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		try {
-			DateFormat df = new SimpleDateFormat("yyyyMMdd");
+			DateFormat df = new SimpleDateFormat(YYYY_M_MDD);
 			int count = reportService.findTerminatedSubscriptionsPerApplication(appId, df.parse(start), df.parse(end));
 			return new ResponseEntity<>(count, HttpStatus.OK);
 		} catch (Exception ex) {
