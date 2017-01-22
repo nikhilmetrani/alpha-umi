@@ -99,14 +99,14 @@ public class JwtTokenUtil implements Serializable {
      * @return
      */
     public Date getExpirationDateFromToken(String token) {
-        Date expiration;
+        Date expirationDate;
         try {
             final Claims claims = getClaimsFromToken(token);
-            expiration = claims.getExpiration();
+            expirationDate = claims.getExpiration();
         } catch (Exception e) {
-            expiration = null;
+            expirationDate = null;
         }
-        return expiration;
+        return expirationDate;
     }
 
     /**
@@ -148,12 +148,12 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
+        final Date expirationDate = getExpirationDateFromToken(token);
+        return expirationDate.before(new Date());
     }
 
     private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
-        return (lastPasswordReset != null && created.before(lastPasswordReset));
+        return lastPasswordReset != null && created.before(lastPasswordReset);
     }
 
     private String generateAudience(Device device) {
@@ -170,7 +170,7 @@ public class JwtTokenUtil implements Serializable {
 
     private Boolean ignoreTokenExpiration(String token) {
         String audience = getAudienceFromToken(token);
-        return (AUDIENCE_TABLET.equals(audience) || AUDIENCE_MOBILE.equals(audience));
+        return AUDIENCE_TABLET.equals(audience) || AUDIENCE_MOBILE.equals(audience);
     }
 
     public String generateToken(UserDetails userDetails, Device device) {
@@ -235,9 +235,8 @@ public class JwtTokenUtil implements Serializable {
         JwtUser user = (JwtUser) userDetails;
         final String username = getUsernameFromToken(token);
         final Date created = getCreatedDateFromToken(token);
-        return (
-                username.equals(user.getUsername())
+        return username.equals(user.getUsername())
                         && !isTokenExpired(token)
-                        && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
+                        && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate());
     }
 }
