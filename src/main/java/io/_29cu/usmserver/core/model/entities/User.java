@@ -17,6 +17,8 @@
 package io._29cu.usmserver.core.model.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -93,10 +95,12 @@ public class User {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
@@ -125,10 +129,12 @@ public class User {
         this.email = email;
     }
 
+    @JsonIgnore
     public Boolean getEnabled() {
         return enabled;
     }
 
+    @JsonProperty
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
@@ -141,10 +147,12 @@ public class User {
         this.authorities = authorities;
     }
 
+    @JsonIgnore
     public Date getLastPasswordResetDate() {
         return lastPasswordResetDate;
     }
 
+    @JsonProperty
     public void setLastPasswordResetDate(Date lastPasswordResetDate) {
         this.lastPasswordResetDate = lastPasswordResetDate;
     }
