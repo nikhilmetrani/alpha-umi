@@ -404,7 +404,7 @@ public class DeveloperApplicationsController {
             ApplicationUpdate applicationUpdate = applicationUpdateResource.toEntity();
             Application application = applicationService.findApplicationByDeveloperIdAndAppId(user.getId(), appId);
             // If the application state is not 'blocked' and should be active/RECALLED for the update to take place
-            if(null != application && !application.getState().equals(AppState.Blocked) && (application.getState().equals(AppState.Active)) || application.getState().equals(AppState.Recalled)) {
+            if(null != application && !AppState.Blocked.equals(application.getState()) && (AppState.Active.equals(application.getState())) || AppState.Recalled.equals(application.getState())) {
                 applicationUpdate.setTarget(application);
                 ApplicationUpdate newApplicationUpdate = applicationUpdateService.createApplicationUpdateByDeveloper(user.getId(),applicationUpdate);
                 application.setId(applicationUpdate.getTarget().getId());
