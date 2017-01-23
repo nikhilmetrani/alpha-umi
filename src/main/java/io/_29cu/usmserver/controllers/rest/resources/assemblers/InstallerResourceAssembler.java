@@ -16,11 +16,16 @@
 
 package io._29cu.usmserver.controllers.rest.resources.assemblers;
 
+import io._29cu.usmserver.core.model.enumerations.OperatingSystem;
+import io._29cu.usmserver.core.model.enumerations.Platform;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
 import io._29cu.usmserver.controllers.rest.ApplicationController;
 import io._29cu.usmserver.controllers.rest.resources.InstallerResource;
 import io._29cu.usmserver.core.model.entities.Installer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InstallerResourceAssembler extends ResourceAssemblerSupport<Installer, InstallerResource> {
     public InstallerResourceAssembler() {
@@ -34,6 +39,27 @@ public class InstallerResourceAssembler extends ResourceAssemblerSupport<Install
     	installerResource.setOs(installer.getOs());
     	installerResource.setDownloadUrl(installer.getDownloadUrl());
     	installerResource.setExpressInstallCommand(installer.getExpressInstallCommand());
+    	installerResource.setLaunchCommand(installer.getLaunchCommand());
+    	installerResource.setUninstallCommand(installer.getUninstallCommand());
         return installerResource;
+    }
+
+    public List<InstallerResource> getEmptyInstallers() {
+        List<InstallerResource> installers = new ArrayList<InstallerResource>();
+
+        installers.add(toResource(createInstaller(OperatingSystem.Windows, Platform.x64)));
+        installers.add(toResource(createInstaller(OperatingSystem.Windows, Platform.x86)));
+        installers.add(toResource(createInstaller(OperatingSystem.Mac, Platform.x64)));
+        installers.add(toResource(createInstaller(OperatingSystem.Linux, Platform.x64)));
+        installers.add(toResource(createInstaller(OperatingSystem.Linux, Platform.x86)));
+
+        return installers;
+    }
+
+    private Installer createInstaller(OperatingSystem os, Platform platform) {
+        Installer installer = new Installer();
+        installer.setOs(os);
+        installer.setPlatform(platform);
+        return  installer;
     }
 }

@@ -33,13 +33,15 @@ public class Installer {
     private OperatingSystem os;
     private String downloadUrl;
     private String expressInstallCommand;
+    private String launchCommand;
+    private String uninstallCommand;
 
 	@ManyToOne
 	Application application;
 
 	@ManyToOne
 	ApplicationUpdate applicationUpdate;
-	
+
     public Long getId() {
         return id;
     }
@@ -79,11 +81,29 @@ public class Installer {
     public void setExpressInstallCommand(String expressInstallCommand) {
         this.expressInstallCommand = expressInstallCommand;
     }
-    
+
+    public String getLaunchCommand() {
+        return launchCommand;
+    }
+
+    public void setLaunchCommand(String launchCommand) {
+        this.launchCommand = launchCommand;
+    }
+
+    public String getUninstallCommand() {
+        return uninstallCommand;
+    }
+
+    public void setUninstallCommand(String uninstallCommand) {
+        this.uninstallCommand = uninstallCommand;
+    }
+
     public String toString(){
     	return "{ \"id\":\""+ this.getId() + "\", \"platform\":\""+ this.getPlatform() 
     	+ "\", \"os\":\"" + this.getOs() + "\", \"downloadUrl\":\"" + this.getDownloadUrl() 
-    	+ "\", \"expressInstallCommand\":\"" + this.getExpressInstallCommand() + "\" }";
+    	+ "\", \"expressInstallCommand\":\"" + this.getExpressInstallCommand() + "\" "
+        + "\", \"launchCommand\":\"" + this.getLaunchCommand() + "\" "
+        + "\", \"uninstallCommand\":\"" + this.getUninstallCommand() + "\" }";
     }
 
 	public Application getApplication() {

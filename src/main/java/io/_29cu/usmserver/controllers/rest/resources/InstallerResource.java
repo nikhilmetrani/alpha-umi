@@ -27,6 +27,8 @@ public class InstallerResource extends EntityResourceBase<Installer> {
     private OperatingSystem os;
     private String downloadUrl;
     private String expressInstallCommand;
+    private String launchCommand;
+	private String uninstallCommand;
    
     public Long getRid() {
 		return rid;
@@ -68,6 +70,22 @@ public class InstallerResource extends EntityResourceBase<Installer> {
 		this.expressInstallCommand = expressInstallCommand;
 	}
 
+	public String getLaunchCommand() {
+		return launchCommand;
+	}
+
+	public void setLaunchCommand(String launchCommand) {
+		this.launchCommand = launchCommand;
+	}
+
+	public String getUninstallCommand() {
+		return uninstallCommand;
+	}
+
+	public void setUninstallCommand(String uninstallCommand) {
+		this.uninstallCommand = uninstallCommand;
+	}
+
 	@Override
     public Installer toEntity() {
 		Installer installer = new Installer();
@@ -76,6 +94,8 @@ public class InstallerResource extends EntityResourceBase<Installer> {
 		installer.setOs(os);
 		installer.setDownloadUrl(downloadUrl);
 		installer.setExpressInstallCommand(expressInstallCommand);
+		installer.setLaunchCommand(launchCommand);
+		installer.setUninstallCommand(uninstallCommand);
         return installer;
     }
 }

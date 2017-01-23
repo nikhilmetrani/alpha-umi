@@ -41,10 +41,12 @@ public class ApplicationUpdateResourceAssembler extends ResourceAssemblerSupport
         applicationUpdateResource.setWhatsNew(applicationUpdate.getWhatsNew());
         applicationUpdateResource.setTarget(applicationUpdate.getTarget());
         List<InstallerResource> installers = new ArrayList<InstallerResource>();
-        if(applicationUpdate.getInstallers() != null) {
+        if(applicationUpdate.getInstallers() != null && !applicationUpdate.getInstallers().isEmpty()) {
 	        for(Installer installer : applicationUpdate.getInstallers()) {
 	        	installers.add(new InstallerResourceAssembler().toResource(installer));
 	        }
+        }else {
+            installers = new InstallerResourceAssembler().getEmptyInstallers();
         }
         applicationUpdateResource.setInstallers(installers);
         return applicationUpdateResource;

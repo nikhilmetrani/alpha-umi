@@ -49,10 +49,12 @@ public class ApplicationResourceAssembler extends ResourceAssemblerSupport<Appli
         applicationResource.setWhatsNew(application.getWhatsNew());
         List<InstallerResource> installers = new ArrayList<InstallerResource>();
         List<ReviewResource> reviews = new ArrayList<ReviewResource>();
-        if(application.getInstallers() != null) {
+        if(application.getInstallers() != null && !application.getInstallers().isEmpty()) {
 	        for(Installer installer : application.getInstallers()) {
 	        	installers.add(new InstallerResourceAssembler().toResource(installer));
 	        }
+        } else {
+            installers = new InstallerResourceAssembler().getEmptyInstallers();
         }
         applicationResource.setInstallers(installers);
         if(application.getReviews() != null) {
