@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import io._29cu.usmserver.common.utilities.AppHelper;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Installer;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.repositories.ApplicationRepository;
 import io._29cu.usmserver.core.repositories.CategoryRepository;
@@ -132,14 +133,18 @@ public class ApplicationServiceImpl implements ApplicationService {
 	}
 
 	@Override
+	public User findApplicationDeveloper(String id) {
+		Application app = findApplication(id);
+		return app.getDeveloper();
+	}
+
+	@Override
 	public ApplicationList findApplicationsByDeveloper(long developerId) {
 		List<Application> appList = applicationRepository.findApplicationsByDeveloper(developerId);
 		ApplicationList applicationList = new ApplicationList();
 		applicationList.setApplications(appList);
 		return applicationList;
 	}
-
-
 
 	@Override
 	public ApplicationList findApplicationsByCategory(String category) {

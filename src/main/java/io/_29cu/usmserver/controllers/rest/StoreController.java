@@ -18,6 +18,7 @@ package io._29cu.usmserver.controllers.rest;
 
 import java.net.URI;
 
+import io._29cu.usmserver.controllers.rest.resources.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +33,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import io._29cu.usmserver.common.utilities.AppConstants;
-import io._29cu.usmserver.controllers.rest.resources.ApplicationListResource;
-import io._29cu.usmserver.controllers.rest.resources.ApplicationResource;
-import io._29cu.usmserver.controllers.rest.resources.CategoryListResource;
-import io._29cu.usmserver.controllers.rest.resources.CategoryResource;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationListResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.ApplicationResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.CategoryListResourceAssembler;
 import io._29cu.usmserver.controllers.rest.resources.assemblers.CategoryResourceAssembler;
+import io._29cu.usmserver.controllers.rest.resources.assemblers.UserResourceAssembler;
 import io._29cu.usmserver.core.model.entities.Application;
 import io._29cu.usmserver.core.model.entities.Category;
+import io._29cu.usmserver.core.model.entities.User;
 import io._29cu.usmserver.core.model.enumerations.AppListType;
 import io._29cu.usmserver.core.model.enumerations.AppState;
 import io._29cu.usmserver.core.service.ApplicationListService;
@@ -310,6 +309,26 @@ public class StoreController {
 			Application application = applicationService.findApplication(appId);
 			ApplicationResource applicationResource = new ApplicationResourceAssembler().toResource(application);
 			return new ResponseEntity<>(applicationResource, HttpStatus.OK);
+		} catch (Exception ex) {
+			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Get application by id
+	 * @param appId The application id to be searched with
+	 * @return
+	 * @see ApplicationResource
+	 */
+	@RequestMapping(path = "/applications/{appId}/developer", method = RequestMethod.GET)
+	public ResponseEntity<UserResource> getApplicationDeveloper(
+			@PathVariable String appId
+	) {
+		try {
+			User developer = applicationService.findApplicationDeveloper(appId);
+			UserResource developerResource = new UserResourceAssembler().toResource(developer);
+			return new ResponseEntity<>(developerResource, HttpStatus.OK);
 		} catch (Exception ex) {
 			logger.error(AppConstants.REQUEST_PROCCESS_ERROR,ex);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -28,6 +28,15 @@ public class UserResource extends EntityResourceBase<User>{
     private String lastname;
     private String email;
     private boolean enabled;
+    private Long rid;
+
+    public Long getRid() {
+        return rid;
+    }
+
+    public void setRid(Long rid) {
+        this.rid = rid;
+    }
 
     public String getUsername() {
         return username;
