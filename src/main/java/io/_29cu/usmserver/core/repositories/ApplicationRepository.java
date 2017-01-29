@@ -30,7 +30,7 @@ import java.util.Date;
 
 @Component
 public interface ApplicationRepository extends CrudRepository<Application, String> {
-	@Query("select u from Application u where u.state = 1")
+	@Query("select u from Application u where u.state = 1 and u.developer.enabled = 1")
     List<Application> findAllActive();
 
 	@Query("select u from Application u where u.developer.id = :developerId")
