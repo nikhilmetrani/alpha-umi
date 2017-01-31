@@ -90,15 +90,18 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	@Override
 	public ApplicationList getTrendingApplications() {
 		Date endDate = new Date();
-		Date startDate = new Date();
-		startDate.setTime(new Date().getTime() - 30 * 24 * 60 * 60 * 1000);
+		//Date startDate = new Date();
+		//startDate.setTime(new Date().getTime() - 30 * 24 * 60 * 60 * 1000);
+		java.util.Calendar cal = java.util.Calendar.getInstance();
+		cal.add(java.util.Calendar.MONTH, -1);
+		Date startDate = cal.getTime();
 
 		ApplicationList appList = new ApplicationList();
 		List<Application> apps = subscriptionRepository.getTrendingApplications(startDate, endDate);
 		if (apps != null && apps.size() > 10) {
 			apps = apps.subList(0, 10);
-			appList.setApplications(AppHelper.getInstance().convertIterableToList(apps));
-		}		
+		}
+		appList.setApplications(AppHelper.getInstance().convertIterableToList(apps));
 		return appList;
 	}
 }
