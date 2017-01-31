@@ -59,12 +59,12 @@ public class ApplicationBundleServiceImpl implements ApplicationBundleService{
     }
 
     @Override
-    public ApplicationBundle findApplicationBundleByDeveloperAndId(Long developerId, String applicationBundleId) {
+    public ApplicationBundle findApplicationBundleByDeveloperAndId(Long developerId, Long applicationBundleId) {
         return applicationBundleRepository.findApplicationBundleByDeveloperAndId(developerId, applicationBundleId);
     }
 
     @Override
-    public ApplicationBundle findApplicationBundle(String id) {
+    public ApplicationBundle findApplicationBundle(Long id) {
         return applicationBundleRepository.findOne(id);
     }
 

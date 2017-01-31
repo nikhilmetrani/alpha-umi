@@ -72,7 +72,7 @@ public class ApplicationBundleController {
      */
     @RequestMapping(path = "/applicationBundles/{appBundleId}", method = RequestMethod.GET)
     public ResponseEntity<ApplicationBundleResource> getApplicationBundle(
-            @PathVariable String appBundleId
+            @PathVariable Long appBundleId
     ){
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
@@ -142,7 +142,7 @@ public class ApplicationBundleController {
      */
     @RequestMapping(path = "/applicationBundles/{appBundleId}/update", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> UpdateDeveloperApplicationBundle(
-            @PathVariable String appBundleId,
+            @PathVariable Long appBundleId,
             @RequestBody ApplicationBundleResource applicationBundleResource
     ) {
 	    // Let's get the user from principal and validate the userId against it.
@@ -170,7 +170,7 @@ public class ApplicationBundleController {
      */
     @RequestMapping(path = "/applicationBundles/{appBundleId}/publish", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> publishDeveloperApplicationBundle(
-            @PathVariable String appBundleId
+            @PathVariable Long appBundleId
     ) {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();
@@ -217,7 +217,7 @@ public class ApplicationBundleController {
      */
     @RequestMapping(path = "/applicationBundles/{appBundleId}/recall", method = RequestMethod.POST)
     public ResponseEntity<ApplicationBundleResource> recallDeveloperApplicationBundle(
-            @PathVariable String appBundleId
+            @PathVariable Long appBundleId
     ) {
         // Let's get the user from principal and validate the userId against it.
         User user = userService.findAuthenticatedUser();

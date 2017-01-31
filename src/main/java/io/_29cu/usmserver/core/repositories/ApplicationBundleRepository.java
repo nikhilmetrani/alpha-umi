@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 import io._29cu.usmserver.core.model.entities.ApplicationBundle;
 
 @Component
-public interface ApplicationBundleRepository extends CrudRepository<ApplicationBundle, String> {
+public interface ApplicationBundleRepository extends CrudRepository<ApplicationBundle, Long> {
     @Query("select u from ApplicationBundle u where u.developer.id = :id")
     List<ApplicationBundle> findApplicationBundlesByDeveloper(@Param("id") Long id);
 
@@ -37,5 +37,5 @@ public interface ApplicationBundleRepository extends CrudRepository<ApplicationB
     ApplicationBundle findApplicationBundleByDeveloperAndName(@Param("id") Long id, @Param("applicationBundleName") String applicationBundleName);
 
     @Query("select a from ApplicationBundle a where a.developer.id = :id and a.id = :applicationBundleId")
-    ApplicationBundle findApplicationBundleByDeveloperAndId(@Param("id") Long id, @Param("applicationBundleId") String applicationBundleId);
+    ApplicationBundle findApplicationBundleByDeveloperAndId(@Param("id") Long id, @Param("applicationBundleId") Long applicationBundleId);
 }

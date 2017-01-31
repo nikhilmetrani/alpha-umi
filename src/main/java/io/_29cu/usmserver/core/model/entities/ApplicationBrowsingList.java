@@ -2,15 +2,13 @@ package io._29cu.usmserver.core.model.entities;
 
 import java.util.List;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 @MappedSuperclass
 public class ApplicationBrowsingList {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appbrowselist_seq")
+	@SequenceGenerator(name = "appbrowselist_seq", sequenceName = "appbrowselist_seq", allocationSize = 1)
 	private Long id;
 
 	@OneToMany

@@ -21,7 +21,7 @@ import io._29cu.usmserver.core.model.enumerations.AppState;
 
 public class ApplicationBundleResource extends EntityResourceBase<ApplicationBundle> {
 
-    private String rid;
+    private Long rid;
     private String name;
     private User developer;
     private Category category;
@@ -44,11 +44,11 @@ public class ApplicationBundleResource extends EntityResourceBase<ApplicationBun
         this.category = category;
     }
 
-    public String getRid() {
+    public Long getRid() {
         return rid;
     }
 
-    public void setRid(String rid) {
+    public void setRid(Long rid) {
         this.rid = rid;
     }
 

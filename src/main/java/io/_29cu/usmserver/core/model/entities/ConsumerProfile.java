@@ -24,7 +24,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class ConsumerProfile {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "consumerprofile_seq")
+    @SequenceGenerator(name = "consumerprofile_seq", sequenceName = "consumerprofile_seq", allocationSize = 1)
     private Long id;
     @NotNull
     @Column(unique = true)

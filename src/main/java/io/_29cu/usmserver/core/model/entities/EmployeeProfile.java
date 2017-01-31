@@ -13,7 +13,8 @@ import java.util.Date;
 @Entity
 public class EmployeeProfile {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employeeprofile_seq")
+    @SequenceGenerator(name = "employeeprofile_seq", sequenceName = "employeeprofile_seq", allocationSize = 1)
     private Long id;
     @NotNull
     @OneToOne

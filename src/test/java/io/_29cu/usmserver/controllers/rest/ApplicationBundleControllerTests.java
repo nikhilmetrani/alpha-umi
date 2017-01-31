@@ -82,14 +82,14 @@ public class ApplicationBundleControllerTests {
     private ApplicationBundle applicationBundle;
     private ApplicationBundle existingApplicationBundle;
 	private ApplicationBundle updatedApplicationBundle;
-    private String uuid;
+    private Long uuid;
 
     @Before
     public void setup() throws Exception {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(developerApplicationBundleController).build();
 
-        uuid = UUID.randomUUID().toString();
+        uuid = 1L;
 
         developer = new User();
         developer.setId(1L);
@@ -216,7 +216,7 @@ public class ApplicationBundleControllerTests {
                 .andExpect(jsonPath("$.name",
                         equalTo(applicationBundle.getName())))
                 .andExpect(jsonPath("$.rid",
-                        equalTo(uuid)))
+                        equalTo(1)))
                 .andExpect(jsonPath("$.state",
                         equalTo(applicationBundle.getState().name())))
                 .andExpect(jsonPath("$.category.name",
@@ -288,7 +288,7 @@ public class ApplicationBundleControllerTests {
 		        .andExpect(jsonPath("$.name",
 				        equalTo(updatedApplicationBundle.getName())))
 		        .andExpect(jsonPath("$.rid",
-				        equalTo(uuid)))
+				        equalTo(1)))
 		        .andExpect(jsonPath("$.state",
 				        equalTo(updatedApplicationBundle.getState().name())))
 		        .andExpect(jsonPath("$.category.name",
@@ -311,7 +311,7 @@ public class ApplicationBundleControllerTests {
     @Test
     public void  testPublishApplicationBundleWhenbundleDoesNotExist() throws Exception {
         when(userService.findAuthenticatedUser()).thenReturn(developer);
-        when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), "22")).thenReturn(null);
+        when(applicationBundleService.findApplicationBundleByDeveloperAndId(developer.getId(), 22L)).thenReturn(null);
         mockMvc.perform(post("/api/0/developer/applicationBundles/22/publish")
                 .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'", "\""))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -345,7 +345,7 @@ public class ApplicationBundleControllerTests {
                 .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'", "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.rid",
-                        equalTo(uuid)))
+                        equalTo(1)))
                 .andExpect(jsonPath("$.name",
                         equalTo(applicationBundle.getName())))
                 .andExpect(jsonPath("$.state",
@@ -387,7 +387,7 @@ public class ApplicationBundleControllerTests {
                 .content("{'name':'Dreamweaver v1.1', 'whatsNew':'What is new', 'version':'1.1'}".replaceAll("'", "\""))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.rid",
-                        equalTo(uuid)))
+                        equalTo(1)))
                 .andExpect(jsonPath("$.name",
                         equalTo(applicationBundle.getName())))
                 .andExpect(jsonPath("$.state",

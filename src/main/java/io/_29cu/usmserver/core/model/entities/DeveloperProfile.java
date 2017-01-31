@@ -26,7 +26,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class DeveloperProfile {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "developerprofile_seq")
+    @SequenceGenerator(name = "developerprofile_seq", sequenceName = "developerprofile_seq", allocationSize = 1)
     private Long id;
     @NotNull
     @OneToOne

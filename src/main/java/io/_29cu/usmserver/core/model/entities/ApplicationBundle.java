@@ -17,7 +17,6 @@
 package io._29cu.usmserver.core.model.entities;
 
 import io._29cu.usmserver.core.model.enumerations.AppState;
-import org.hibernate.annotations.GenericGenerator;
 
 
 import javax.persistence.*;
@@ -27,9 +26,9 @@ import java.util.List;
 @Entity
 public class ApplicationBundle {
 	@Id
-	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")
-	private String id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appbundle_seq")
+	@SequenceGenerator(name = "appbundle_seq", sequenceName = "appbundle_seq", allocationSize = 1)
+	private Long id;
 	@NotNull
 	private String name;
 	@NotNull
@@ -43,11 +42,11 @@ public class ApplicationBundle {
 	@OneToMany
 	private List<Application> applications;
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -17,16 +17,15 @@
 package io._29cu.usmserver.core.model.entities;
 
 import org.hibernate.annotations.NaturalId;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+
+import javax.persistence.*;
 import java.util.HashMap;
 
 @Entity
 public class ApplicationConfiguration {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appconfig_seq")
+    @SequenceGenerator(name = "appconfig_seq", sequenceName = "appconfig_seq", allocationSize = 1)
     private Long id;
     private HashMap<String, Object> settings;
     @OneToOne

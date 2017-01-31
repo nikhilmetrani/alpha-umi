@@ -26,8 +26,8 @@ public interface ApplicationBundleService {
 	public ApplicationBundle createApplicationBundle(ApplicationBundle applicationBundle);
 	public ApplicationBundle updateApplicationBundle(ApplicationBundle applicationBundle);
 	public ApplicationBundle findApplicationBundleByDeveloperAndName(Long developerId, String applicationBundleName);
-	public ApplicationBundle findApplicationBundleByDeveloperAndId(Long developerId, String applicationBundleId);
-	public ApplicationBundle findApplicationBundle(String applicationBundleId);
+	public ApplicationBundle findApplicationBundleByDeveloperAndId(Long developerId, Long applicationBundleId);
+	public ApplicationBundle findApplicationBundle(Long applicationBundleId);
 	public ApplicationBundleList findApplicationBundlesByDeveloper(Long developerId);
 	public ApplicationBundleList findApplicationBundlesByCategory(String category);
 
