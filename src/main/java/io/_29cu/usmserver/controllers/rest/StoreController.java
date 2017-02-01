@@ -345,7 +345,7 @@ public class StoreController {
 		try {
 			ApplicationList appList = subscriptionService.getTrendingApplications();
 			if (appList.getItems() == null || appList.getItems().isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				return store();
 			}
 			ApplicationListResource resource = new ApplicationListResourceAssembler().toResource(appList);
 			HttpHeaders headers = new HttpHeaders();
