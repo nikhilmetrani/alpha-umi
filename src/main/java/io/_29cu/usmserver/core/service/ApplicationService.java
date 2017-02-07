@@ -16,15 +16,33 @@
 
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entity.Application;
-import io._29cu.usmserver.core.service.utility.ApplicationList;
 import org.springframework.stereotype.Component;
+
+import io._29cu.usmserver.core.model.entities.Application;
+import io._29cu.usmserver.core.model.entities.User;
+import io._29cu.usmserver.core.model.entities.DeveloperProfile;
+import io._29cu.usmserver.core.model.enumerations.AppState;
+import io._29cu.usmserver.core.service.utilities.ApplicationList;
 
 @Component
 public interface ApplicationService {
     public ApplicationList getAllApplications();
     public Application createApplication(Application application);
-    public Application findApplication(Long id);
-    public ApplicationList findApplicationsByDeveloper(Long developerId);
+    public Application updateApplication(Application application);
+    public Application recallApplication(Application application);
+    public Application findApplicationByDeveloperIdAndAppName(long developerId, String applicationName);
+    public Application findApplicationByDeveloperIdAndAppId(long developerId, String applicationId);
+    public Application findApplicationByUsernameAndAppName(String username, String applicationName);
+    public Application findApplicationByUsernameAndAppId(String username, String applicationId);
+    public Application findApplication(String id);
+    public User findApplicationDeveloper(String id);
+    public ApplicationList findApplicationsByDeveloper(long developerId);
     public ApplicationList findApplicationsByCategory(String category);
+    public ApplicationList findApplicationsByCategoryAndState(String category, AppState state);
+    public ApplicationList getAllActiveApplications();
+    public Boolean blockApplication(Application application);
+    public ApplicationList findApplicationsByKeyword(String keyword);
+    public ApplicationList findApplicationsByCategoryAndKeyword(Long categoryId, String keyword);
+    public ApplicationList findAllActiveApplicationsByDeveloper(long developerId);
+
 }

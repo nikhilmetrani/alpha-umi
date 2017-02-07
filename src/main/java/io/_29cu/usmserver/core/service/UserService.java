@@ -16,9 +16,12 @@
 
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entity.User;
+import io._29cu.usmserver.core.model.entities.User;
 
 public interface UserService {
-    public User createUser(User user);
-    public User findUser(Long id);
+    User createUser(User user);
+    User findAuthenticatedUser();
+    User findUser(Long id);
+    Boolean blockUser(User user);
+    Boolean updateUser(User user);
 }

@@ -16,25 +16,55 @@
 
 package io._29cu.usmserver;
 
-import io._29cu.usmserver.common.utility.AppHelperTests;
-import io._29cu.usmserver.core.repository.UserRepositoryTests;
-import io._29cu.usmserver.core.service.ApplicationService;
-import io._29cu.usmserver.core.service.ApplicationServiceTests;
-import io._29cu.usmserver.core.service.UserServiceTests;
-import io._29cu.usmserver.core.service.utility.ApplicationListTests;
+import io._29cu.usmserver.configurations.security.JwtTokenUtilTest;
+import io._29cu.usmserver.controllers.rest.*;
+import io._29cu.usmserver.core.service.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.springframework.test.context.ActiveProfiles;
 
+import io._29cu.usmserver.common.utilities.AppHelperTests;
+import io._29cu.usmserver.core.repositories.UserRepositoryTests;
+import io._29cu.usmserver.core.service.utilities.ApplicationListTests;
+
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        AlphaUmiApplicationTests.class,
-        UserServiceTests.class,
-        UserRepositoryTests.class,
-        ApplicationServiceTests.class,
-        AppHelperTests.class,
-        ApplicationListTests.class
-        })
+    AlphaUmiApplicationTests.class,
+    AppHelperTests.class,
+    ApplicationBundleControllerTests.class,
+    ApplicationControllerTests.class,
+    CodeDefinitionControllerTests.class,
+    ConsumerProfileControllerTests.class,
+    DeveloperApplicationsControllerTests.class,
+    DeveloperProfileControllerTests.class,
+    EmployeeProfileControllerTests.class,
+    StoreControllerTests.class,
+    SubscriptionControllerTests.class,
+    UserControllerTests.class,
+    UserRepositoryTests.class,
+    ApplicationBundleServiceTests.class,
+    ApplicationHistoryServiceTests.class,
+    ApplicationServiceTests.class,
+    ApplicationUpdateServiceTests.class,
+    CategoryServiceTests.class,
+    ConsumerProfileServiceTests.class,
+    DeveloperProfileServiceTests.class,
+    EmployeeProfileServiceTests.class,
+    FeatureApplicationServiceTests.class,
+    RateServiceTests.class,
+    ReportServiceTests.class,
+    ReviewReplyServiceTests.class,
+    ReviewServiceTests.class,
+    SubscriptionServiceTests.class,
+    UserServiceTests.class,
+    ApplicationListTests.class,
+    ReviewControllerTests.class,
+    RatingControllerTests.class,
+    ReviewReplyControllerTests.class,
+    JwtTokenUtilTest.class,
+    ReportControllerTests.class,
+    InstallerServiceTests.class
+})
 @ActiveProfiles("test")
 public class AlphaUmiTestSuite {
 }

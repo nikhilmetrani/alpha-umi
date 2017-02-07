@@ -1,8 +1,9 @@
-#α-UMi (Alpha UMi)
+#alpha-umi: Universal Software Marketplace
 
-## Universal Software Marketplace
+REST API server
 
-[![Build Status](https://travis-ci.com/nikhilmetrani/alpha-umi.svg?token=bQkogbxFfYCzp5uJhLW7&branch=master)](https://travis-ci.com/nikhilmetrani/alpha-umi)
+[![Build Status](https://travis-ci.com/nikhilmetrani/alpha-umi.svg?token=bQkogbxFfYCzp5uJhLW7&branch=store)](https://travis-ci.com/nikhilmetrani/alpha-umi)
+[![codecov](https://codecov.io/gh/nikhilmetrani/alpha-umi/branch/store/graph/badge.svg?token=KQyi4NZj87)](https://codecov.io/gh/nikhilmetrani/alpha-umi)
 
 ##Environment setup
 
@@ -22,7 +23,7 @@
 
 `Linux / Mac OS: Run the script - ./scripts/mysql_setup_dev.sh`
 
-`Windows: Coming soon...`
+`Windows: Run the script - .\scripts\win_mysql_setup_dev.bat`
 
 ####Launching the project
 
@@ -46,7 +47,7 @@
 
 `Linux / Mac OS: Run the script - ./scripts/mysql_setup_test.sh`
 
-`Windows: Coming soon...`
+`Windows: Run the script - .\scripts\win_mysql_setup_test.bat`
 
 ####Launching the project
 

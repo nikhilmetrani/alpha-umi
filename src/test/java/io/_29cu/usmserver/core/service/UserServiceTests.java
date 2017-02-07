@@ -16,7 +16,10 @@
 
 package io._29cu.usmserver.core.service;
 
-import io._29cu.usmserver.core.model.entity.User;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,8 +30,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import io._29cu.usmserver.core.model.entities.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -45,15 +47,42 @@ public class UserServiceTests {
     @Rollback(false)
     public void setup() {
         account = new User();
-        account.setEmail("name");
+        account.setEmail("email");
+        account.setUsername("username");
+        account.setEnabled(true);
         service.createUser(account);
     }
 
     @Test
     @Transactional
-    public void testFind() {
+    public void testCreateUser() {
+        User fromDb = service.createUser(account);
+        assertNotNull(fromDb);
+        assertEquals("Account was retrieved", account.getEmail(), fromDb.getEmail());
+    }
+
+    @Test
+    @Transactional
+    public void testUpdateUser() {
+        account.setEmail("email2");
+        Boolean result = service.updateUser(account);
+        assertTrue(result);
+    }
+
+    @Test
+    @Transactional
+    public void testFindUser() {
         User fromDb = service.findUser(account.getId());
         assertNotNull(fromDb);
         assertEquals("Account was retrieved", account.getEmail(), fromDb.getEmail());
+    }
+
+    @Test
+    @Transactional
+    public void testBlockUser() {
+        User fromDb = service.findUser(account.getId());
+        assertNotNull(fromDb);
+        boolean blocked = service.blockUser(fromDb);
+        assertTrue("Account was blocked", blocked);
     }
 }
