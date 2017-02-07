@@ -21,8 +21,6 @@ public class UserResourceAssembler extends ResourceAssemblerSupport<User, UserRe
         userResource.setUsername(user.getUsername());
         userResource.setFirstname(user.getFirstname());
         userResource.setLastname(user.getLastname());
-        userResource.setPassword(user.getPassword());
-        userResource.setEnabled(user.getEnabled());
         return userResource;
     }
 }
