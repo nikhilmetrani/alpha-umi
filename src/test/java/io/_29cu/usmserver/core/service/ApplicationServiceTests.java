@@ -187,7 +187,7 @@ public class ApplicationServiceTests {
         		break;
         	}
         }
-        assertTrue("No AppState in Staing", appInStaging);
+        assertTrue("No AppState in Staging", appInStaging);
     }
 
     @Test
@@ -220,6 +220,13 @@ public class ApplicationServiceTests {
         for(Application app: fromDb.getItems()) {
         	assertTrue("Invalid Application Found", app.getDeveloper().getId().equals(developer.getId()));
         }
+    }
+
+    @Test
+    @Transactional
+    public void testFindApplicationDeveloper() {
+        User fromDb = service.findApplicationDeveloper(application.getId());
+        assertNotNull("Developer is not null", fromDb);
     }
 
     @Test
