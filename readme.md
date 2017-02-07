@@ -2,8 +2,9 @@
 
 REST API server
 
-[![Build Status](https://travis-ci.com/nikhilmetrani/alpha-umi.svg?token=bQkogbxFfYCzp5uJhLW7&branch=store)](https://travis-ci.com/nikhilmetrani/alpha-umi)
-[![codecov](https://codecov.io/gh/nikhilmetrani/alpha-umi/branch/store/graph/badge.svg?token=KQyi4NZj87)](https://codecov.io/gh/nikhilmetrani/alpha-umi)
+
+[![Build Status](https://travis-ci.com/nikhilmetrani/alpha-umi.svg?token=bQkogbxFfYCzp5uJhLW7&branch=master)](https://travis-ci.com/nikhilmetrani/alpha-umi)
+[![codecov](https://codecov.io/gh/nikhilmetrani/alpha-umi/branch/master/graph/badge.svg?token=KQyi4NZj87)](https://codecov.io/gh/nikhilmetrani/alpha-umi)
 
 ##Environment setup
 
@@ -11,13 +12,12 @@ REST API server
 
 1. MySQL Server and MySQL Workbench
 
-###Developer 
+###Development
 
 ####Developer dependencies
 1. Maven or Java IDE with Maven Support
 
 `NetBeans, Intellij Idea, Eclipse or any other desirable IDE`
-2. NodeJS 5.xx or later
 
 ####Database Setup
 
@@ -33,7 +33,7 @@ REST API server
 
 `The server can be launched by using the spring-boot:run task of Maven plugin`
 
-###Test 
+###Testing
 
 ####Test dependencies
 1. Maven or Java IDE with Maven Support
@@ -67,6 +67,4 @@ REST API server
 
 `Attach the token to the request header before making API request`
 
-####UI testing
 
-`This information will be available in the future`
